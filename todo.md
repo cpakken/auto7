@@ -1,11 +1,9 @@
-- change @/_ to @main/_
-- reorganize utils
-  - make mst folder
-  - helpers -> common
-  - react - hooks
+-> ui
 
--> LogicModule type -> outs functions no longer need typeKey
--> just have the function return a class with a serialize or toJSON function
+- try fast refresh using next
+  -> textStyles
+  -> labels sm bold gray
+
 -> will automatically call toJSON if need to ipc
 -> have all complex types be initialized with base class Serializable
 -> can check if need to call toJSON if instanceof Serializable

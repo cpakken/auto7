@@ -5,7 +5,7 @@ export const _std_string: TypeNativeSnapshotIn = {
   info: {
     label: "string",
     description: "A string of word/characters/number etc.",
-    avatar: { abbr: "abc", color: "rose" },
+    avatar: { abbr: "abc", color: "violet" },
   },
 }
 

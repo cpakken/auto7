@@ -16,9 +16,7 @@ const customTheme = extendTheme({
 
 export const StorybookDecorator = (Story) => (
   <ChakraProvider theme={customTheme}>
-    <ColorModeProvider options={{ initialColorMode: "light", useSystemColorMode: false }}>
-      <Story />
-    </ColorModeProvider>
+    <ColorModeProvider options={{ initialColorMode: "light", useSystemColorMode: false }}>{Story()}</ColorModeProvider>
   </ChakraProvider>
 )
 
