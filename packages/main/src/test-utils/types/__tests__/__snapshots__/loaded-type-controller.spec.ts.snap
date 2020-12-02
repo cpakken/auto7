@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loadedTypeController inits 1`] = `
+Object {
+  "composed": Object {
+    "composition": Array [],
+    "info": Array [],
+  },
+  "native": Object {
+    "info": Array [
+      Object {
+        "avatar": Object {
+          "abbr": "abc",
+          "color": "rose",
+        },
+        "description": "A string of word/characters/number etc.",
+        "label": "string",
+      },
+      Object {
+        "avatar": Object {
+          "color": "teal",
+          "icon": "number",
+        },
+        "description": "A number to perform mathematic operations",
+        "label": "number",
+      },
+    ],
+  },
+}
+`;

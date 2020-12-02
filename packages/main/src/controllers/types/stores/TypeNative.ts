@@ -1,5 +1,5 @@
 import { computed, makeObservable } from "mobx"
-import { ITypeNativeStore } from ".."
+import { ITypeNativeInfo, ITypeNativeInfoSnapshot, ITypeNativeInfoSnapshotIn, ITypeNativeStore } from ".."
 
 //TODO have two kinds of TypeNative -> ones included by default do not need to have module loaded aync
 export class TypeNative {
@@ -12,7 +12,7 @@ export class TypeNative {
     this.store = store
   }
 
-  @computed get info() {
+  @computed get info(): ITypeNativeInfo | undefined {
     return this.store.info.get(this.typeKey)
   }
 
@@ -26,4 +26,14 @@ export class TypeNative {
 
   //toSnpashot (serialize)
   //fromSnapshot (deserialize)
+}
+
+export interface TypeNativeSnapshotIn {
+  _id: string
+  info: Omit<ITypeNativeInfoSnapshotIn, "_id">
+}
+
+export interface TypeNativeSnapshot {
+  _id: string
+  info: Omit<ITypeNativeInfoSnapshot, "_id">
 }

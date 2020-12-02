@@ -33,6 +33,8 @@ export const TypeNode = types.union({ dispatcher }, TypeNodeNative, TypeNodeComp
   ITypeNode
 >
 
+export interface ITypeCompositionSnapshot extends SnapshotOut<typeof TypeComposition> {}
+export interface ITypeComposition extends Instance<typeof TypeComposition> {}
 export const TypeComposition = createOrderedMap(TypeNode)
 
 export function isTypeNodeComposed(typeNode): typeNode is ITypeNodeComposed {

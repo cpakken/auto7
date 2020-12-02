@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@main/*": ["../../packages/main/src/*"],
-      "@utils/*": ["../../packages/utils/src/*"]
+      "@utils/*": ["../../packages/utils/src/*"],
+      "@ui/*": ["../../packages/ui/src/*"]
     },
     "target": "es6",
     "module": "ESNext",

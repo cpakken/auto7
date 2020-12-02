@@ -1,6 +1,15 @@
 import { isTrueReduce, mapIter } from "@utils/iterable-fns"
 import { action, comparer, computed, makeObservable, when } from "mobx"
-import { ITypeComposedStore, ITypeNode, isTypeNodeComposed } from ".."
+import {
+  ITypeComposedStore,
+  ITypeNode,
+  isTypeNodeComposed,
+  ITypeComposedInfoSnapshotIn,
+  ITypeComposedInfoSnapshot,
+  ITypeCompositionSnapshot,
+  ITypeComposedInfo,
+  ITypeComposition,
+} from ".."
 
 export class TypeComposed {
   readonly typeKey: string
@@ -12,11 +21,11 @@ export class TypeComposed {
     this.store = store
   }
 
-  @computed get info() {
+  @computed get info(): ITypeComposedInfo | undefined {
     return this.store.info.get(this.typeKey)
   }
 
-  @computed get composition() {
+  @computed get composition(): ITypeComposition | undefined {
     return this.store.composition.get(this.typeKey)
   }
 
@@ -48,7 +57,7 @@ export class TypeComposed {
   }
 
   /** Returns shallowKeys and updates cache when changed */
-  @action.bound updateCacheKeys(): Set<string> | null {
+  @action updateCacheKeys(): Set<string> | null {
     //check if shallow ready from logicComposed
     const { _shallowKeys } = this
     if (_shallowKeys) {
@@ -58,7 +67,7 @@ export class TypeComposed {
   }
 
   /** Returns promise that resolves when logickeys is ready */
-  @action.bound getKeysWhenReady(): Promise<Set<string>> {
+  @action getKeysWhenReady(): Promise<Set<string>> {
     return new Promise((res) => {
       let shallowKeys: Set<string> | null
       when(
@@ -67,4 +76,16 @@ export class TypeComposed {
       )
     })
   }
+}
+
+export interface TypeComposedSnapshotIn {
+  _id: string
+  info: Omit<ITypeComposedInfoSnapshotIn, "_id">
+  composition: Omit<ITypeCompositionSnapshot, "_id">
+}
+
+export interface TypeComposedSnapshot {
+  _id: string
+  info: Omit<ITypeComposedInfoSnapshot, "_id">
+  composition: Omit<ITypeCompositionSnapshot, "_id">
 }

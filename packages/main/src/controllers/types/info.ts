@@ -1,7 +1,8 @@
-import { Instance, types, SnapshotOut } from "mobx-state-tree"
+import { Instance, types, SnapshotOut, SnapshotIn } from "mobx-state-tree"
 
 export type IAvatar = { color: string } & ({ icon: string } | { abbr: string })
 
+export interface ITypeNativeInfoSnapshotIn extends SnapshotIn<typeof TypeNativeInfo> {}
 export interface ITypeNativeInfoSnapshot extends SnapshotOut<typeof TypeNativeInfo> {}
 export interface ITypeNativeInfo extends Instance<typeof TypeNativeInfo> {}
 export const TypeNativeInfo = types.model({
@@ -10,6 +11,7 @@ export const TypeNativeInfo = types.model({
   avatar: types.frozen<IAvatar>(),
 })
 
+export interface ITypeComposedInfoSnapshotIn extends SnapshotIn<typeof TypeComposedInfo> {}
 export interface ITypeComposedInfoSnapshot extends SnapshotOut<typeof TypeComposedInfo> {}
 export interface ITypeComposedInfo extends Instance<typeof TypeComposedInfo> {}
 export const TypeComposedInfo = TypeNativeInfo.props({

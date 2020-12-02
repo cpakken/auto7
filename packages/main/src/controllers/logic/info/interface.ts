@@ -1,5 +1,5 @@
 import { HasID, createOrderedMap } from "@utils/mst"
-import { getEnv, Instance, types } from "mobx-state-tree"
+import { getEnv, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { getLogicComposedInfo, getLogicComposedStore } from ".."
 import { IType } from "@main/controllers/types"
 
@@ -40,8 +40,10 @@ export const LogicNode = LogicNodeModel.actions((self) => ({
   },
 }))
 
+export interface ILogicInterfaceModelSnapshot extends SnapshotOut<typeof LogicInterfaceModel> {}
 export interface ILogicInterfaceModel extends Instance<typeof LogicInterfaceModel> {}
 export const LogicInterfaceModel = createOrderedMap(LogicNodeModel)
 
+export interface ILogicInterfaceSnapshot extends SnapshotOut<typeof LogicInterface> {}
 export interface ILogicInterface extends Instance<typeof LogicInterface> {}
 export const LogicInterface = createOrderedMap(LogicNode)
