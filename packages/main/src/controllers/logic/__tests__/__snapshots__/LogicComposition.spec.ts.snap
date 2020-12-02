@@ -1,0 +1,503 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Logic Composition create model 1`] = `
+Object {
+  "_id": "ADDSTRING_COMPOUND",
+  "blocks": Array [
+    Object {
+      "_id": "A",
+      "logicKey": "ADDSTRING",
+      "xy": Array [
+        0,
+        0,
+      ],
+    },
+    Object {
+      "_id": "B",
+      "logicKey": "ADDSTRING_NESTED",
+      "xy": Array [
+        0,
+        0,
+      ],
+    },
+    Object {
+      "_id": "C",
+      "logicKey": "_std_ADDSTRING",
+      "xy": Array [
+        0,
+        0,
+      ],
+    },
+  ],
+  "paths": Array [
+    Object {
+      "_id": "p0",
+      "from": Object {
+        "node": "in1",
+      },
+      "to": Object {
+        "block": "A",
+        "node": "in1",
+      },
+    },
+    Object {
+      "_id": "p1",
+      "from": Object {
+        "node": "in2",
+      },
+      "to": Object {
+        "block": "A",
+        "node": "in2",
+      },
+    },
+    Object {
+      "_id": "p2",
+      "from": Object {
+        "node": "in2",
+      },
+      "to": Object {
+        "block": "B",
+        "node": "in1",
+      },
+    },
+    Object {
+      "_id": "p3",
+      "from": Object {
+        "node": "in3",
+      },
+      "to": Object {
+        "block": "B",
+        "node": "in2",
+      },
+    },
+    Object {
+      "_id": "p4",
+      "from": Object {
+        "block": "A",
+        "node": "out1",
+      },
+      "to": Object {
+        "block": "C",
+        "node": "in1",
+      },
+    },
+    Object {
+      "_id": "p5",
+      "from": Object {
+        "block": "B",
+        "node": "out1",
+      },
+      "to": Object {
+        "block": "C",
+        "node": "in2",
+      },
+    },
+    Object {
+      "_id": "p6",
+      "from": Object {
+        "block": "C",
+        "node": "out",
+      },
+      "to": Object {
+        "node": "out1",
+      },
+    },
+  ],
+}
+`;
+
+exports[`Logic Composition verify links when block delete 1`] = `
+Object {
+  "_id": "ADDSTRING_COMPOUND",
+  "blocks": Array [
+    Object {
+      "_id": "B",
+      "logicKey": "ADDSTRING_NESTED",
+      "xy": Array [
+        0,
+        0,
+      ],
+    },
+    Object {
+      "_id": "C",
+      "logicKey": "_std_ADDSTRING",
+      "xy": Array [
+        0,
+        0,
+      ],
+    },
+  ],
+  "paths": Array [
+    Object {
+      "_id": "p2",
+      "from": Object {
+        "node": "in2",
+      },
+      "to": Object {
+        "block": "B",
+        "node": "in1",
+      },
+    },
+    Object {
+      "_id": "p3",
+      "from": Object {
+        "node": "in3",
+      },
+      "to": Object {
+        "block": "B",
+        "node": "in2",
+      },
+    },
+    Object {
+      "_id": "p5",
+      "from": Object {
+        "block": "B",
+        "node": "out1",
+      },
+      "to": Object {
+        "block": "C",
+        "node": "in2",
+      },
+    },
+    Object {
+      "_id": "p6",
+      "from": Object {
+        "block": "C",
+        "node": "out",
+      },
+      "to": Object {
+        "node": "out1",
+      },
+    },
+  ],
+}
+`;
+
+exports[`Logic Composition verify links when block delete 2`] = `
+Map {
+  "in1" => Array [],
+  "in2" => Array [
+    Object {
+      "block": Object {
+        "_id": "B",
+        "logicKey": "ADDSTRING_NESTED",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in1",
+      "path": Object {
+        "_id": "p2",
+        "from": Object {
+          "node": "in2",
+        },
+        "to": Object {
+          "block": "B",
+          "node": "in1",
+        },
+      },
+    },
+  ],
+  "in3" => Array [
+    Object {
+      "block": Object {
+        "_id": "B",
+        "logicKey": "ADDSTRING_NESTED",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in2",
+      "path": Object {
+        "_id": "p3",
+        "from": Object {
+          "node": "in3",
+        },
+        "to": Object {
+          "block": "B",
+          "node": "in2",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`Logic Composition verify links when block delete 3`] = `
+Map {
+  "out1" => Array [
+    Object {
+      "block": Object {
+        "_id": "C",
+        "logicKey": "_std_ADDSTRING",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "out",
+      "path": Object {
+        "_id": "p6",
+        "from": Object {
+          "block": "C",
+          "node": "out",
+        },
+        "to": Object {
+          "node": "out1",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`Logic Composition verify links when path delete 1`] = `
+Object {
+  "_id": "ADDSTRING_COMPOUND",
+  "blocks": Array [
+    Object {
+      "_id": "A",
+      "logicKey": "ADDSTRING",
+      "xy": Array [
+        0,
+        0,
+      ],
+    },
+    Object {
+      "_id": "B",
+      "logicKey": "ADDSTRING_NESTED",
+      "xy": Array [
+        0,
+        0,
+      ],
+    },
+    Object {
+      "_id": "C",
+      "logicKey": "_std_ADDSTRING",
+      "xy": Array [
+        0,
+        0,
+      ],
+    },
+  ],
+  "paths": Array [],
+}
+`;
+
+exports[`Logic Composition verify links when path delete 2`] = `
+Map {
+  "in1" => Array [],
+  "in2" => Array [],
+  "in3" => Array [],
+}
+`;
+
+exports[`Logic Composition verify links when path delete 3`] = `
+Map {
+  "out1" => Array [],
+}
+`;
+
+exports[`Logic Composition verify links when path delete 4`] = `
+Map {
+  "in1" => Array [],
+  "in2" => Array [],
+}
+`;
+
+exports[`Logic Composition verify links when path delete 5`] = `
+Map {
+  "out1" => Array [],
+}
+`;
+
+exports[`Logic Composition verify path initialization in blocks 1`] = `
+Map {
+  "in1" => Array [
+    Object {
+      "block": Object {
+        "_id": "A",
+        "logicKey": "ADDSTRING",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in1",
+      "path": Object {
+        "_id": "p0",
+        "from": Object {
+          "node": "in1",
+        },
+        "to": Object {
+          "block": "A",
+          "node": "in1",
+        },
+      },
+    },
+  ],
+  "in2" => Array [
+    Object {
+      "block": Object {
+        "_id": "A",
+        "logicKey": "ADDSTRING",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in2",
+      "path": Object {
+        "_id": "p1",
+        "from": Object {
+          "node": "in2",
+        },
+        "to": Object {
+          "block": "A",
+          "node": "in2",
+        },
+      },
+    },
+    Object {
+      "block": Object {
+        "_id": "B",
+        "logicKey": "ADDSTRING_NESTED",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in1",
+      "path": Object {
+        "_id": "p2",
+        "from": Object {
+          "node": "in2",
+        },
+        "to": Object {
+          "block": "B",
+          "node": "in1",
+        },
+      },
+    },
+  ],
+  "in3" => Array [
+    Object {
+      "block": Object {
+        "_id": "B",
+        "logicKey": "ADDSTRING_NESTED",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in2",
+      "path": Object {
+        "_id": "p3",
+        "from": Object {
+          "node": "in3",
+        },
+        "to": Object {
+          "block": "B",
+          "node": "in2",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`Logic Composition verify path initialization in blocks 2`] = `
+Map {
+  "out1" => Array [
+    Object {
+      "block": Object {
+        "_id": "C",
+        "logicKey": "_std_ADDSTRING",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "out",
+      "path": Object {
+        "_id": "p6",
+        "from": Object {
+          "block": "C",
+          "node": "out",
+        },
+        "to": Object {
+          "node": "out1",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`Logic Composition verify path initialization in blocks 3`] = `
+Map {
+  "in1" => Array [
+    Object {
+      "block": undefined,
+      "node": "in1",
+      "path": Object {
+        "_id": "p0",
+        "from": Object {
+          "node": "in1",
+        },
+        "to": Object {
+          "block": "A",
+          "node": "in1",
+        },
+      },
+    },
+  ],
+  "in2" => Array [
+    Object {
+      "block": undefined,
+      "node": "in2",
+      "path": Object {
+        "_id": "p1",
+        "from": Object {
+          "node": "in2",
+        },
+        "to": Object {
+          "block": "A",
+          "node": "in2",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`Logic Composition verify path initialization in blocks 4`] = `
+Map {
+  "out1" => Array [
+    Object {
+      "block": Object {
+        "_id": "C",
+        "logicKey": "_std_ADDSTRING",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in1",
+      "path": Object {
+        "_id": "p4",
+        "from": Object {
+          "block": "A",
+          "node": "out1",
+        },
+        "to": Object {
+          "block": "C",
+          "node": "in1",
+        },
+      },
+    },
+  ],
+}
+`;

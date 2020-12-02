@@ -1,0 +1,44 @@
+{
+  "name": "@auto/ui",
+  "version": "1.0.0",
+  "private": true,
+  "sideEffects": false,
+  "main": "index.tsx",
+  "scripts": {
+    "storybook": "start-storybook -s ./public -p 6006",
+    "build-storybook": "build-storybook",
+    "dev": "webpack serve"
+  },
+  "dependencies": {
+    "@auto/main": "1.0.0",
+    "@auto/utils": "1.0.0",
+    "@chakra-ui/react": "^1.0.1",
+    "@emotion/react": "^11.1.1",
+    "@emotion/styled": "^11.0.0",
+    "framer-motion": "^2.9.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
+    "@storybook/addon-actions": "^6.1.7",
+    "@storybook/addon-essentials": "^6.1.7",
+    "@storybook/addon-links": "^6.1.7",
+    "@storybook/cli": "^6.1.7",
+    "@storybook/react": "^6.1.7",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "babel-loader": "^8.2.2",
+    "react-refresh": "^0.9.0",
+    "ts-loader": "^8.0.11",
+    "tsconfig-paths-webpack-plugin": "^3.3.0",
+    "typescript": "^4.1.2",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "resolutions": {
+    "react": "^17",
+    "react-dom": "^17"
+  }
+}

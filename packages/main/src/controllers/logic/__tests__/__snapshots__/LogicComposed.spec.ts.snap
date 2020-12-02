@@ -1,0 +1,273 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogicComposed deleting io node will automatically delete connecting paths 1`] = `
+Map {
+  "in1" => Array [
+    Object {
+      "block": undefined,
+      "node": "in1",
+      "path": Object {
+        "_id": "p0",
+        "from": Object {
+          "node": "in1",
+        },
+        "to": Object {
+          "block": "A",
+          "node": "in1",
+        },
+      },
+    },
+  ],
+  "in2" => Array [],
+}
+`;
+
+exports[`LogicComposed deleting io node will automatically delete connecting paths 2`] = `
+Map {
+  "in1" => Array [
+    Object {
+      "block": Object {
+        "_id": "A",
+        "logicKey": "ADDSTRING",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in1",
+      "path": Object {
+        "_id": "p0",
+        "from": Object {
+          "node": "in1",
+        },
+        "to": Object {
+          "block": "A",
+          "node": "in1",
+        },
+      },
+    },
+  ],
+  "in2" => Array [],
+  "in3" => Array [
+    Object {
+      "block": Object {
+        "_id": "B",
+        "logicKey": "ADDSTRING_NESTED",
+        "xy": Array [
+          0,
+          0,
+        ],
+      },
+      "node": "in2",
+      "path": Object {
+        "_id": "p3",
+        "from": Object {
+          "node": "in3",
+        },
+        "to": Object {
+          "block": "B",
+          "node": "in2",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`LogicComposed deleting io node will automatically delete connecting paths 3`] = `
+Array [
+  Object {
+    "_id": "p0",
+    "from": Object {
+      "node": "in1",
+    },
+    "to": Object {
+      "block": "A",
+      "node": "in1",
+    },
+  },
+  Object {
+    "_id": "p3",
+    "from": Object {
+      "node": "in3",
+    },
+    "to": Object {
+      "block": "B",
+      "node": "in2",
+    },
+  },
+  Object {
+    "_id": "p4",
+    "from": Object {
+      "block": "A",
+      "node": "out1",
+    },
+    "to": Object {
+      "block": "C",
+      "node": "in1",
+    },
+  },
+  Object {
+    "_id": "p5",
+    "from": Object {
+      "block": "B",
+      "node": "out1",
+    },
+    "to": Object {
+      "block": "C",
+      "node": "in2",
+    },
+  },
+  Object {
+    "_id": "p6",
+    "from": Object {
+      "block": "C",
+      "node": "out",
+    },
+    "to": Object {
+      "node": "out1",
+    },
+  },
+]
+`;
+
+exports[`LogicComposed store snapshot 1`] = `
+Object {
+  "composition": Array [
+    Object {
+      "_id": "ADDSTRING_COMPOUND",
+      "blocks": Array [
+        Object {
+          "_id": "A",
+          "logicKey": "ADDSTRING",
+          "xy": Array [
+            0,
+            0,
+          ],
+        },
+        Object {
+          "_id": "B",
+          "logicKey": "ADDSTRING_NESTED",
+          "xy": Array [
+            0,
+            0,
+          ],
+        },
+        Object {
+          "_id": "C",
+          "logicKey": "_std_ADDSTRING",
+          "xy": Array [
+            0,
+            0,
+          ],
+        },
+      ],
+      "paths": Array [
+        Object {
+          "_id": "p0",
+          "from": Object {
+            "node": "in1",
+          },
+          "to": Object {
+            "block": "A",
+            "node": "in1",
+          },
+        },
+        Object {
+          "_id": "p1",
+          "from": Object {
+            "node": "in2",
+          },
+          "to": Object {
+            "block": "A",
+            "node": "in2",
+          },
+        },
+        Object {
+          "_id": "p2",
+          "from": Object {
+            "node": "in2",
+          },
+          "to": Object {
+            "block": "B",
+            "node": "in1",
+          },
+        },
+        Object {
+          "_id": "p3",
+          "from": Object {
+            "node": "in3",
+          },
+          "to": Object {
+            "block": "B",
+            "node": "in2",
+          },
+        },
+        Object {
+          "_id": "p4",
+          "from": Object {
+            "block": "A",
+            "node": "out1",
+          },
+          "to": Object {
+            "block": "C",
+            "node": "in1",
+          },
+        },
+        Object {
+          "_id": "p5",
+          "from": Object {
+            "block": "B",
+            "node": "out1",
+          },
+          "to": Object {
+            "block": "C",
+            "node": "in2",
+          },
+        },
+        Object {
+          "_id": "p6",
+          "from": Object {
+            "block": "C",
+            "node": "out",
+          },
+          "to": Object {
+            "node": "out1",
+          },
+        },
+      ],
+    },
+  ],
+  "info": Array [
+    Object {
+      "_id": "ADDSTRING_COMPOUND",
+      "inputs": Array [
+        Object {
+          "_id": "in1",
+          "label": "in1",
+          "typeKey": "_string",
+        },
+        Object {
+          "_id": "in2",
+          "label": "in2",
+          "typeKey": "_string",
+        },
+        Object {
+          "_id": "in3",
+          "label": "in3",
+          "typeKey": "_string",
+        },
+      ],
+      "keysCache": undefined,
+      "label": "ADDSTRING COMPOUND",
+      "outputs": Array [
+        Object {
+          "_id": "out1",
+          "label": "out1",
+          "typeKey": "_string",
+        },
+      ],
+    },
+  ],
+}
+`;

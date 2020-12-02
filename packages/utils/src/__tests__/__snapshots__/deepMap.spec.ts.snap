@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`deepMap deep get/set 1`] = `
+Map {
+  "a" => Map {
+    "b" => Map {
+      "c" => "foo",
+      "d" => "bar",
+    },
+    "e" => "chris",
+  },
+}
+`;

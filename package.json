@@ -1,0 +1,15 @@
+{
+  "name": "auto6",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "private",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "main": "yarn workspace @auto/main",
+    "utils": "yarn workspace @auto/utils",
+    "ui": "yarn workspace @auto/ui"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@main/*": ["../../packages/main/src/*"],
+      "@utils/*": ["../../packages/utils/src/*"]
+    },
+    "target": "es6",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "lib": ["dom", "esnext"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/"],
+  "exclude": ["node_modules"]
+}

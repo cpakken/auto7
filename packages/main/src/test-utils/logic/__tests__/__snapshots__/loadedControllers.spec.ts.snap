@@ -1,0 +1,449 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loadedControllers convertLogicSnapshot 1`] = `
+Object {
+  "composition": Array [
+    Object {
+      "_id": "ADDSTRING_COMPOUND",
+      "blocks": Array [
+        Object {
+          "_id": "A",
+          "logicKey": "ADDSTRING",
+          "xy": Array [
+            0,
+            0,
+          ],
+        },
+        Object {
+          "_id": "B",
+          "logicKey": "ADDSTRING_NESTED",
+          "xy": Array [
+            0,
+            0,
+          ],
+        },
+        Object {
+          "_id": "C",
+          "logicKey": "_std_ADDSTRING",
+          "xy": Array [
+            0,
+            0,
+          ],
+        },
+      ],
+      "paths": Array [
+        Object {
+          "_id": "p0",
+          "from": Object {
+            "node": "in1",
+          },
+          "to": Object {
+            "block": "A",
+            "node": "in1",
+          },
+        },
+        Object {
+          "_id": "p1",
+          "from": Object {
+            "node": "in2",
+          },
+          "to": Object {
+            "block": "A",
+            "node": "in2",
+          },
+        },
+        Object {
+          "_id": "p2",
+          "from": Object {
+            "node": "in2",
+          },
+          "to": Object {
+            "block": "B",
+            "node": "in1",
+          },
+        },
+        Object {
+          "_id": "p3",
+          "from": Object {
+            "node": "in3",
+          },
+          "to": Object {
+            "block": "B",
+            "node": "in2",
+          },
+        },
+        Object {
+          "_id": "p4",
+          "from": Object {
+            "block": "A",
+            "node": "out1",
+          },
+          "to": Object {
+            "block": "C",
+            "node": "in1",
+          },
+        },
+        Object {
+          "_id": "p5",
+          "from": Object {
+            "block": "B",
+            "node": "out1",
+          },
+          "to": Object {
+            "block": "C",
+            "node": "in2",
+          },
+        },
+        Object {
+          "_id": "p6",
+          "from": Object {
+            "block": "C",
+            "node": "out",
+          },
+          "to": Object {
+            "node": "out1",
+          },
+        },
+      ],
+    },
+  ],
+  "info": Array [
+    Object {
+      "_id": "ADDSTRING_COMPOUND",
+      "inputs": Array [
+        Object {
+          "_id": "in1",
+          "label": "in1",
+          "typeKey": "_string",
+        },
+        Object {
+          "_id": "in2",
+          "label": "in2",
+          "typeKey": "_string",
+        },
+        Object {
+          "_id": "in3",
+          "label": "in3",
+          "typeKey": "_string",
+        },
+      ],
+      "label": "ADDSTRING COMPOUND",
+      "outputs": Array [
+        Object {
+          "_id": "out1",
+          "label": "out1",
+          "typeKey": "_string",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`loadedControllers createLoadedController 1`] = `
+Object {
+  "composed": Object {
+    "composition": Array [
+      Object {
+        "_id": "ADDSTRING",
+        "blocks": Array [
+          Object {
+            "_id": "A",
+            "logicKey": "_std_ADDSTRING",
+            "xy": Array [
+              0,
+              0,
+            ],
+          },
+        ],
+        "paths": Array [
+          Object {
+            "_id": "pA",
+            "from": Object {
+              "node": "in1",
+            },
+            "to": Object {
+              "block": "A",
+              "node": "in1",
+            },
+          },
+          Object {
+            "_id": "pB",
+            "from": Object {
+              "node": "in2",
+            },
+            "to": Object {
+              "block": "A",
+              "node": "in2",
+            },
+          },
+          Object {
+            "_id": "pC",
+            "from": Object {
+              "block": "A",
+              "node": "out",
+            },
+            "to": Object {
+              "node": "out1",
+            },
+          },
+        ],
+      },
+      Object {
+        "_id": "ADDSTRING_NESTED",
+        "blocks": Array [
+          Object {
+            "_id": "A",
+            "logicKey": "ADDSTRING",
+            "xy": Array [
+              0,
+              0,
+            ],
+          },
+        ],
+        "paths": Array [
+          Object {
+            "_id": "pA",
+            "from": Object {
+              "node": "in1",
+            },
+            "to": Object {
+              "block": "A",
+              "node": "in1",
+            },
+          },
+          Object {
+            "_id": "pB",
+            "from": Object {
+              "node": "in2",
+            },
+            "to": Object {
+              "block": "A",
+              "node": "in2",
+            },
+          },
+          Object {
+            "_id": "pC",
+            "from": Object {
+              "block": "A",
+              "node": "out1",
+            },
+            "to": Object {
+              "node": "out1",
+            },
+          },
+        ],
+      },
+      Object {
+        "_id": "ADDSTRING_COMPOUND",
+        "blocks": Array [
+          Object {
+            "_id": "A",
+            "logicKey": "ADDSTRING",
+            "xy": Array [
+              0,
+              0,
+            ],
+          },
+          Object {
+            "_id": "B",
+            "logicKey": "ADDSTRING_NESTED",
+            "xy": Array [
+              0,
+              0,
+            ],
+          },
+          Object {
+            "_id": "C",
+            "logicKey": "_std_ADDSTRING",
+            "xy": Array [
+              0,
+              0,
+            ],
+          },
+        ],
+        "paths": Array [
+          Object {
+            "_id": "p0",
+            "from": Object {
+              "node": "in1",
+            },
+            "to": Object {
+              "block": "A",
+              "node": "in1",
+            },
+          },
+          Object {
+            "_id": "p1",
+            "from": Object {
+              "node": "in2",
+            },
+            "to": Object {
+              "block": "A",
+              "node": "in2",
+            },
+          },
+          Object {
+            "_id": "p2",
+            "from": Object {
+              "node": "in2",
+            },
+            "to": Object {
+              "block": "B",
+              "node": "in1",
+            },
+          },
+          Object {
+            "_id": "p3",
+            "from": Object {
+              "node": "in3",
+            },
+            "to": Object {
+              "block": "B",
+              "node": "in2",
+            },
+          },
+          Object {
+            "_id": "p4",
+            "from": Object {
+              "block": "A",
+              "node": "out1",
+            },
+            "to": Object {
+              "block": "C",
+              "node": "in1",
+            },
+          },
+          Object {
+            "_id": "p5",
+            "from": Object {
+              "block": "B",
+              "node": "out1",
+            },
+            "to": Object {
+              "block": "C",
+              "node": "in2",
+            },
+          },
+          Object {
+            "_id": "p6",
+            "from": Object {
+              "block": "C",
+              "node": "out",
+            },
+            "to": Object {
+              "node": "out1",
+            },
+          },
+        ],
+      },
+    ],
+    "info": Array [
+      Object {
+        "_id": "ADDSTRING",
+        "inputs": Array [
+          Object {
+            "_id": "in1",
+            "label": "in1",
+            "typeKey": "_string",
+          },
+          Object {
+            "_id": "in2",
+            "label": "in2",
+            "typeKey": "_number",
+          },
+        ],
+        "keysCache": undefined,
+        "label": "ADDSTRING COMPOSED",
+        "outputs": Array [
+          Object {
+            "_id": "out1",
+            "label": "out1",
+            "typeKey": "_string",
+          },
+        ],
+      },
+      Object {
+        "_id": "ADDSTRING_NESTED",
+        "inputs": Array [
+          Object {
+            "_id": "in1",
+            "label": "in1",
+            "typeKey": "_string",
+          },
+          Object {
+            "_id": "in2",
+            "label": "in2",
+            "typeKey": "_number",
+          },
+        ],
+        "keysCache": undefined,
+        "label": "ADDSTRING NESTED",
+        "outputs": Array [
+          Object {
+            "_id": "out1",
+            "label": "out1",
+            "typeKey": "_string",
+          },
+        ],
+      },
+      Object {
+        "_id": "ADDSTRING_COMPOUND",
+        "inputs": Array [
+          Object {
+            "_id": "in1",
+            "label": "in1",
+            "typeKey": "_string",
+          },
+          Object {
+            "_id": "in2",
+            "label": "in2",
+            "typeKey": "_string",
+          },
+          Object {
+            "_id": "in3",
+            "label": "in3",
+            "typeKey": "_string",
+          },
+        ],
+        "keysCache": undefined,
+        "label": "ADDSTRING COMPOUND",
+        "outputs": Array [
+          Object {
+            "_id": "out1",
+            "label": "out1",
+            "typeKey": "_string",
+          },
+        ],
+      },
+    ],
+  },
+  "native": Object {
+    "info": Array [
+      Object {
+        "_id": "_std_ADDSTRING",
+        "inputs": Array [
+          Object {
+            "_id": "in1",
+            "label": "in1",
+            "typeKey": "_string",
+          },
+          Object {
+            "_id": "in2",
+            "label": "in2",
+            "typeKey": "_string",
+          },
+        ],
+        "label": "ADDSTRING NATIVE",
+        "outputs": Array [
+          Object {
+            "_id": "out",
+            "label": "out",
+            "typeKey": "_string",
+          },
+        ],
+      },
+    ],
+  },
+}
+`;

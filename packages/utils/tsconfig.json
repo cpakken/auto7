@@ -1,0 +1,22 @@
+{
+   "compilerOptions": {
+      "target": "es6",
+      "module": "ESNext",
+      "esModuleInterop": true,
+      "jsx": "react",
+      "moduleResolution": "node",
+      "allowJs": true,
+      "experimentalDecorators": true,
+      "allowSyntheticDefaultImports": true,
+      "noImplicitThis": true,
+      // "noImplicitAny": true,
+      "strictNullChecks": true,
+      "lib": ["dom", "esnext"],
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "resolveJsonModule": true,
+      "emitDecoratorMetadata": true,
+      "isolatedModules": true
+   },
+   "exclude": ["node_modules", "./jest.config.js"],
+}

@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogicController getUpdatedLogicKeys 1`] = `
+Set {
+  "ADDSTRING_COMPOUND",
+  "ADDSTRING",
+  "_std_ADDSTRING",
+  "ADDSTRING_NESTED",
+}
+`;
+
+exports[`LogicController logicNative module loading 1`] = `
+Object {
+  "ins": Array [
+    "in1",
+    "in2",
+  ],
+  "outs": Object {
+    "out": [Function],
+  },
+}
+`;

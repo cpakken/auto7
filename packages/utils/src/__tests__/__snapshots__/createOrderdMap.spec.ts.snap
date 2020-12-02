@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createOrderedMap push/delete/move 1`] = `
+Object {
+  "_id": "0",
+  "a": 7,
+}
+`;
+
+exports[`createOrderedMap push/delete/move 2`] = `
+Array [
+  Object {
+    "_id": "a",
+    "a": 4,
+  },
+  Object {
+    "_id": "b",
+    "a": 5,
+  },
+  Object {
+    "_id": "c",
+    "a": 6,
+  },
+  Object {
+    "_id": "0",
+    "a": 7,
+  },
+]
+`;
+
+exports[`createOrderedMap push/delete/move 3`] = `
+Array [
+  Object {
+    "_id": "b",
+    "a": 5,
+  },
+  Object {
+    "_id": "c",
+    "a": 6,
+  },
+  Object {
+    "_id": "0",
+    "a": 7,
+  },
+]
+`;
+
+exports[`createOrderedMap push/delete/move 4`] = `
+Array [
+  Object {
+    "_id": "c",
+    "a": 6,
+  },
+  Object {
+    "_id": "b",
+    "a": 5,
+  },
+  Object {
+    "_id": "0",
+    "a": 7,
+  },
+]
+`;
