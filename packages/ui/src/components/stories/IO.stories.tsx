@@ -24,11 +24,12 @@ function usePropsUpdateStore(props: {}, store: {}) {
 
 export const InInterface: Story<{ isEdit: boolean }> = (props) => {
   const io = useConstant(() => {
-    console.log("adf")
+    console.log("onMount")
     return LogicInterface.create(snapshot, { typeController: createTestTypeController() })
   })
   const ioState = useLocalObservable(() => ({ isEdit: false }))
   usePropsUpdateStore(props, ioState)
+  console.log("render")
 
   return (
     <IOContext.Provider value={ioState}>

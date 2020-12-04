@@ -1,8 +1,12 @@
+- issues
+  sx -> rounded works but no types
+
 -> ui
+-> borderbox outline when focus
 
 - try fast refresh using next
-  -> textStyles
-  -> labels sm bold gray
+  -> textStyles / component styles
+  -> labels -> sm bold gray
 
 -> will automatically call toJSON if need to ipc
 -> have all complex types be initialized with base class Serializable
