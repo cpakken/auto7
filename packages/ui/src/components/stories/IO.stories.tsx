@@ -1,6 +1,6 @@
 import { Meta, Story } from "@storybook/react/types-6-0"
 import { useConstant } from "@utils/react/"
-import { IO, IOContext } from "../IO"
+import { IO } from "@ui/components/IO"
 import { createTestTypeController } from "@main/test-utils/types/create-test-controller"
 import { LogicInterface, ILogicInterfaceSnapshot } from "@main/controllers"
 import { useLocalObservable } from "mobx-react-lite"
@@ -23,20 +23,14 @@ function usePropsUpdateStore(props: {}, store: {}) {
 }
 
 export const InInterface: Story<{ isEdit: boolean }> = (props) => {
-  const io = useConstant(() => {
-    console.log("onMount")
-    return LogicInterface.create(snapshot, { typeController: createTestTypeController() })
-  })
-  const ioState = useLocalObservable(() => ({ isEdit: false }))
-  usePropsUpdateStore(props, ioState)
-  console.log("render")
+  const io = useConstant(() => LogicInterface.create(snapshot, { typeController: createTestTypeController() }))
+  const state = useLocalObservable(() => ({ store: { isEdit: false } }))
+  usePropsUpdateStore(props, state.store)
 
   return (
-    <IOContext.Provider value={ioState}>
-      <div style={{ height: 600, userSelect: "none" }}>
-        <IO io={io} />
-      </div>
-    </IOContext.Provider>
+    <div style={{ height: 600, userSelect: "none" }}>
+      <IO io={io} _state={state} />
+    </div>
   )
 }
 
