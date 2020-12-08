@@ -1,16 +1,30 @@
 import { createContext, useContext } from "react"
-import { observable } from "mobx"
-import { useLocalObservable } from "mobx-react-lite"
+import { makeAutoObservable } from "mobx"
+import { ILogicNode } from "@main/controllers"
+import { useConstant } from "@utils/react"
 
-export const IOContext = createContext<IOState>(observable({ store: { isEdit: false } }))
+export class IOState {
+  isEdit = false
+  nodeEdit: ILogicNode | null = null
+
+  editNode(node: ILogicNode) {
+    this.isEdit = true
+    this.nodeEdit = node
+  }
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+}
+
+export function useIOState() {
+  const state = useConstant(() => new IOState())
+
+  return state
+}
+
+export const IOContext = createContext(new IOState())
 
 export function useParentIOState() {
   return useContext(IOContext)
-}
-
-export type IOState = ReturnType<typeof useIOState>
-export function useIOState() {
-  const store = useLocalObservable(() => ({ isEdit: false }))
-
-  return { store }
 }

@@ -24,6 +24,6 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
-  "include": ["src/", "../utils/src/chakra-enhance/chakra-enhance.tsx"],
+  "include": ["src/", "../utils/src/chakra-enhance/chakra-enhance.tsx", "../utils/src/react/use-props-update-store.tsx"],
   "exclude": ["node_modules"]
 }
