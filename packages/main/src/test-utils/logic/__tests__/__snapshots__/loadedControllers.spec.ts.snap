@@ -114,17 +114,17 @@ Object {
         Object {
           "_id": "in1",
           "label": "in1",
-          "typeKey": "_string",
+          "typeKey": "_std_string",
         },
         Object {
           "_id": "in2",
           "label": "in2",
-          "typeKey": "_string",
+          "typeKey": "_std_string",
         },
         Object {
           "_id": "in3",
           "label": "in3",
-          "typeKey": "_string",
+          "typeKey": "_std_string",
         },
       ],
       "label": "ADDSTRING COMPOUND",
@@ -132,7 +132,7 @@ Object {
         Object {
           "_id": "out1",
           "label": "out1",
-          "typeKey": "_string",
+          "typeKey": "_std_string",
         },
       ],
     },
@@ -345,12 +345,12 @@ Object {
           Object {
             "_id": "in1",
             "label": "in1",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
           Object {
             "_id": "in2",
             "label": "in2",
-            "typeKey": "_number",
+            "typeKey": "_std_number",
           },
         ],
         "keysCache": undefined,
@@ -359,7 +359,7 @@ Object {
           Object {
             "_id": "out1",
             "label": "out1",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
         ],
       },
@@ -369,12 +369,12 @@ Object {
           Object {
             "_id": "in1",
             "label": "in1",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
           Object {
             "_id": "in2",
             "label": "in2",
-            "typeKey": "_number",
+            "typeKey": "_std_number",
           },
         ],
         "keysCache": undefined,
@@ -383,7 +383,7 @@ Object {
           Object {
             "_id": "out1",
             "label": "out1",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
         ],
       },
@@ -393,17 +393,17 @@ Object {
           Object {
             "_id": "in1",
             "label": "in1",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
           Object {
             "_id": "in2",
             "label": "in2",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
           Object {
             "_id": "in3",
             "label": "in3",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
         ],
         "keysCache": undefined,
@@ -412,7 +412,7 @@ Object {
           Object {
             "_id": "out1",
             "label": "out1",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
         ],
       },
@@ -426,12 +426,12 @@ Object {
           Object {
             "_id": "in1",
             "label": "in1",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
           Object {
             "_id": "in2",
             "label": "in2",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
         ],
         "label": "ADDSTRING NATIVE",
@@ -439,7 +439,7 @@ Object {
           Object {
             "_id": "out",
             "label": "out",
-            "typeKey": "_string",
+            "typeKey": "_std_string",
           },
         ],
       },

@@ -13,10 +13,10 @@ export const ADDSTRING: LogicComposedSnapshotIn = {
   info: {
     label: "ADDSTRING COMPOSED",
     inputs: [
-      { _id: "in1", label: "in1", typeKey: "_string" },
-      { _id: "in2", label: "in2", typeKey: "_number" },
+      { _id: "in1", label: "in1", typeKey: "_std_string" },
+      { _id: "in2", label: "in2", typeKey: "_std_number" },
     ],
-    outputs: [{ _id: "out1", label: "out1", typeKey: "_string" }],
+    outputs: [{ _id: "out1", label: "out1", typeKey: "_std_string" }],
   },
 }
 
@@ -33,10 +33,10 @@ export const ADDSTRING_NESTED: LogicComposedSnapshotIn = {
   info: {
     label: "ADDSTRING NESTED",
     inputs: [
-      { _id: "in1", label: "in1", typeKey: "_string" },
-      { _id: "in2", label: "in2", typeKey: "_number" },
+      { _id: "in1", label: "in1", typeKey: "_std_string" },
+      { _id: "in2", label: "in2", typeKey: "_std_number" },
     ],
-    outputs: [{ _id: "out1", label: "out1", typeKey: "_string" }],
+    outputs: [{ _id: "out1", label: "out1", typeKey: "_std_string" }],
   },
 }
 
@@ -61,10 +61,10 @@ export const ADDSTRING_COMPOUND: LogicComposedSnapshotIn = {
   info: {
     label: "ADDSTRING COMPOUND",
     inputs: [
-      { _id: "in1", label: "in1", typeKey: "_string" },
-      { _id: "in2", label: "in2", typeKey: "_string" },
-      { _id: "in3", label: "in3", typeKey: "_string" },
+      { _id: "in1", label: "in1", typeKey: "_std_string" },
+      { _id: "in2", label: "in2", typeKey: "_std_string" },
+      { _id: "in3", label: "in3", typeKey: "_std_string" },
     ],
-    outputs: [{ _id: "out1", label: "out1", typeKey: "_string" }],
+    outputs: [{ _id: "out1", label: "out1", typeKey: "_std_string" }],
   },
 }

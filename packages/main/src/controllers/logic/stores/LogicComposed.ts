@@ -90,3 +90,13 @@ export interface LogicComposedSnapshot {
   info: Omit<ILogicComposedInfoSnapshot, "_id">
   composition: Omit<ILogicCompositionSnapshot, "_id">
 }
+
+export interface LogicComposedShallowReady extends LogicComposed {
+  info: ILogicComposedInfo
+  composition: ILogicComposition
+  shallowInfoReady: true
+}
+
+export function isShallowReady(composed: LogicComposed): composed is LogicComposedShallowReady {
+  return composed.shallowInfoReady
+}
