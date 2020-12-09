@@ -3,6 +3,10 @@ import colors from "./colors"
 
 const customTheme = extendTheme({
   colors,
+  shadows: {
+    none1: "0 0px 0px 0px rgba(0, 0, 0, 0)",
+    none2: "0 0px 0px 0px rgba(0, 0, 0, 0), 0 0px 0px 0px rgba(0, 0, 0, 0)",
+  },
   styles: {
     global: {
       body: { fontFamily: "Inter, sans-serif" },

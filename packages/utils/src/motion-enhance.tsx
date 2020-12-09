@@ -1,7 +1,7 @@
 import { forwardRef, ComponentType } from "react"
 import { motion } from "framer-motion"
 
-const motionPropKeys = new Set(["whileHover"])
+const motionPropKeys = new Set(["whileHover", "onHoverStart", "onHoverEnd"])
 
 function filterMotionKeys<M extends {}>(obj: M) {
   const ret = {} as any

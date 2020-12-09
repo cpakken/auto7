@@ -3,7 +3,11 @@ import { makeAutoObservable } from "mobx"
 import { ILogicNode } from "@main/controllers"
 import { useConstant } from "@utils/react"
 
+export type IOType = "in" | "out"
+
 export class IOState {
+  ioType: IOType
+
   isEdit = false
   nodeEdit: ILogicNode | null = null
 
@@ -12,18 +16,19 @@ export class IOState {
     this.nodeEdit = node
   }
 
-  constructor() {
-    makeAutoObservable(this)
+  constructor(ioType: IOType) {
+    makeAutoObservable(this, { ioType: false }, { autoBind: true })
+    this.ioType = ioType
   }
 }
 
-export function useIOState() {
-  const state = useConstant(() => new IOState())
+export function useIOState(ioType: IOType) {
+  const state = useConstant(() => new IOState(ioType))
 
   return state
 }
 
-export const IOContext = createContext(new IOState())
+export const IOContext = createContext(new IOState("in"))
 
 export function useParentIOState() {
   return useContext(IOContext)

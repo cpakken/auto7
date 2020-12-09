@@ -21,6 +21,7 @@ export interface StyleConfig {
     variant?: string
     size?: string
     colorScheme?: string
+    [key: string]: any
   }
 }
 

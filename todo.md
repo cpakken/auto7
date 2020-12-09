@@ -25,3 +25,13 @@ update connectionStore with MergeDeepMap class
 logicController / typeController can have separate store -> mst and getter functions class mobx computed
 -> have separate cache store for info / comp / detail
 -> getter -> mobx class that computed values links all 3 together
+
+## Open Source Contribute
+
+chakra
+typescript optimization
+useStyleConfig closure instead -> move config out of theme
+
+optimize -> useMemo is useless there
+
+framerMotion -> custom don't foward props motion props

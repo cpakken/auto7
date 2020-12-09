@@ -1,0 +1,51 @@
+import { Meta, Story } from "@storybook/react/types-6-0"
+import { useConstant } from "@utils/react/"
+import { createTestTypeController } from "@main/test-utils/types/create-test-controller"
+import { LogicInterface, ILogicInterfaceSnapshot } from "@main/controllers"
+import { usePropsUpdateStore } from "@utils/react/use-props-update-store"
+import { Box } from "@ui/common"
+import { IO } from "@ui/components/IO"
+import { useIOState } from "../use-io-state"
+
+const inSnapshot: ILogicInterfaceSnapshot = [
+  { _id: "in1", label: "in1", typeKey: "_std_string" },
+  { _id: "in2", label: "in2", typeKey: "_std_string" },
+  { _id: "in3", label: "in3", typeKey: "_std_string" },
+]
+
+export const Inputs: Story<{ isEdit: boolean }> = (props) => {
+  const io = useConstant(() => LogicInterface.create(inSnapshot, { typeController: createTestTypeController() }))
+  const state = useIOState("in")
+  usePropsUpdateStore(props, state)
+
+  return <IO ioType="in" io={io} _state={state} />
+}
+
+Inputs.args = {
+  isEdit: false,
+}
+
+const outSnapshot: ILogicInterfaceSnapshot = [
+  { _id: "out1", label: "out1", typeKey: "_std_string" },
+  { _id: "out2", label: "out2", typeKey: "_std_string" },
+  { _id: "out3", label: "out3", typeKey: "_std_string" },
+]
+
+export const Outputs: Story<{ isEdit: boolean }> = (props) => {
+  const io = useConstant(() => LogicInterface.create(outSnapshot, { typeController: createTestTypeController() }))
+  const state = useIOState("out")
+  usePropsUpdateStore(props, state)
+
+  return <IO ioType="out" io={io} _state={state} />
+}
+
+Outputs.args = {
+  isEdit: false,
+}
+
+export default {
+  title: "UI/IO",
+  decorators: [
+    (Story) => <Box sx={{ w: 400, h: 600, bg: "coolGray.700", userSelect: "none", position: "relative" }}>{Story()}</Box>,
+  ],
+} as Meta

@@ -22,13 +22,14 @@ export const NodeInput = observer(({ node }: { node: ILogicNode }) => {
         h: 7,
         // h: "full",
         textAlign: "center",
+        fontSize: "inherit",
         fontWeight: "inherit",
         borderRadius: "md",
         outline: "none",
         bg: "none",
         transitionDuration: "normal",
-        boxShadow: !isValid ? `0 0 0 2px ${errorColor}` : undefined,
       }}
+      _invalid={{ boxShadow: `0 0 0 2px ${errorColor}` }}
     />
   )
 })
