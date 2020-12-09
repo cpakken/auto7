@@ -73,6 +73,9 @@ export function createStoreModel<T extends IAnyType>(model: T) {
       get(key: string) {
         return self.store.get(key)
       },
+      values() {
+        return self.store.values()
+      },
     }))
     .actions((self) => ({
       remove(item: Instance<T>) {

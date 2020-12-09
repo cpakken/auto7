@@ -45,7 +45,5 @@ Outputs.args = {
 
 export default {
   title: "UI/IO",
-  decorators: [
-    (Story) => <Box sx={{ w: 400, h: 600, bg: "coolGray.700", userSelect: "none", position: "relative" }}>{Story()}</Box>,
-  ],
+  decorators: [(Story) => <Box sx={{ w: 400, h: 600, bg: "coolGray.700", position: "relative" }}>{Story()}</Box>],
 } as Meta

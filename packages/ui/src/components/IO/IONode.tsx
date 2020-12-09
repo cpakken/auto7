@@ -1,8 +1,8 @@
 import { observer, useLocalObservable } from "mobx-react-lite"
 import { ILogicNode } from "@main/controllers"
-import { useTheme } from "@chakra-ui/react"
 import { motionEnhance } from "@utils/motion-enhance"
 import { chakraEnhance } from "@utils/chakra-enhance"
+import { useScaleBoxShadowValues } from "@ui/utils"
 import { useParentIOState } from "./use-io-state"
 import { MotionFlex } from "@ui/common"
 import { NodeLabel } from "./NodeLabel"
@@ -12,8 +12,8 @@ const NodeConnector = motionEnhance(
   chakraEnhance("div", {
     baseStyle: {
       bg: "coolGray.400",
-      w: "60px",
-      h: "25px",
+      w: "50px",
+      h: "20px",
       borderRadius: "full",
       position: "absolute",
       zIndex: "base",
@@ -30,8 +30,7 @@ export const IONode = observer(({ node }: { node: ILogicNode }) => {
   const { ioType, isEdit } = useParentIOState()
   const { isFocus, onFocus, onBlur, isHover, onHoverStart, onHoverEnd } = useIONodeState()
 
-  const { shadows } = useTheme()
-  const boxShadow = { animate: { boxShadow: isFocus || isHover ? shadows["md"] : shadows["none2"] } }
+  const { boxShadow, scale } = useScaleBoxShadowValues()
 
   return (
     <MotionFlex
@@ -40,7 +39,8 @@ export const IONode = observer(({ node }: { node: ILogicNode }) => {
       justifyContent="center"
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      animate={isFocus || isHover ? { scale: 1.06 } : { scale: 1 }}
+      animate={{ scale: isHover || isFocus ? 1.06 : 1 }}
+      style={{ scale }}
     >
       <MotionFlex
         sx={{ bg: "coolGray.200", h: "75px", w: "100%", px: 2, borderRadius: "lg", zIndex: "docked" }}
@@ -49,12 +49,12 @@ export const IONode = observer(({ node }: { node: ILogicNode }) => {
         align="center"
         onFocus={onFocus}
         onBlur={onBlur}
-        {...boxShadow}
+        style={{ boxShadow }}
       >
         <NodeLabel node={node} isEdit={isEdit} />
         <TypeLabel info={type!.info!} isEdit={isEdit} />
       </MotionFlex>
-      <NodeConnector variant={ioType} {...boxShadow} />
+      <NodeConnector variant={ioType} style={{ boxShadow }} />
     </MotionFlex>
   )
 })
@@ -64,16 +64,16 @@ function useIONodeState() {
     isFocus: false,
     isHover: false,
     onFocus() {
-      state.isFocus = true
+      this.isFocus = true
     },
     onBlur() {
-      state.isFocus = false
+      this.isFocus = false
     },
     onHoverStart() {
-      state.isHover = true
+      this.isHover = true
     },
     onHoverEnd() {
-      state.isHover = false
+      this.isHover = false
     },
   }))
 

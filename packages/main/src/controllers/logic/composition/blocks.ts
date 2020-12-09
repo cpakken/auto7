@@ -14,6 +14,9 @@ const BlockModel = HasID.props({
 })
   .volatile(createConnections)
   .actions((self) => ({
+    setXY(xy: [number, number]) {
+      self.xy = xy
+    },
     beforeDestroy() {
       //Remove all connected paths
       const { paths } = getLogicComposition(self)
@@ -56,4 +59,5 @@ export function isBlockNative(block): block is IBlockNative {
   return isStateTreeNode(block) && getType(block) === BlockNative
 }
 
+export interface IBlocks extends Instance<typeof Blocks> {}
 export const Blocks = createStoreModel(Block)

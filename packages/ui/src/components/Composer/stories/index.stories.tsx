@@ -17,5 +17,5 @@ export const Primary = () => {
 
 export default {
   title: "UI/Composer",
-  decorators: [(Story) => <Box sx={{ w: 800, h: 600 }}>{Story()}</Box>],
+  decorators: [(Story) => <Box sx={{ w: 1000, h: 600 }}>{Story()}</Box>],
 } as Meta

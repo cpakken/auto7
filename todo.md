@@ -1,12 +1,10 @@
+- switch chakraEnhanced("div) with chakraDiv
+- test charkraMotion fast refresh
+
 - issues
-  sx -> rounded works but no types
+  sx -> rounded works but no types in docs
 
--> ui
--> borderbox outline when focus
-
-- try fast refresh using next
-  -> textStyles / component styles
-  -> labels -> sm bold gray
+try fast refresh with motionChakraEnhance
 
 -> will automatically call toJSON if need to ipc
 -> have all complex types be initialized with base class Serializable
@@ -34,4 +32,6 @@ useStyleConfig closure instead -> move config out of theme
 
 optimize -> useMemo is useless there
 
-framerMotion -> custom don't foward props motion props
+framerMotion -> custom don't forward props motion props
+
+//BUG: FramerMotion drag is used with onHoverStart onHoverEnd, make sure drag is tied to Hover or else it will stutter

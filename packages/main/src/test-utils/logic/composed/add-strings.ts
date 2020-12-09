@@ -45,8 +45,8 @@ export const ADDSTRING_COMPOUND: LogicComposedSnapshotIn = {
   composition: {
     blocks: [
       { _id: "A", logicKey: "ADDSTRING", xy: [0, 0] },
-      { _id: "B", logicKey: "ADDSTRING_NESTED", xy: [0, 0] },
-      { _id: "C", logicKey: "_std_ADDSTRING", xy: [0, 0] },
+      { _id: "B", logicKey: "ADDSTRING_NESTED", xy: [0, 6] },
+      { _id: "C", logicKey: "_std_ADDSTRING", xy: [7, 3] },
     ],
     paths: [
       { _id: "p0", from: { node: "in1" }, to: { block: "A", node: "in1" } },

@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react"
 import { Input } from "../Input"
 
 export default {
-  title: "Common/Input",
+  title: "Library/Common/Input",
   args: {
     value: "Sample input",
   },

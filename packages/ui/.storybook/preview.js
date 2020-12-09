@@ -5,6 +5,7 @@ export const parameters = {
   docs: { page: null },
   backgrounds: { default: "dark" },
   controls: { hideNoControlsWarning: true },
+  options: { storySort: { order: ["UI", ["IO", "Composition", "Composer"], "Library"] } },
 }
 
 export const decorators = [StorybookDecorator]

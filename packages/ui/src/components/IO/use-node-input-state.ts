@@ -12,28 +12,28 @@ export function useNodeInputState(node: ILogicNode) {
       ref,
       value: node.label,
       get isValid() {
-        return state.value.length > 0
+        return this.value.length > 0
       },
       onChange(e: ChangeEvent<HTMLInputElement>) {
-        state.value = e.target.value
+        this.value = e.target.value
       },
       resetLabel() {
-        state.value = node.label
+        this.value = node.label
       },
       setLabel() {
-        if (state.isValid) node.setLabel(state.value)
-        else state.resetLabel()
+        if (this.isValid) node.setLabel(this.value)
+        else this.resetLabel()
       },
       onKeyDown({ key }: KeyboardEvent<HTMLInputElement>) {
         switch (key) {
           case "Escape":
-            state.resetLabel()
+            this.resetLabel()
           case "Enter":
             ref.current!.blur()
         }
       },
       onBlur() {
-        state.setLabel()
+        this.setLabel()
         // parent.isEdit = false
       },
       onFocus() {

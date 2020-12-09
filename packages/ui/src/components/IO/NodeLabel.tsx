@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite"
 import { ILogicNode } from "@main/controllers"
 import { Center, Box, chakra } from "@chakra-ui/react"
 import { useColor } from "@utils/chakra-utils"
-import { useNodeInputState } from "./use-node-Input-state"
+import { useNodeInputState } from "./use-node-input-state"
 
 export const NodeInput = observer(({ node }: { node: ILogicNode }) => {
   const { ref, value, onChange, isValid, onKeyDown, onBlur, onFocus } = useNodeInputState(node)

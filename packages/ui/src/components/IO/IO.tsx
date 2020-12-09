@@ -8,10 +8,13 @@ import { IONode } from "./IONode"
 const IOWrapper = chakraExtend(Flex, {
   baseStyle: {
     bg: "coolGray.50",
+    // bg: "coolGray.700",
     w: 140,
-    px: 3,
     h: "100%",
+    px: 3,
     position: "absolute",
+    userSelect: "none",
+    top: 0,
   },
   defaultProps: {
     direction: "column",

@@ -11,7 +11,7 @@ export const WithCustomSX = Template.bind({})
 WithCustomSX.args = { sx: { fontSize: 20 } }
 
 export default {
-  title: "Common/Label",
+  title: "Library/Common/Label",
   args: { label: "Testing!" },
   argTypes: {
     colorScheme: {
