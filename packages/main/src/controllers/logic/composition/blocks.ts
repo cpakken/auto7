@@ -14,7 +14,7 @@ const BlockModel = HasID.props({
 })
   .volatile(createConnections)
   .actions((self) => ({
-    setXY(xy: [number, number]) {
+    setXY(xy: readonly [number, number]) {
       self.xy = xy
     },
     beforeDestroy() {

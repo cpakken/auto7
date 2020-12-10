@@ -1,4 +1,4 @@
-import { motionEnhance } from "@utils/motion-enhance"
+import { motionEnhance } from "@utils/motion"
 import { Flex, Box } from "."
 // import { Flex, Box } from "@chakra-ui/react"
 

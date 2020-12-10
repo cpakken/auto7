@@ -66,8 +66,11 @@ export class BlockState {
 
   @action.bound onDragEnd() {
     this.parent.composition.blockDrag = null
+    this.setPosition()
   }
-  @action.bound setXY(xy: [number, number]) {
+  @action.bound setPosition() {
+    const { x, y } = this.motionXY
+    const xy = [valueToGrid(x.get()), valueToGrid(y.get())] as const
     this.block.setXY(xy)
   }
 }

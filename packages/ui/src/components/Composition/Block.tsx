@@ -2,7 +2,7 @@ import { IBlock } from "@main/controllers"
 import { observer } from "mobx-react-lite"
 import { Label } from "@ui/library"
 import { chakraEnhance } from "@utils/chakra-enhance"
-import { motionEnhance } from "@utils/motion-enhance"
+import { motionEnhance } from "@utils/motion"
 import { useBlockState } from "./use-block-state"
 import { useScaleBoxShadowValues } from "@ui/utils"
 

@@ -1,6 +1,6 @@
 import { observer, useLocalObservable } from "mobx-react-lite"
 import { ILogicNode } from "@main/controllers"
-import { motionEnhance } from "@utils/motion-enhance"
+import { motionEnhance } from "@utils/motion"
 import { chakraEnhance } from "@utils/chakra-enhance"
 import { useScaleBoxShadowValues } from "@ui/utils"
 import { useParentIOState } from "./use-io-state"

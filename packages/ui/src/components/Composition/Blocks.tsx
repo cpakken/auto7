@@ -1,14 +1,11 @@
 import { MotionBox } from "@ui/common"
 import { mapIter } from "@utils/iterable-fns"
-import { observer, useLocalObservable } from "mobx-react-lite"
+import { observer } from "mobx-react-lite"
 import { IBlocks, IBlock } from "@main/controllers"
 import { Block } from "./Block"
 import { useBlocksState } from "./use-blocks-state"
 import { BlockState, gridToValue, valueToGrid } from "./use-block-state"
-import { useSpring } from "framer-motion"
-import { useEffect } from "react"
-import { autorun } from "mobx"
-import { useUnmountEffect } from "@utils/react"
+import { useSpring, useTransform } from "framer-motion"
 
 export const Blocks = observer(({ blocks }: { blocks: IBlocks }) => {
   const { motionOffset, dimensions, composition } = useBlocksState()
@@ -25,54 +22,26 @@ export const Blocks = observer(({ blocks }: { blocks: IBlocks }) => {
 })
 
 function useBlockDragShadowState(block: BlockState) {
-  // const { motionXY } = block
-  // const grid = {
-  //   x: useTransform(motionXY.x, valueToGrid),
-  //   y: useTransform(motionXY.y, valueToGrid),
-  // }
-  // const xy = {
-  //   x: useTransform(grid.x, gridToValue),
-  //   y: useTransform(grid.y, gridToValue),
-  // }
-
-  const { x, y } = block.motionXY
-  const state = useLocalObservable(() => ({
-    grid: { x: valueToGrid(x.get()), y: valueToGrid(y.get()) },
-    get x() {
-      return gridToValue(state.grid.x)
-    },
-    get y() {
-      return gridToValue(state.grid.y)
-    },
-    setGrid(xy: "x" | "y", val) {
-      const prev = state.grid[xy]
-      if (prev !== val) state.grid[xy] = val
-    },
-  }))
-
-  const xy = {
-    x: useSpring(state.x, { damping: 25, stiffness: 300 }),
-    y: useSpring(state.y, { damping: 25, stiffness: 300 }),
+  const { motionXY } = block
+  const grid = {
+    x: useTransform(motionXY.x, valueToGrid),
+    y: useTransform(motionXY.y, valueToGrid),
+  }
+  const position = {
+    x: useTransform(grid.x, gridToValue),
+    y: useTransform(grid.y, gridToValue),
   }
 
-  useEffect(() => {
-    const disposer: (() => void)[] = []
-    disposer.push(x.onChange((val) => state.setGrid("x", valueToGrid(val))))
-    disposer.push(y.onChange((val) => state.setGrid("y", valueToGrid(val))))
-    disposer.push(autorun(() => xy.x.set(state.x)))
-    disposer.push(autorun(() => xy.y.set(state.y)))
-
-    return () => disposer.forEach((d) => d())
-  }, [])
-
-  useUnmountEffect(() => block.setXY([state.grid.x, state.grid.y]))
-
-  return xy
+  const config = { damping: 25, stiffness: 350 }
+  return {
+    x: useSpring(position.x, config),
+    y: useSpring(position.y, config),
+  }
 }
 
 export const BlockDragShadow = ({ block }: { block: BlockState }) => {
   const { width, height } = block
-  const xy = useBlockDragShadowState(block)
+  const position = useBlockDragShadowState(block)
 
-  return <MotionBox sx={{ width, height, bg: "red.600", position: "absolute" }} style={xy} />
+  return <MotionBox sx={{ width, height, bg: "red.600", position: "absolute" }} style={position} />
 }
