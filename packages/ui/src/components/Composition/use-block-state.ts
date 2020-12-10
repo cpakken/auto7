@@ -1,10 +1,20 @@
 import { IBlock } from "@main/controllers"
 import { MotionValue } from "framer-motion"
-import { action, computed, makeObservable } from "mobx"
+import { action, computed, makeObservable, untracked } from "mobx"
+import { useConstant } from "@utils/react"
 import { BlocksState } from "./use-blocks-state"
 import { useParentCompositionState } from "./use-composition-state"
 
 const gridSize = 35
+
+export function valueToGrid(value: number) {
+  return Math.round(value / gridSize)
+}
+
+export function gridToValue(grid: number) {
+  return grid * gridSize
+}
+
 export class BlockState {
   block: IBlock
   motionXY: { x: MotionValue<number>; y: MotionValue<number> }
@@ -14,7 +24,11 @@ export class BlockState {
     makeObservable(this)
     this.block = block
     this.parent = parent
-    this.motionXY = { x: new MotionValue(this.x), y: new MotionValue(this.y) }
+    this.motionXY = untracked(() => ({ x: new MotionValue(this.x), y: new MotionValue(this.y) }))
+
+    // const { x, y } = this.motionXY
+    // autorun(() => animate(x, this.x))
+    // autorun(() => animate(y, this.y))
   }
 
   @computed get width() {
@@ -24,10 +38,10 @@ export class BlockState {
     return gridSize * 3
   }
   @computed get x() {
-    return this.block.xy[0] * gridSize
+    return gridToValue(this.block.xy[0])
   }
   @computed get y() {
-    return this.block.xy[1] * gridSize
+    return gridToValue(this.block.xy[1])
   }
 
   @computed get isHover() {
@@ -53,10 +67,14 @@ export class BlockState {
   @action.bound onDragEnd() {
     this.parent.composition.blockDrag = null
   }
+  @action.bound setXY(xy: [number, number]) {
+    this.block.setXY(xy)
+  }
 }
 
-// export type BlockState = ReturnType<typeof useBlockState>
 export function useBlockState(block: IBlock) {
   const parent = useParentCompositionState()
-  return parent.blocks.get(block._id)!
+  const state = useConstant(() => parent.blocks.get(block._id)!)
+  // const state = parent.blocks.get(block._id)!
+  return state
 }

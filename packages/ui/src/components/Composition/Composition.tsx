@@ -1,23 +1,9 @@
-import { Box, MotionBox } from "@ui/common"
-import { mapIter } from "@utils/iterable-fns"
+import { Box } from "@ui/common"
 import { observer } from "mobx-react-lite"
-import { ILogicComposition, IBlocks, IBlock } from "@main/controllers"
-import { Block } from "./Block"
+import { ILogicComposition } from "@main/controllers"
 import { useCompositionState, CompositionContext } from "./use-composition-state"
-import { useBlocksState } from "./use-blocks-state"
 import { chakraEnhance } from "@utils/chakra-enhance"
-
-export const Blocks = observer(({ blocks }: { blocks: IBlocks }) => {
-  const { motionOffset, dimensions } = useBlocksState()
-
-  return (
-    <MotionBox position="absolute" bg="coolGray.600" sx={dimensions} style={motionOffset}>
-      {mapIter(blocks.values(), (block: IBlock) => (
-        <Block key={block._id} block={block} />
-      ))}
-    </MotionBox>
-  )
-})
+import { Blocks } from "./Blocks"
 
 const CompositionWrapper = chakraEnhance("div", {
   baseStyle: { w: "full", h: "full", position: "relative", userSelect: "none" },

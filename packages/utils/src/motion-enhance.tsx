@@ -1,21 +1,19 @@
 import { forwardRef, ComponentType, FunctionComponent } from "react"
-import { motion, MotionProps, Variants } from "framer-motion"
-
-const motionPropKeys = new Set(["whileHover", "onHoverStart", "onHoverEnd", "drag"])
+import { motion, MotionProps, Variants, isValidMotionProp } from "framer-motion"
 
 function filterMotionKeys<M extends {}>(obj: M) {
   const ret = {} as any
   for (const k in obj) {
-    if (!motionPropKeys.has(k)) ret[k] = obj[k]
+    if (!isValidMotionProp(k)) ret[k] = obj[k]
   }
   return ret
 }
 
 export function motionEnhance<P>(Component: ComponentType<P>) {
   const Enhanced = motion.custom(
-    forwardRef((props: P, ref) => {
+    forwardRef(({ style, ...props }: P & MotionProps, ref) => {
       const forwardKeys = filterMotionKeys(props)
-      return <Component ref={ref} {...forwardKeys} />
+      return <Component ref={ref} {...forwardKeys} style={style} />
     })
   )
 

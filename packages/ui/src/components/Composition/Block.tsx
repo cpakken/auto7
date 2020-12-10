@@ -18,20 +18,21 @@ const BlockWrapper = motionEnhance(
 )
 
 export const Block = observer(({ block }: { block: IBlock }) => {
-  const { width, height, motionXY, onHoverStart, onHoverEnd, onDragEnd, onDragStart, isHover, isDrag } = useBlockState(block)
   const { inputs, outputs, label } = block.logic.info!
-
+  const { width, height, motionXY, onHoverStart, onHoverEnd, onDragEnd, onDragStart, isHover, isDrag } = useBlockState(block)
   const { boxShadow, scale } = useScaleBoxShadowValues()
+
   const enable = isHover || isDrag
 
   return (
     <BlockWrapper
       drag={enable}
-      sx={{ width, height }}
+      dragMomentum={false}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
+      sx={{ width, height }}
       animate={{ scale: enable ? 1.06 : 1 }}
       style={{ scale, boxShadow, ...motionXY, zIndex: enable ? 10 : 1 }}
     >

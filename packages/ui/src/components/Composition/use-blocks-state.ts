@@ -1,7 +1,7 @@
 import { reduceIter } from "@utils/iterable-fns"
 import { IBlock, IBlocks } from "@main/controllers"
 import { autorun, computed, makeObservable } from "mobx"
-import { smartmap, SmartMap } from "smartmap"
+import { SmartMap } from "smartmap"
 import { BlockState } from "./use-block-state"
 import { MotionValue } from "framer-motion"
 import { CompositionState, Dimensions, useParentCompositionState } from "./use-composition-state"
@@ -21,9 +21,14 @@ export class BlocksState {
   constructor(blocks: IBlocks, composition: CompositionState) {
     makeObservable(this)
     this.composition = composition
-    this.map = smartmap(blocks.store, (block) => new BlockState(block, this), { eager: true })
+    this.map = new SmartMap(blocks.store, (block) => new BlockState(block, this), { eager: true })
+
     this.get = this.map.get
 
+    //TODO turn this into function mobxToMotion
+    //TODO also make MotiontoMobx
+
+    //Sync mobx offset to motionOffset alue
     this.dispose = autorun(() => {
       const { offset, motionOffset } = this
       if (offset) {
