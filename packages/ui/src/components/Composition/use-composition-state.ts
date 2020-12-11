@@ -2,9 +2,9 @@ import { ILogicComposition } from "@main/controllers"
 import { createContext, createRef, RefObject, useContext, useLayoutEffect } from "react"
 import { action, makeObservable, observable } from "mobx"
 import { useConstant } from "@utils/react"
-import { BlocksState, InitialPoint } from "./use-blocks-state"
+import { BlocksState, InitialPoint } from "./blocks/use-blocks-state"
 import { useUnmountEffect } from "@chakra-ui/react"
-import { BlockState } from "./use-block-state"
+import { BlockState } from "./blocks/use-block-state"
 
 export type Dimensions = { width: number; height: number }
 

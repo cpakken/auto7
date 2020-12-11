@@ -1,10 +1,4 @@
-- switch chakraEnhanced("div) with chakraDiv
-- test charkraMotion fast refresh
-
-- issues
-  sx -> rounded works but no types in docs
-
-try fast refresh with motionChakraEnhance
+BUG onHoverStart onHoverEnd triggers when drag
 
 -> will automatically call toJSON if need to ipc
 -> have all complex types be initialized with base class Serializable

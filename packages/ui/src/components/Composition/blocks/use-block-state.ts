@@ -1,9 +1,9 @@
 import { IBlock } from "@main/controllers"
 import { animate, MotionValue } from "framer-motion"
-import { action, autorun, computed, makeObservable, untracked } from "mobx"
+import { action, computed, makeObservable, untracked } from "mobx"
 import { useConstant } from "@utils/react"
 import { BlocksState } from "./use-blocks-state"
-import { useParentCompositionState } from "./use-composition-state"
+import { useParentCompositionState } from "../use-composition-state"
 
 const gridSize = 35
 
@@ -51,10 +51,12 @@ export class BlockState {
   }
 
   @action.bound onHoverStart() {
+    console.log(this.block._id, "hoverstart")
     this.parent.composition.blockHover = this
   }
 
   @action.bound onHoverEnd() {
+    console.log(this.block._id, "hoverend")
     this.parent.composition.blockHover = null
   }
 

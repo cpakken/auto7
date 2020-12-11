@@ -14,7 +14,6 @@ export const Blocks = observer(({ blocks }: { blocks: IBlocks }) => {
   if (motionOffset) {
     return (
       <MotionBox position="absolute" style={motionOffset} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        {/* <BlocksBackground layout sx={dimensions} style={min} /> */}
         <BlocksBackground layout sx={dimensions} style={min} />
         {mapIter(blocks.values(), (block: IBlock) => (
           <Block key={block._id} block={block} />

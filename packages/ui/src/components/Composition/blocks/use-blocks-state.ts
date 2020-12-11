@@ -5,7 +5,7 @@ import { when } from "@utils/mobx"
 import { SmartMap } from "smartmap"
 import { BlockState } from "./use-block-state"
 import { animate, MotionValue } from "framer-motion"
-import { CompositionState, Dimensions, useParentCompositionState } from "./use-composition-state"
+import { CompositionState, Dimensions, useParentCompositionState } from "../use-composition-state"
 import { useEffect } from "react"
 
 type Point = { x: number; y: number }
@@ -13,7 +13,7 @@ type MotionPoint = { x: MotionValue<number>; y: MotionValue<number> }
 export const InitialPoint = { x: 0, y: 0 }
 
 export class BlocksState {
-  private map: SmartMap<string, IBlock, BlockState>
+  private store: SmartMap<string, IBlock, BlockState>
 
   composition: CompositionState
   @observable.ref motionOffset: MotionPoint | null = null
@@ -23,8 +23,8 @@ export class BlocksState {
   constructor(blocks: IBlocks, composition: CompositionState) {
     makeObservable(this)
     this.composition = composition
-    this.map = new SmartMap(blocks.store, (block) => new BlockState(block, this), { eager: true })
-    this.get = this.map.get
+    this.store = new SmartMap(blocks.store, (block) => new BlockState(block, this), { eager: true })
+    this.get = this.store.get
   }
 
   //run in useEffect
@@ -53,14 +53,14 @@ export class BlocksState {
 
   @computed get min(): Point {
     return (
-      reduceIter(this.map.values(), (a, { x, y }) => {
+      reduceIter(this.store.values(), (a, { x, y }) => {
         return a ? { x: Math.min(x, a.x), y: Math.min(y, a.y) } : { x, y }
       }) || InitialPoint
     )
   }
   @computed get max(): Point {
     return (
-      reduceIter(this.map.values(), (a, { width, height, x, y }) => {
+      reduceIter(this.store.values(), (a, { width, height, x, y }) => {
         const next = { x: x + width, y: y + height }
         return a ? { x: Math.max(a.x, next.x), y: Math.max(a.y, next.y) } : next
       }) || InitialPoint

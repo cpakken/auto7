@@ -1,6 +1,6 @@
-import { chakraEnhance } from "@utils/chakra-enhance"
+import { createChakraDiv } from "@utils/chakra-enhance"
 
-export const Label = chakraEnhance("div", {
+export const Label = createChakraDiv({
   baseStyle: ({ colorScheme }) => ({
     color: `${colorScheme}.500`,
     fontWeight: "bold",

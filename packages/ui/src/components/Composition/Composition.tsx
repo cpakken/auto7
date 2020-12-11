@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite"
 import { ILogicComposition } from "@main/controllers"
 import { useCompositionState, CompositionContext } from "./use-composition-state"
 import { createChakraDiv } from "@utils/chakra-enhance"
-import { Blocks } from "./Blocks"
+import { Blocks } from "./blocks"
 
 const CompositionWrapper = createChakraDiv({
   baseStyle: { w: "full", h: "full", bg: "blueGray.300", position: "relative", userSelect: "none" },
