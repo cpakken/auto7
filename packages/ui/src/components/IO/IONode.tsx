@@ -1,26 +1,11 @@
 import { observer, useLocalObservable } from "mobx-react-lite"
 import { ILogicNode } from "@main/controllers"
-import { motionChakraDiv } from "@ui/common/motion-chakra"
 import { useScaleBoxShadowValues } from "@ui/utils"
 import { useParentIOState } from "./use-io-state"
 import { MotionFlex } from "@ui/common"
 import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
-
-const NodeConnector = motionChakraDiv({
-  baseStyle: {
-    bg: "coolGray.400",
-    w: "50px",
-    h: "20px",
-    borderRadius: "full",
-    position: "absolute",
-    zIndex: "base",
-  },
-  variants: {
-    in: { right: 0, transform: "translateX(50%)" },
-    out: { left: 0, transform: "translateX(-50%)" },
-  },
-})
+import { NodeConnector } from "./NodeConnector"
 
 export const IONode = observer(({ node }: { node: ILogicNode }) => {
   const { type } = node
@@ -40,7 +25,7 @@ export const IONode = observer(({ node }: { node: ILogicNode }) => {
       style={{ scale }}
     >
       <MotionFlex
-        sx={{ bg: "coolGray.200", h: "75px", w: "100%", px: 2, borderRadius: "lg", zIndex: "docked" }}
+        sx={{ bg: "blueGray.200", h: "75px", w: "100%", px: 2, borderRadius: "lg", zIndex: "docked" }}
         direction="column"
         justify="center"
         align="center"

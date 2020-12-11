@@ -2,10 +2,12 @@ import { chakraEnhance } from "@utils/chakra-enhance"
 
 export const Label = chakraEnhance("div", {
   baseStyle: ({ colorScheme }) => ({
-    color: `${colorScheme}.600`,
+    color: `${colorScheme}.500`,
     fontWeight: "bold",
+    whiteSpace: "nowrap",
   }),
   sizes: {
+    xs: { fontSize: "xs" },
     sm: { fontSize: "sm" },
     md: { fontSize: "md" },
   },
@@ -17,5 +19,5 @@ export const Label = chakraEnhance("div", {
       h: "full",
     },
   },
-  defaultProps: { colorScheme: "coolGray", size: "sm" },
+  defaultProps: { colorScheme: "blueGray", size: "xs" },
 })

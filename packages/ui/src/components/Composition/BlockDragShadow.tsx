@@ -1,12 +1,14 @@
-import { motionChakraDiv } from "@ui/common"
+import { createMotionChakraDiv } from "@ui/common"
 import { BlockState, gridToValue, valueToGrid } from "./use-block-state"
 import { useSpring, useTransform } from "framer-motion"
 
-const BlockDragShadowWrapper = motionChakraDiv({
+const BlockDragShadowWrapper = createMotionChakraDiv({
   baseStyle: {
-    // bg: "red.600",
     position: "absolute",
-    border: "3px dashed red",
+    border: "2px dashed",
+    // borderColor: "rose.500",
+    // borderColor: "blueGray.500",
+    borderColor: "violet.500",
     borderRadius: "lg",
   },
 })
@@ -15,7 +17,15 @@ export const BlockDragShadow = ({ block }: { block: BlockState }) => {
   const { width, height } = block
   const position = useBlockDragShadowState(block)
 
-  return <BlockDragShadowWrapper sx={{ width, height }} style={position} />
+  return (
+    <BlockDragShadowWrapper
+      sx={{ width, height }}
+      style={position}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1, transition: { duration: 0.1 } }}
+      exit={{ opacity: 0 }}
+    />
+  )
 }
 
 function useBlockDragShadowState(block: BlockState) {

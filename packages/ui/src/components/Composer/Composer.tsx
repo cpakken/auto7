@@ -8,7 +8,7 @@ export const Composer = ({ composed }: { composed: LogicComposed }) => {
   const { inputs, outputs } = composed.info
 
   return (
-    <Box sx={{ bg: "coolGray.300", w: "full", h: "full", position: "relative" }}>
+    <Box sx={{ bg: "blueGray.700", w: "full", h: "full", position: "relative" }}>
       <Composition composition={composed.composition} />
       <IO ioType="in" io={inputs} />
       <IO ioType="out" io={outputs} />

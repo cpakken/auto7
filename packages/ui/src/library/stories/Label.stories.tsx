@@ -16,7 +16,7 @@ export default {
   argTypes: {
     colorScheme: {
       control: { type: "select", options: Object.keys(colors) },
-      defaultValue: "coolGray",
+      defaultValue: "blueGray",
     },
     ...extractArgTypes(Label),
   },

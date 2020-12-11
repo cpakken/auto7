@@ -30,5 +30,5 @@ export const Input = chakraEnhance("input", {
     sm: { fontSize: "sm", borderRadius: "sm" },
     md: { fontSize: "md", borderRadius: "md" },
   },
-  defaultProps: { colorScheme: "coolGray", size: "sm" },
+  defaultProps: { colorScheme: "blueGray", size: "sm" },
 })

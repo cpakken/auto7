@@ -30,5 +30,5 @@ export const Primary = () => {
 
 export default {
   title: "UI/Composition",
-  decorators: [(Story) => <Box sx={{ w: 800, h: 600, bg: "coolGray.700" }}>{Story()}</Box>],
+  decorators: [(Story) => <Box sx={{ w: 800, h: 600 }}>{Story()}</Box>],
 } as Meta

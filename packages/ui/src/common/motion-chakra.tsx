@@ -1,8 +1,8 @@
-import { StyleConfig, chakraDiv } from "@utils/chakra-enhance"
+import { StyleConfig, createChakraDiv } from "@utils/chakra-enhance"
 import { motionEnhance } from "@utils/motion"
 
-export function motionChakraDiv(styleConfig: StyleConfig) {
-  const MotionEnhanced = motionEnhance(chakraDiv(styleConfig))
+export function createMotionChakraDiv(styleConfig: StyleConfig) {
+  const MotionEnhanced = motionEnhance(createChakraDiv(styleConfig))
   return MotionEnhanced
 }
 

@@ -1,6 +1,8 @@
 import { observer } from "mobx-react-lite"
 import { ILogicNode } from "@main/controllers"
-import { Center, Box, chakra } from "@chakra-ui/react"
+import { Label } from "@ui/library"
+import { Center } from "@ui/common"
+import { chakra } from "@chakra-ui/react"
 import { useColor } from "@utils/chakra-utils"
 import { useNodeInputState } from "./use-node-input-state"
 
@@ -36,7 +38,7 @@ export const NodeInput = observer(({ node }: { node: ILogicNode }) => {
 
 export const NodeLabel = observer(({ node, isEdit }: { node: ILogicNode; isEdit: boolean }) => {
   const { label } = node
-  const color = useColor("coolGray")
+  const color = useColor("blueGray")
 
   return (
     <Center
@@ -57,7 +59,8 @@ export const NodeLabel = observer(({ node, isEdit }: { node: ILogicNode; isEdit:
         boxShadow: `0 0 0 2px ${useColor("violet")(400)}`,
       }}
     >
-      {isEdit ? <NodeInput node={node} /> : <Box>{label}</Box>}
+      {/* {isEdit ? <NodeInput node={node} /> : <Box>{label}</Box>} */}
+      {isEdit ? <NodeInput node={node} /> : <Label size="sm">{label}</Label>}
     </Center>
   )
 })

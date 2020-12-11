@@ -1,4 +1,4 @@
-import { extendTheme, ChakraProvider, ColorModeProvider } from "@chakra-ui/react"
+import { extendTheme, ChakraProvider, ColorModeProvider, ColorModeScript } from "@chakra-ui/react"
 import colors from "./colors"
 
 const customTheme = extendTheme({
@@ -12,15 +12,15 @@ const customTheme = extendTheme({
       body: { fontFamily: "Inter, sans-serif" },
     },
   },
-  // config: {
-  //   initialColorMode: "light",
-  //   useSystemColorMode: false,
-  // },
+  config: {
+    initialColorMode: "light",
+    useSystemColorMode: false,
+  },
 })
 
 export const StorybookDecorator = (Story) => (
   <ChakraProvider theme={customTheme}>
-    {/* <ColorModeProvider options={{ initialColorMode: "light", useSystemColorMode: false }}>{Story()}</ColorModeProvider> */}
+    {/* <ColorModeScript initialColorMode="light" /> */}
     {Story()}
   </ChakraProvider>
 )
