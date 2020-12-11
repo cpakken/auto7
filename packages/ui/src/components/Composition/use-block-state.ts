@@ -1,6 +1,6 @@
 import { IBlock } from "@main/controllers"
-import { MotionValue } from "framer-motion"
-import { action, computed, makeObservable, untracked } from "mobx"
+import { animate, MotionValue } from "framer-motion"
+import { action, autorun, computed, makeObservable, untracked } from "mobx"
 import { useConstant } from "@utils/react"
 import { BlocksState } from "./use-blocks-state"
 import { useParentCompositionState } from "./use-composition-state"
@@ -15,20 +15,18 @@ export function gridToValue(grid: number) {
   return grid * gridSize
 }
 
+type Disposer = () => void
 export class BlockState {
   block: IBlock
   motionXY: { x: MotionValue<number>; y: MotionValue<number> }
   parent: BlocksState
+  dispose: Disposer
 
   constructor(block: IBlock, parent: BlocksState) {
     makeObservable(this)
     this.block = block
     this.parent = parent
     this.motionXY = untracked(() => ({ x: new MotionValue(this.x), y: new MotionValue(this.y) }))
-
-    // const { x, y } = this.motionXY
-    // autorun(() => animate(x, this.x))
-    // autorun(() => animate(y, this.y))
   }
 
   @computed get width() {
@@ -67,6 +65,11 @@ export class BlockState {
   @action.bound onDragEnd() {
     this.parent.composition.blockDrag = null
     this.setPosition()
+
+    const { x, y } = this.motionXY
+    const transition = { type: "spring", bounce: 0.05 } as const
+    animate(x, this.x, transition)
+    animate(y, this.y, transition)
   }
   @action.bound setPosition() {
     const { x, y } = this.motionXY

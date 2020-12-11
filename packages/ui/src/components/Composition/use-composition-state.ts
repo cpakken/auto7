@@ -25,9 +25,7 @@ export class CompositionState {
     this.blocks = new BlocksState(composition.blocks, this)
   }
 
-  @action.bound dispose() {
-    this.blocks.dispose()
-  }
+  @action.bound dispose() {}
 
   @action setDimensions(dimensions: Dimensions) {
     this.dimensions = dimensions

@@ -9,17 +9,17 @@ function filterMotionKeys<M extends {}>(obj: M) {
   return ret
 }
 
-export function motionEnhance<P>(Component: ComponentType<P>): FunctionComponent<Omit<P, "style"> & MotionProps>
-export function motionEnhance<P>(
-  Component: ComponentType<P>,
-  _variants: Variants | undefined
-): FunctionComponent<Omit<P, "style"> & Omit<MotionProps, "variants">>
+// export function motionEnhance<P>(Component: ComponentType<P>): FunctionComponent<Omit<P, "style"> & MotionProps>
+// export function motionEnhance<P>(
+//   Component: ComponentType<P>,
+//   _variants: Variants | undefined
+// ): FunctionComponent<Omit<P, "style"> & Omit<MotionProps, "variants">>
 
-export function motionEnhance<P>(Component: ComponentType<P>, _variants?: Variants) {
+export function motionEnhance<P>(Component: ComponentType<P>) {
   const Enhanced = motion.custom(
     forwardRef(({ style, variants, ...props }: P & MotionProps, ref) => {
       const forwardKeys = filterMotionKeys(props)
-      return <Component ref={ref} {...forwardKeys} style={style} variants={_variants || variants} />
+      return <Component ref={ref} {...forwardKeys} style={style} variants={variants} />
     })
   )
 

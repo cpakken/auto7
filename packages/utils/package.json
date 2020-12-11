@@ -11,6 +11,7 @@
     "mobx": "^6.0.4",
     "mobx-state-tree": "^4.0.2",
     "mobx-utils": "^6.0.1",
-    "nanoid": "^3.1.19"
+    "nanoid": "^3.1.19",
+    "popmotion": "^9.0.1"
   }
 }

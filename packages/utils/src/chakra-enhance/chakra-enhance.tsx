@@ -37,7 +37,8 @@ export function chakraExtend<C extends ChakraComponent<As>>(Chakra: C, config: S
 
 export interface ChakraEnhancedDiv extends ChakraEnhanced<"div"> {}
 export function chakraDiv(styleConfig: StyleConfig) {
-  return (chakraEnhance("div", styleConfig) as any) as ChakraEnhancedDiv
+  const ChakraDiv = chakraEnhance("div", styleConfig) as any
+  return ChakraDiv as ChakraEnhancedDiv
 }
 
 //own useStyleConfig created in a closure, since styleConfig doesn't change

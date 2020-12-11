@@ -5,7 +5,7 @@
   "sideEffects": false,
   "main": "index.tsx",
   "scripts": {
-    "storybook": "start-storybook -s ./public -p 6006",
+    "storybook": "start-storybook -s ./public -p 6006 --ci",
     "build-storybook": "build-storybook",
     "dev": "webpack serve"
   },

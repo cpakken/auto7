@@ -1,21 +1,23 @@
 import { IBlock } from "@main/controllers"
 import { observer } from "mobx-react-lite"
 import { Label } from "@ui/library"
-import { chakraEnhance } from "@utils/chakra-enhance"
-import { motionEnhance } from "@utils/motion"
+import { motionChakraDiv } from "@ui/common/motion-chakra"
 import { useBlockState } from "./use-block-state"
 import { useScaleBoxShadowValues } from "@ui/utils"
 
-const BlockWrapper = motionEnhance(
-  chakraEnhance("div", {
-    baseStyle: {
-      bg: "coolGray.200",
-      borderRadius: "lg",
-      position: "absolute",
-      overflow: "hidden",
-    },
-  })
-)
+const BlockWrapper = motionChakraDiv({
+  baseStyle: {
+    bg: "coolGray.200",
+    borderRadius: "lg",
+    position: "absolute",
+    overflow: "hidden",
+  },
+})
+const blockAnimationVariants = {
+  default: { scale: 1, opacity: 1, zIndex: 1 },
+  hover: { scale: 1.06, opacity: 1, zIndex: 10 },
+  drag: { scale: 1.06, opacity: 0.85, zIndex: 10 },
+}
 
 export const Block = observer(({ block }: { block: IBlock }) => {
   const { inputs, outputs, label } = block.logic.info!
@@ -23,6 +25,7 @@ export const Block = observer(({ block }: { block: IBlock }) => {
   const { boxShadow, scale } = useScaleBoxShadowValues()
 
   const enable = isHover || isDrag
+  const variant = isDrag ? "drag" : isHover ? "hover" : "default"
 
   return (
     <BlockWrapper
@@ -33,8 +36,9 @@ export const Block = observer(({ block }: { block: IBlock }) => {
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       sx={{ width, height }}
-      animate={{ scale: enable ? 1.06 : 1 }}
-      style={{ scale, boxShadow, ...motionXY, zIndex: enable ? 10 : 1 }}
+      animate={variant}
+      variants={blockAnimationVariants}
+      style={{ scale, boxShadow, ...motionXY }}
     >
       <Label sx={{ bg: "coolGray.300", h: 6, fontSize: "xs", pt: 1, whiteSpace: "nowrap" }} variant="center">
         {label}
