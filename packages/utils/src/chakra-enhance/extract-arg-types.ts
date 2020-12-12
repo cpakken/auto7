@@ -1,6 +1,6 @@
 import { ChakraEnhanced } from "./chakra-enhance"
 
-export function extractArgTypes({ config }: ChakraEnhanced) {
+export function extractArgTypes<C extends ChakraEnhanced>({ config }: C) {
   const { sizes, variants, defaultProps } = config
   const size = sizes && {
     // control: { type: "select", options: Object.keys(sizes) },

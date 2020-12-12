@@ -58,7 +58,7 @@ export const BlockNode = observer(({ node, ioType }: { node: ILogicNodeModel; io
   return (
     <BlockNodeWrapper>
       <Label size="xs">{label}</Label>
-      <NodeConnector variant={ioType === "in" ? "left" : "right"} />
+      <NodeConnector variant={ioType === "in" ? "left" : "right"} size="sm" />
     </BlockNodeWrapper>
   )
 })
