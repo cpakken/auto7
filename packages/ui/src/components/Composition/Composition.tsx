@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite"
 import { ILogicComposition } from "@main/controllers"
 import { useCompositionState, CompositionContext } from "./use-composition-state"
-import { createChakraDiv } from "@utils/chakra-enhance"
+import { createChakraDiv } from "@ui/utils/hoc"
 import { Blocks } from "./blocks"
 
 const CompositionWrapper = createChakraDiv({

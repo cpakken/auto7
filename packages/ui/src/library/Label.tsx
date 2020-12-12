@@ -1,4 +1,4 @@
-import { createChakraDiv } from "@utils/chakra-enhance"
+import { createChakraDiv } from "@ui/utils/hoc"
 
 export const Label = createChakraDiv({
   baseStyle: ({ colorScheme }) => ({
@@ -19,5 +19,5 @@ export const Label = createChakraDiv({
       h: "full",
     },
   },
-  defaultProps: { colorScheme: "blueGray", size: "xs" },
+  defaultProps: { colorScheme: "blueGray", size: "sm" },
 })

@@ -1,5 +1,5 @@
 import { forwardRef, ComponentType, FunctionComponent } from "react"
-import { motion, MotionProps, Variants, isValidMotionProp } from "framer-motion"
+import { motion, MotionProps, isValidMotionProp } from "framer-motion"
 
 function filterMotionKeys<M extends {}>(obj: M) {
   const ret = {} as any

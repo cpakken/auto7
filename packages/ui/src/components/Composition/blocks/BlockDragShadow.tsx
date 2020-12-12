@@ -1,4 +1,4 @@
-import { createMotionChakraDiv } from "@ui/common"
+import { createMotionChakraDiv } from "@ui/utils/hoc"
 import { BlockState, gridToValue, valueToGrid } from "./use-block-state"
 import { useSpring, useTransform } from "framer-motion"
 

@@ -1,10 +1,11 @@
 import { AnimatePresence } from "framer-motion"
-import { createMotionChakraDiv, MotionBox } from "@ui/common"
-import { mapIter } from "@utils/iterable-fns"
 import { observer } from "mobx-react-lite"
+import { mapIter } from "@utils/iterable-fns"
+import { MotionBox } from "@ui/common"
+import { createMotionChakraDiv } from "@ui/utils/hoc"
 import { IBlocks, IBlock } from "@main/controllers"
-import { Block } from "./Block"
 import { useBlocksState } from "./use-blocks-state"
+import { Block } from "./Block"
 import { BlockDragShadow } from "./BlockDragShadow"
 
 export const Blocks = observer(({ blocks }: { blocks: IBlocks }) => {

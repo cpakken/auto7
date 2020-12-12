@@ -3,7 +3,6 @@ import { createContext, createRef, RefObject, useContext, useLayoutEffect } from
 import { action, makeObservable, observable } from "mobx"
 import { useConstant } from "@utils/react"
 import { BlocksState, InitialPoint } from "./blocks/use-blocks-state"
-import { useUnmountEffect } from "@chakra-ui/react"
 import { BlockState } from "./blocks/use-block-state"
 
 export type Dimensions = { width: number; height: number }
@@ -25,7 +24,7 @@ export class CompositionState {
     this.blocks = new BlocksState(composition.blocks, this)
   }
 
-  @action.bound dispose() {}
+  @action intialize() {}
 
   @action setDimensions(dimensions: Dimensions) {
     this.dimensions = dimensions
@@ -39,8 +38,6 @@ export function useCompositionState(composition: ILogicComposition) {
     const { offsetHeight, offsetWidth } = state.ref.current!
     state.setDimensions({ width: offsetWidth, height: offsetHeight })
   }, [])
-
-  useUnmountEffect(state.dispose)
 
   return state
 }

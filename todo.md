@@ -1,4 +1,4 @@
-BUG onHoverStart onHoverEnd triggers when drag
+BUG onHoverStart onHoverEnd triggers when drag (only on chrome)
 
 -> will automatically call toJSON if need to ipc
 -> have all complex types be initialized with base class Serializable

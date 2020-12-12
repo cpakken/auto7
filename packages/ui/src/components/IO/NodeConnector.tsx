@@ -1,4 +1,4 @@
-import { createMotionChakraDiv } from "@ui/common/motion-chakra"
+import { createMotionChakraDiv } from "@ui/utils/hoc"
 
 export const NodeConnector = createMotionChakraDiv({
   baseStyle: {
@@ -7,7 +7,7 @@ export const NodeConnector = createMotionChakraDiv({
     h: "20px",
     borderRadius: "full",
     position: "absolute",
-    zIndex: "base",
+    zIndex: "connector",
   },
   variants: {
     in: { right: 0, transform: "translateX(50%)" },

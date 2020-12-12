@@ -33,7 +33,7 @@ export class BlockState {
     return gridSize * 4
   }
   @computed get height() {
-    return gridSize * 3
+    return gridSize * 4
   }
   @computed get x() {
     return gridToValue(this.block.xy[0])
@@ -51,20 +51,22 @@ export class BlockState {
   }
 
   @action.bound onHoverStart() {
-    console.log(this.block._id, "hoverstart")
+    // console.log(this.block._id, "hoverStart")
     this.parent.composition.blockHover = this
   }
 
   @action.bound onHoverEnd() {
-    console.log(this.block._id, "hoverend")
+    // console.log(this.block._id, "hoverEnd")
     this.parent.composition.blockHover = null
   }
 
   @action.bound onDragStart() {
+    // console.log(this.block._id, "dragStart")
     this.parent.composition.blockDrag = this
   }
 
   @action.bound onDragEnd() {
+    // console.log(this.block._id, "dragEnd")
     this.parent.composition.blockDrag = null
     this.setPosition()
 
