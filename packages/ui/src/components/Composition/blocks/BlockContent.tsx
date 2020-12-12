@@ -44,7 +44,6 @@ const BlockIOWrapper = createBox({
     position: "relative",
     display: "flex",
     flexDir: "column",
-    zIndex: "block",
   },
   variants: {
     in: { mr: 2, borderRightRadius: "lg", alignItems: "flex-start", mb: 2 },
@@ -56,7 +55,7 @@ export const BlockNode = observer(({ node, ioType }: { node: ILogicNodeModel; io
   const { label } = node
 
   return (
-    <BlockNodeWrapper>
+    <BlockNodeWrapper variant={ioType}>
       <Label size="xs">{label}</Label>
       <NodeConnector variant={ioType === "in" ? "left" : "right"} size="sm" />
     </BlockNodeWrapper>
@@ -68,7 +67,10 @@ const BlockNodeWrapper = createBox({
     position: "relative",
     display: "flex",
     alignItems: "center",
-    zIndex: "block",
     h: 7,
+  },
+  variants: {
+    in: { pl: 2 },
+    out: { pr: 2 },
   },
 })

@@ -1,7 +1,7 @@
 import { forwardRef, ComponentType, FunctionComponent } from "react"
 import { motion, MotionProps, isValidMotionProp } from "framer-motion"
 
-function filterMotionKeys<M extends {}>(obj: M) {
+export function filterMotionKeys<M extends {}>(obj: M) {
   const ret = {} as any
   for (const k in obj) {
     if (!isValidMotionProp(k)) ret[k] = obj[k]
@@ -17,8 +17,8 @@ function filterMotionKeys<M extends {}>(obj: M) {
 
 export function motionEnhance<P>(Component: ComponentType<P>) {
   const Enhanced = motion.custom(
-    forwardRef(({ style, variants, ...props }: P & MotionProps, ref) => {
-      const forwardKeys = filterMotionKeys(props)
+    forwardRef(({ style, variants, ...rest }: P & MotionProps, ref) => {
+      const forwardKeys = filterMotionKeys(rest)
       return <Component ref={ref} {...forwardKeys} style={style} variants={variants} />
     })
   )

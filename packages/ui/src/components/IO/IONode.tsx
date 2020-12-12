@@ -26,8 +26,8 @@ export const IONode = observer(({ node }: { node: ILogicNode }) => {
       <IONodeContainer onFocus={onFocus} onBlur={onBlur} style={{ boxShadow }}>
         <NodeLabel node={node} isEdit={isEdit} />
         <TypeLabel info={type!.info!} isEdit={isEdit} />
+        <NodeConnector variant={ioType === "in" ? "right" : "left"} style={{ boxShadow }} />
       </IONodeContainer>
-      <NodeConnector variant={ioType === "in" ? "right" : "left"} style={{ boxShadow }} />
     </MotionCenter>
   )
 })
@@ -39,11 +39,12 @@ const IONodeContainer = createMotionBox({
     h: "75px",
     px: 2,
     borderRadius: "lg",
-    zIndex: "node",
     display: "flex",
     flexDir: "column",
     justifyContent: "center",
     alignItems: "center",
+    zIndex: "node",
+    position: "relative",
   },
 })
 

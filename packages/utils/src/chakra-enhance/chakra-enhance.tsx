@@ -42,4 +42,4 @@ export type ChakraExtend<C extends ChakraComponent<As>, S extends StyleConfig> =
   PropsOf<C> & { variant?: keyof S["variants"]; size?: keyof S["sizes"] }
 > & { config: S }
 
-type PropsOf<C> = C extends ComponentType<infer T> ? T : never
+export type PropsOf<C> = C extends ComponentType<infer T> ? T : never
