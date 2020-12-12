@@ -12,17 +12,15 @@ export const Blocks = observer(({ blocks }: { blocks: IBlocks }) => {
   const { motionOffset, dimensions, composition, min } = useBlocksState()
   const { blockDrag } = composition
 
-  if (motionOffset) {
-    return (
-      <MotionBox position="absolute" style={motionOffset} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <BlocksBackground layout sx={dimensions} style={min} />
-        {mapIter(blocks.values(), (block: IBlock) => (
-          <Block key={block._id} block={block} />
-        ))}
-        <AnimatePresence>{blockDrag && <BlockDragShadow block={blockDrag} />}</AnimatePresence>
-      </MotionBox>
-    )
-  } else return null
+  return (
+    <MotionBox position="absolute" style={motionOffset!}>
+      <BlocksBackground layout sx={dimensions} style={min} />
+      {mapIter(blocks.values(), (block: IBlock) => (
+        <Block key={block._id} block={block} />
+      ))}
+      <AnimatePresence>{blockDrag && <BlockDragShadow block={blockDrag} />}</AnimatePresence>
+    </MotionBox>
+  )
 })
 
 const BlocksBackground = createMotionBox({

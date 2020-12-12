@@ -24,7 +24,12 @@ export class CompositionState {
     this.blocks = new BlocksState(composition.blocks, this)
   }
 
-  @action intialize() {}
+  @action.bound intialize() {
+    const { offsetHeight, offsetWidth } = this.ref.current!
+    this.setDimensions({ width: offsetWidth, height: offsetHeight })
+
+    return this.blocks.initialize() //Return unmount effect
+  }
 
   @action setDimensions(dimensions: Dimensions) {
     this.dimensions = dimensions
@@ -33,11 +38,7 @@ export class CompositionState {
 
 export function useCompositionState(composition: ILogicComposition) {
   const state = useConstant(() => new CompositionState(composition))
-
-  useLayoutEffect(() => {
-    const { offsetHeight, offsetWidth } = state.ref.current!
-    state.setDimensions({ width: offsetWidth, height: offsetHeight })
-  }, [])
+  useLayoutEffect(state.intialize, [])
 
   return state
 }

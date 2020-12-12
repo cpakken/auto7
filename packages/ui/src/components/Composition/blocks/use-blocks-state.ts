@@ -1,12 +1,10 @@
 import { reduceIter } from "@utils/iterable-fns"
 import { IBlock, IBlocks } from "@main/controllers"
-import { autorun, computed, makeObservable, observable } from "mobx"
-import { when } from "@utils/mobx"
+import { action, reaction, computed, makeObservable, observable } from "mobx"
 import { SmartMap } from "smartmap"
 import { BlockState } from "./use-block-state"
 import { animate, MotionValue } from "framer-motion"
 import { CompositionState, Dimensions, useParentCompositionState } from "../use-composition-state"
-import { useEffect } from "react"
 
 type Point = { x: number; y: number }
 type MotionPoint = { x: MotionValue<number>; y: MotionValue<number> }
@@ -27,28 +25,22 @@ export class BlocksState {
     this.get = this.store.get
   }
 
-  //run in useEffect
-  initialize() {
+  //Run when Composition State is created
+  @action.bound initialize() {
     //Initialize motionOffset
-    if (!this.motionOffset) {
-      when(
-        () => this.offset,
-        ({ x, y }) => {
-          this.motionOffset = { x: new MotionValue(x), y: new MotionValue(y) }
-        }
-      )
-    }
+    const { x, y } = this.offset!
+    const motionOffset = { x: new MotionValue(x), y: new MotionValue(y) }
+    this.motionOffset = motionOffset
 
-    //Sync mobx offset to motionOffset alue
-    return autorun(() => {
-      const { offset, motionOffset } = this
-      const config = { type: "spring", bounce: 0.1 } as const
-
-      if (offset && motionOffset) {
-        animate(motionOffset.x, offset.x, config)
-        animate(motionOffset.y, offset.y, config)
+    //Sync mobx offset to motionOffset value
+    const config = { type: "spring", bounce: 0.1 } as const
+    return reaction(
+      () => this.offset!,
+      ({ x, y }) => {
+        animate(motionOffset.x, x, config)
+        animate(motionOffset.y, y, config)
       }
-    })
+    )
   }
 
   @computed get min(): Point {
@@ -85,6 +77,5 @@ export class BlocksState {
 
 export function useBlocksState() {
   const { blocks } = useParentCompositionState()
-  useEffect(() => blocks.initialize(), [])
   return blocks
 }

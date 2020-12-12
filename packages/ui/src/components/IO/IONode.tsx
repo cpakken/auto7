@@ -6,7 +6,7 @@ import { MotionCenter } from "@ui/common"
 import { createMotionFlex } from "src/utils/hoc"
 import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
-import { NodeConnector } from "./NodeConnector"
+import { NodeConnector } from "@ui/library"
 
 export const IONode = observer(({ node }: { node: ILogicNode }) => {
   const { type } = node

@@ -57,4 +57,4 @@ export const BlockNode = observer(({ node }: { node: ILogicNodeModel; ioType: IO
   )
 })
 
-const BlockNodeWrapper = createFlex({ baseStyle: { alignItems: "center", h: 7 } })
+const BlockNodeWrapper = createFlex({ baseStyle: { alignItems: "center", h: 8 } })

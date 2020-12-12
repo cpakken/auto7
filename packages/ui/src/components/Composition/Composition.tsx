@@ -1,25 +1,31 @@
 import { observer } from "mobx-react-lite"
+import { createBox } from "@ui/utils/hoc"
+import { MotionBox } from "@ui/common"
 import { ILogicComposition } from "@main/controllers"
 import { useCompositionState, CompositionContext } from "./use-composition-state"
-import { createBox } from "@ui/utils/hoc"
 import { Blocks } from "./blocks"
-
-const CompositionWrapper = createBox({
-  baseStyle: { w: "full", h: "full", bg: "blueGray.300", position: "relative", userSelect: "none" },
-})
 
 export const Composition = observer(({ composition }: { composition: ILogicComposition }) => {
   const state = useCompositionState(composition)
-  const { ref } = state
+  const { ref, dimensions } = state
   const { blocks } = composition
-  // const { dimensions } = state
 
   return (
     <CompositionContext.Provider value={state}>
-      <CompositionWrapper ref={ref}>
-        {/* {dimensions && <Blocks blocks={blocks} />} */}
-        <Blocks blocks={blocks} />
-      </CompositionWrapper>
+      <CompositionContainer ref={ref}>
+        {dimensions && (
+          <CompositionContentContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <Blocks blocks={blocks} />
+            {/* Paths */}
+          </CompositionContentContainer>
+        )}
+      </CompositionContainer>
     </CompositionContext.Provider>
   )
 })
+
+const CompositionContainer = createBox({
+  baseStyle: { w: "full", h: "full", bg: "blueGray.300", position: "relative", userSelect: "none" },
+})
+
+const CompositionContentContainer = MotionBox
