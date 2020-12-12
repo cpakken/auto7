@@ -1,9 +1,10 @@
 import { Meta } from "@storybook/react/types-6-0"
 import { Box } from "@ui/common"
-import { useConstant } from "@utils/react"
 import { createTestControllers } from "@main/test-utils"
 import { Composition } from "../Composition"
-// import { useCompositionState } from "../use-composition-state"
+import { useComposerState } from "src/components/Composer/use-composer-state"
+import { LogicComposedShallowReady } from "@main/controllers"
+import { useCompositionState } from "../use-composition-state"
 
 const createADDSTRING = () => {
   const { logic } = createTestControllers()
@@ -11,8 +12,10 @@ const createADDSTRING = () => {
 }
 
 export const Primary = () => {
-  const { composition } = useConstant(createADDSTRING)
-  return <Composition composition={composition!} />
+  const composer = useComposerState(createADDSTRING() as LogicComposedShallowReady)
+  const state = useCompositionState(composer)
+
+  return <Composition _state={state} />
 }
 
 // export const Blocks_ = () => {

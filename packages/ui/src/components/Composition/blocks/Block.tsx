@@ -1,7 +1,7 @@
 import { IBlock } from "@main/controllers"
 import { observer } from "mobx-react-lite"
 import { MotionBox } from "@ui/common"
-import { useBlockState } from "./use-block-state"
+import { BlockStateContext, useBlockState } from "./use-block-state"
 import { useScaleBoxShadowValues } from "@ui/utils/use-scale-boxShadow"
 import { BlockContent } from "./BlockContent"
 
@@ -38,7 +38,9 @@ export const Block = observer(({ block }: { block: IBlock }) => {
       position="absolute"
       style={{ scale, boxShadow, ...motionXY }}
     >
-      <BlockContent state={state} />
+      <BlockStateContext.Provider value={state}>
+        <BlockContent state={state} />
+      </BlockStateContext.Provider>
     </MotionBox>
   )
 })

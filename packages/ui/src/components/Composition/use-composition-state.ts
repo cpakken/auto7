@@ -1,11 +1,11 @@
-import { createContext, createRef, RefObject, useContext, useLayoutEffect } from "react"
+import { createContext, createRef, RefObject, useContext, useLayoutEffect, useMemo } from "react"
 import { animate, MotionValue } from "framer-motion"
 import { action, computed, makeObservable, observable, reaction } from "mobx"
 import { SmartMap } from "smartmap"
-import { useConstant } from "@utils/react"
 import { reduceIter } from "@utils/iterable-fns"
 import { IBlock, ILogicComposition } from "@main/controllers"
 import { BlockState } from "./blocks/use-block-state"
+import { ComposerState, useParentComposerState } from "../Composer/use-composer-state"
 
 export type Dimensions = { width: number; height: number }
 type Point = { x: number; y: number }
@@ -16,6 +16,7 @@ export class CompositionState {
   ref: RefObject<HTMLDivElement>
   composition: ILogicComposition
 
+  composer: ComposerState
   blocks: SmartMap<string, IBlock, BlockState>
   //paths
 
@@ -26,9 +27,10 @@ export class CompositionState {
 
   @observable.ref border: null | Dimensions = null
 
-  constructor(composition: ILogicComposition) {
+  constructor(composition: ILogicComposition, composer: ComposerState) {
     makeObservable(this)
     this.ref = createRef()
+    this.composer = composer
     this.composition = composition
     this.blocks = new SmartMap(composition.blocks.store, (block) => new BlockState(block, this), { eager: true })
   }
@@ -36,7 +38,7 @@ export class CompositionState {
   @action.bound intialize() {
     //Set Composition Border Dimensions
     const { offsetHeight, offsetWidth } = this.ref.current!
-    this.setBorder({ width: offsetWidth, height: offsetHeight })
+    this.border = { width: offsetWidth, height: offsetHeight }
 
     //TODO sync border with window size change
 
@@ -87,20 +89,18 @@ export class CompositionState {
       }
     )
   }
-
-  @action.bound setBorder(border: Dimensions) {
-    this.border = border
-  }
 }
 
-export function useCompositionState(composition: ILogicComposition) {
-  const state = useConstant(() => new CompositionState(composition))
+export function useCompositionState(_composer?: ComposerState) {
+  const composer = _composer ?? useParentComposerState()
+  const state = useMemo(() => composer.composition, [composer])
+
   useLayoutEffect(state.intialize, [])
 
   return state
 }
 
-export const CompositionContext = createContext<CompositionState>({ min: InitialPoint, max: InitialPoint } as any)
+export const CompositionContext = createContext({} as CompositionState)
 
 export function useParentCompositionState() {
   return useContext(CompositionContext)

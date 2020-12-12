@@ -2,7 +2,7 @@ import { IBlock, ILogicNodeModel } from "@main/controllers"
 import { animate, MotionValue } from "framer-motion"
 import { action, computed, makeObservable, untracked } from "mobx"
 import { CompositionState, useParentCompositionState } from "../use-composition-state"
-import { useMemo } from "react"
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo } from "react"
 import { SmartMap } from "smartmap"
 import { BlockNodeState } from "./use-block-node-state"
 
@@ -21,8 +21,8 @@ export class BlockState {
   block: IBlock
   motionXY: { x: MotionValue<number>; y: MotionValue<number> }
   composition: CompositionState
-  inNodes: SmartMap<string, ILogicNodeModel, BlockNodeState>
-  outNodes: SmartMap<string, ILogicNodeModel, BlockNodeState>
+  inputs: SmartMap<string, ILogicNodeModel, BlockNodeState>
+  outputs: SmartMap<string, ILogicNodeModel, BlockNodeState>
 
   dispose: Disposer
 
@@ -33,8 +33,13 @@ export class BlockState {
     this.motionXY = untracked(() => ({ x: new MotionValue(this.x), y: new MotionValue(this.y) }))
 
     const { inputs, outputs } = block.logic.info!
-    this.inNodes = new SmartMap(inputs.store, (input) => new BlockNodeState(input), { eager: true })
-    this.outNodes = new SmartMap(outputs.store, (output) => new BlockNodeState(output), { eager: true })
+    this.inputs = new SmartMap(inputs.store, (input) => new BlockNodeState(input), { eager: true })
+    this.outputs = new SmartMap(outputs.store, (output) => new BlockNodeState(output), { eager: true })
+  }
+
+  @action.bound initialize() {
+    this.inputs.forEach((input) => input.initializeInBlock())
+    this.outputs.forEach((output) => output.initializeInBlock())
   }
 
   @computed get width() {
@@ -94,5 +99,13 @@ export function useBlockState(block: IBlock) {
   const composition = useParentCompositionState()
   const state = useMemo(() => composition.blocks.get(block._id)!, [composition])
 
+  useLayoutEffect(state.initialize, [])
+
   return state
+}
+
+export const BlockStateContext = createContext({} as BlockState)
+
+export function useParentBlockState() {
+  return useContext(BlockStateContext)
 }

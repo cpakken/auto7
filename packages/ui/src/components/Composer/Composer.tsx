@@ -13,7 +13,7 @@ export const Composer = ({ composed }: { composed: LogicComposed }) => {
   return (
     <ComposerContext.Provider value={state}>
       <Box sx={{ bg: "blueGray.700", w: "full", h: "full", position: "relative" }}>
-        <Composition composition={composed.composition} />
+        <Composition />
         <IO ioType="in" io={inputs} />
         <IO ioType="out" io={outputs} />
       </Box>

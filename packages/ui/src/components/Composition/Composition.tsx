@@ -1,13 +1,12 @@
 import { observer } from "mobx-react-lite"
 import { createBox } from "@ui/utils/hoc"
 import { MotionBox } from "@ui/common"
-import { ILogicComposition } from "@main/controllers"
-import { useCompositionState, CompositionContext } from "./use-composition-state"
+import { useCompositionState, CompositionContext, CompositionState } from "./use-composition-state"
 import { Blocks } from "./blocks"
 
-export const Composition = observer(({ composition }: { composition: ILogicComposition }) => {
-  const state = useCompositionState(composition)
-  const { ref, border } = state
+export const Composition = observer(({ _state }: { _state?: CompositionState }) => {
+  const state = _state ?? useCompositionState()
+  const { ref, border, composition } = state
   const { blocks } = composition
 
   return (
