@@ -13,7 +13,7 @@ export function chakraEnhance<E extends As>(ElementType: E, config: StyleConfig)
     const configSx = useStyleConfig(props)
 
     //Pull colorSheme out since chakra() @chakra-ui/system shouldForwardProp -> should contain colorScheme
-    const { colorScheme, ...rest } = props
+    const { colorScheme, variant, size, ...rest } = props
     return <Chakra ref={ref} __css={configSx} {...rest} />
   }) as any
 

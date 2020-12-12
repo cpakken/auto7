@@ -1,3 +1,5 @@
+create createMotionBox -> resolve style animate variants whilehover etc... styles to chakra theme style using css(style)(theme)
+
 BUG onHoverStart onHoverEnd triggers when drag (only on chrome)
 
 -> will automatically call toJSON if need to ipc

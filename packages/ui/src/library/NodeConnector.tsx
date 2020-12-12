@@ -10,7 +10,7 @@ export const NodeConnector = createMotionBox({
     zIndex: "connector",
   },
   variants: {
-    in: { right: 0, transform: "translateX(50%)" },
-    out: { left: 0, transform: "translateX(-50%)" },
+    left: { left: 0, transform: "translateX(-50%)" },
+    right: { right: 0, transform: "translateX(50%)" },
   },
 })

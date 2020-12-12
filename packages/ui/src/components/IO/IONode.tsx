@@ -3,7 +3,7 @@ import { ILogicNode } from "@main/controllers"
 import { useScaleBoxShadowValues } from "@ui/utils/use-scale-boxShadow"
 import { useParentIOState } from "./use-io-state"
 import { MotionCenter } from "@ui/common"
-import { createMotionFlex } from "src/utils/hoc"
+import { createMotionBox } from "src/utils/hoc"
 import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
 import { NodeConnector } from "@ui/library"
@@ -27,12 +27,12 @@ export const IONode = observer(({ node }: { node: ILogicNode }) => {
         <NodeLabel node={node} isEdit={isEdit} />
         <TypeLabel info={type!.info!} isEdit={isEdit} />
       </IONodeContainer>
-      <NodeConnector variant={ioType} style={{ boxShadow }} />
+      <NodeConnector variant={ioType === "in" ? "right" : "left"} style={{ boxShadow }} />
     </MotionCenter>
   )
 })
 
-const IONodeContainer = createMotionFlex({
+const IONodeContainer = createMotionBox({
   baseStyle: {
     bg: "blueGray.200",
     w: "full",
@@ -40,6 +40,7 @@ const IONodeContainer = createMotionFlex({
     px: 2,
     borderRadius: "lg",
     zIndex: "node",
+    display: "flex",
     flexDir: "column",
     justifyContent: "center",
     alignItems: "center",

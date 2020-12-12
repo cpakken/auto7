@@ -7,6 +7,7 @@ export function createMotionBox(styleConfig: StyleConfig) {
   return MotionEnhanced
 }
 
+//Just use createMotionBox instead??
 export function createMotionFlex(styleConfig: StyleConfig) {
   const MotionEnhanced = motionEnhance(createFlex(styleConfig))
   return MotionEnhanced

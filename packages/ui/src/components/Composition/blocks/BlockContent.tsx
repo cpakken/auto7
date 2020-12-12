@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite"
-import { Label } from "@ui/library"
+import { Label, NodeConnector } from "@ui/library"
 import { BlockState } from "./use-block-state"
 import { ILogicInterfaceModel, ILogicNodeModel } from "@main/controllers"
-import { createMotionBox, createBox, createFlex } from "@ui/utils/hoc"
+import { createMotionBox, createBox } from "@ui/utils/hoc"
 
 export type IOType = "in" | "out"
 
@@ -25,7 +25,6 @@ const BlockWrapper = createMotionBox({
   baseStyle: {
     bg: "blueGray.200",
     borderRadius: "lg",
-    overflow: "hidden",
   },
 })
 
@@ -40,21 +39,36 @@ export const BlockInterface = observer(({ io, ioType }: { io: ILogicInterfaceMod
 })
 
 const BlockIOWrapper = createBox({
-  baseStyle: { bg: "blueGray.100", position: "relative", display: "flex", flexDir: "column" },
+  baseStyle: {
+    bg: "blueGray.100",
+    position: "relative",
+    display: "flex",
+    flexDir: "column",
+    zIndex: "block",
+  },
   variants: {
     in: { mr: 2, borderRightRadius: "lg", alignItems: "flex-start", mb: 2 },
     out: { ml: 2, borderLeftRadius: "lg", alignItems: "flex-end" },
   },
 })
 
-export const BlockNode = observer(({ node }: { node: ILogicNodeModel; ioType: IOType }) => {
+export const BlockNode = observer(({ node, ioType }: { node: ILogicNodeModel; ioType: IOType }) => {
   const { label } = node
 
   return (
     <BlockNodeWrapper>
       <Label size="xs">{label}</Label>
+      <NodeConnector variant={ioType === "in" ? "left" : "right"} />
     </BlockNodeWrapper>
   )
 })
 
-const BlockNodeWrapper = createFlex({ baseStyle: { alignItems: "center", h: 8 } })
+const BlockNodeWrapper = createBox({
+  baseStyle: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    zIndex: "block",
+    h: 7,
+  },
+})
