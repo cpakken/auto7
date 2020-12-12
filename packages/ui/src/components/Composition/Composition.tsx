@@ -7,13 +7,13 @@ import { Blocks } from "./blocks"
 
 export const Composition = observer(({ composition }: { composition: ILogicComposition }) => {
   const state = useCompositionState(composition)
-  const { ref, dimensions } = state
+  const { ref, border } = state
   const { blocks } = composition
 
   return (
     <CompositionContext.Provider value={state}>
       <CompositionContainer ref={ref}>
-        {dimensions && (
+        {border && (
           <CompositionContentContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Blocks blocks={blocks} />
             {/* Paths */}

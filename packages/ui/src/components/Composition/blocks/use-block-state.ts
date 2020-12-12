@@ -1,8 +1,7 @@
 import { IBlock, ILogicNodeModel } from "@main/controllers"
 import { animate, MotionValue } from "framer-motion"
 import { action, computed, makeObservable, untracked } from "mobx"
-import { BlocksState } from "./use-blocks-state"
-import { useParentCompositionState } from "../use-composition-state"
+import { CompositionState, useParentCompositionState } from "../use-composition-state"
 import { useMemo } from "react"
 import { SmartMap } from "smartmap"
 import { BlockNodeState } from "./use-block-node-state"
@@ -21,16 +20,16 @@ type Disposer = () => void
 export class BlockState {
   block: IBlock
   motionXY: { x: MotionValue<number>; y: MotionValue<number> }
-  parent: BlocksState
+  composition: CompositionState
   inNodes: SmartMap<string, ILogicNodeModel, BlockNodeState>
   outNodes: SmartMap<string, ILogicNodeModel, BlockNodeState>
 
   dispose: Disposer
 
-  constructor(block: IBlock, parent: BlocksState) {
+  constructor(block: IBlock, parent: CompositionState) {
     makeObservable(this)
     this.block = block
-    this.parent = parent
+    this.composition = parent
     this.motionXY = untracked(() => ({ x: new MotionValue(this.x), y: new MotionValue(this.y) }))
 
     const { inputs, outputs } = block.logic.info!
@@ -52,31 +51,31 @@ export class BlockState {
   }
 
   @computed get isHover() {
-    return this.parent.composition.blockHover === this
+    return this.composition.blockHover === this
   }
 
   @computed get isDrag() {
-    return this.parent.composition.blockDrag === this
+    return this.composition.blockDrag === this
   }
 
   @action.bound onHoverStart() {
     // console.log(this.block._id, "hoverStart")
-    this.parent.composition.blockHover = this
+    this.composition.blockHover = this
   }
 
   @action.bound onHoverEnd() {
     // console.log(this.block._id, "hoverEnd")
-    this.parent.composition.blockHover = null
+    this.composition.blockHover = null
   }
 
   @action.bound onDragStart() {
     // console.log(this.block._id, "dragStart")
-    this.parent.composition.blockDrag = this
+    this.composition.blockDrag = this
   }
 
   @action.bound onDragEnd() {
     // console.log(this.block._id, "dragEnd")
-    this.parent.composition.blockDrag = null
+    this.composition.blockDrag = null
     this.setPosition()
 
     const { x, y } = this.motionXY

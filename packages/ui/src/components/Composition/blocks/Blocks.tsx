@@ -4,13 +4,12 @@ import { mapIter } from "@utils/iterable-fns"
 import { MotionBox } from "@ui/common"
 import { createMotionBox } from "@ui/utils/hoc"
 import { IBlocks, IBlock } from "@main/controllers"
-import { useBlocksState } from "./use-blocks-state"
 import { Block } from "./Block"
 import { BlockDragShadow } from "./BlockDragShadow"
+import { useParentCompositionState } from "../use-composition-state"
 
 export const Blocks = observer(({ blocks }: { blocks: IBlocks }) => {
-  const { motionOffset, dimensions, composition, min } = useBlocksState()
-  const { blockDrag } = composition
+  const { motionOffset, dimensions, blockDrag, min } = useParentCompositionState()
 
   return (
     <MotionBox position="absolute" style={motionOffset!}>

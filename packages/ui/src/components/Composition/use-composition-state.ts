@@ -1,38 +1,93 @@
-import { ILogicComposition } from "@main/controllers"
 import { createContext, createRef, RefObject, useContext, useLayoutEffect } from "react"
-import { action, makeObservable, observable } from "mobx"
+import { animate, MotionValue } from "framer-motion"
+import { action, computed, makeObservable, observable, reaction } from "mobx"
+import { SmartMap } from "smartmap"
 import { useConstant } from "@utils/react"
-import { BlocksState, InitialPoint } from "./blocks/use-blocks-state"
+import { reduceIter } from "@utils/iterable-fns"
+import { IBlock, ILogicComposition } from "@main/controllers"
 import { BlockState } from "./blocks/use-block-state"
 
 export type Dimensions = { width: number; height: number }
+type Point = { x: number; y: number }
+type MotionPoint = { x: MotionValue<number>; y: MotionValue<number> }
+export const InitialPoint = { x: 0, y: 0 }
 
 export class CompositionState {
   ref: RefObject<HTMLDivElement>
   composition: ILogicComposition
-  blocks: BlocksState
+  blocks: SmartMap<string, IBlock, BlockState>
+  // blocks: BlocksState
+  @observable.ref motionOffset: MotionPoint | null = null
 
   @observable blockHover: BlockState | null = null
   @observable blockDrag: BlockState | null = null
 
-  @observable.ref dimensions: null | Dimensions = null
+  @observable.ref border: null | Dimensions = null
 
   constructor(composition: ILogicComposition) {
     makeObservable(this)
     this.ref = createRef()
     this.composition = composition
-    this.blocks = new BlocksState(composition.blocks, this)
+    this.blocks = new SmartMap(composition.blocks.store, (block) => new BlockState(block, this), { eager: true })
   }
 
   @action.bound intialize() {
+    //Set Composition Border Dimensions
     const { offsetHeight, offsetWidth } = this.ref.current!
-    this.setDimensions({ width: offsetWidth, height: offsetHeight })
+    this.setBorder({ width: offsetWidth, height: offsetHeight })
 
-    return this.blocks.initialize() //Return unmount effect
+    //TODO sync border with window size change
+
+    //Initialize motionOffset and sync with mobx offset
+    const { x, y } = this.offset!
+    const motionOffset = { x: new MotionValue(x), y: new MotionValue(y) }
+    this.motionOffset = motionOffset
+
+    const config = { type: "spring", bounce: 0.1 } as const
+    const dispose = reaction(
+      () => this.offset!,
+      ({ x, y }) => {
+        animate(motionOffset.x, x, config)
+        animate(motionOffset.y, y, config)
+      }
+    )
+
+    return dispose
   }
 
-  @action setDimensions(dimensions: Dimensions) {
-    this.dimensions = dimensions
+  @computed get min(): Point {
+    return (
+      reduceIter(this.blocks.values(), (a, { x, y }) => {
+        return a ? { x: Math.min(x, a.x), y: Math.min(y, a.y) } : { x, y }
+      }) || InitialPoint
+    )
+  }
+  @computed get max(): Point {
+    return (
+      reduceIter(this.blocks.values(), (a, { width, height, x, y }) => {
+        const next = { x: x + width, y: y + height }
+        return a ? { x: Math.max(a.x, next.x), y: Math.max(a.y, next.y) } : next
+      }) || InitialPoint
+    )
+  }
+
+  @computed get dimensions(): Dimensions {
+    return { width: this.max.x - this.min.x, height: this.max.y - this.min.y }
+  }
+
+  @computed get offset(): Point | null {
+    const { border } = this
+    const { min } = this
+    return (
+      border && {
+        x: -min.x + (border.width - this.dimensions.width) / 2,
+        y: -min.y + (border.height - this.dimensions.height) / 2,
+      }
+    )
+  }
+
+  @action.bound setBorder(border: Dimensions) {
+    this.border = border
   }
 }
 
