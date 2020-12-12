@@ -1,12 +1,12 @@
 import { IBlock, ILogicNodeModel } from "@main/controllers"
 import { animate, MotionValue } from "framer-motion"
+import { createContext, useContext, useLayoutEffect, useMemo } from "react"
 import { action, computed, makeObservable, untracked } from "mobx"
-import { CompositionState, useParentCompositionState } from "../use-composition-state"
-import { createContext, useContext, useEffect, useLayoutEffect, useMemo } from "react"
 import { SmartMap } from "smartmap"
+import { CompositionState, useParentCompositionState } from "../use-composition-state"
 import { BlockNodeState } from "./use-block-node-state"
 
-const gridSize = 35
+export const gridSize = 35
 
 export function valueToGrid(value: number) {
   return Math.round(value / gridSize)
