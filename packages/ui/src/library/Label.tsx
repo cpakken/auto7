@@ -1,6 +1,6 @@
-import { createChakraDiv } from "@ui/utils/hoc"
+import { createBox } from "@ui/utils/hoc"
 
-export const Label = createChakraDiv({
+export const Label = createBox({
   baseStyle: ({ colorScheme }) => ({
     color: `${colorScheme}.500`,
     fontWeight: "bold",

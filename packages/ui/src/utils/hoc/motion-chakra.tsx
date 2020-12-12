@@ -1,13 +1,13 @@
 import { motionEnhance } from "@utils/motion"
 import { StyleConfig } from "@utils/chakra-enhance"
-import { createChakraDiv, createChakraFlex } from "./chakra"
+import { createBox, createFlex } from "./chakra"
 
-export function createMotionChakraDiv(styleConfig: StyleConfig) {
-  const MotionEnhanced = motionEnhance(createChakraDiv(styleConfig))
+export function createMotionBox(styleConfig: StyleConfig) {
+  const MotionEnhanced = motionEnhance(createBox(styleConfig))
   return MotionEnhanced
 }
 
-export function createMotionChakraFlex(styleConfig: StyleConfig) {
-  const MotionEnhanced = motionEnhance(createChakraFlex(styleConfig))
+export function createMotionFlex(styleConfig: StyleConfig) {
+  const MotionEnhanced = motionEnhance(createFlex(styleConfig))
   return MotionEnhanced
 }

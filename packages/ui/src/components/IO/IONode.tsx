@@ -3,7 +3,7 @@ import { ILogicNode } from "@main/controllers"
 import { useScaleBoxShadowValues } from "@ui/utils/use-scale-boxShadow"
 import { useParentIOState } from "./use-io-state"
 import { MotionCenter } from "@ui/common"
-import { createMotionChakraFlex } from "src/utils/hoc"
+import { createMotionFlex } from "src/utils/hoc"
 import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
 import { NodeConnector } from "./NodeConnector"
@@ -32,7 +32,7 @@ export const IONode = observer(({ node }: { node: ILogicNode }) => {
   )
 })
 
-const IONodeContainer = createMotionChakraFlex({
+const IONodeContainer = createMotionFlex({
   baseStyle: {
     bg: "blueGray.200",
     w: "full",

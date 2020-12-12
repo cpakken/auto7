@@ -1,10 +1,10 @@
 import { observer } from "mobx-react-lite"
 import { ILogicComposition } from "@main/controllers"
 import { useCompositionState, CompositionContext } from "./use-composition-state"
-import { createChakraDiv } from "@ui/utils/hoc"
+import { createBox } from "@ui/utils/hoc"
 import { Blocks } from "./blocks"
 
-const CompositionWrapper = createChakraDiv({
+const CompositionWrapper = createBox({
   baseStyle: { w: "full", h: "full", bg: "blueGray.300", position: "relative", userSelect: "none" },
 })
 

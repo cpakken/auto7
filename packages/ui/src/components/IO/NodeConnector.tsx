@@ -1,6 +1,6 @@
-import { createMotionChakraDiv } from "@ui/utils/hoc"
+import { createMotionBox } from "@ui/utils/hoc"
 
-export const NodeConnector = createMotionChakraDiv({
+export const NodeConnector = createMotionBox({
   baseStyle: {
     bg: "blueGray.400",
     w: "50px",

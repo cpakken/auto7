@@ -1,8 +1,8 @@
-import { createMotionChakraDiv } from "@ui/utils/hoc"
+import { createMotionBox } from "@ui/utils/hoc"
 import { BlockState, gridToValue, valueToGrid } from "./use-block-state"
 import { useSpring, useTransform } from "framer-motion"
 
-const BlockDragShadowWrapper = createMotionChakraDiv({
+const BlockDragShadowWrapper = createMotionBox({
   baseStyle: {
     position: "absolute",
     border: "2px dashed",

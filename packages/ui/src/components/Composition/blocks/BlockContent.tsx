@@ -1,19 +1,10 @@
 import { observer } from "mobx-react-lite"
 import { Label } from "@ui/library"
-import { Box } from "@ui/common"
 import { BlockState } from "./use-block-state"
 import { ILogicInterfaceModel, ILogicNodeModel } from "@main/controllers"
-import { createMotionChakraDiv, createChakraDiv } from "@ui/utils/hoc"
+import { createMotionBox, createBox, createFlex } from "@ui/utils/hoc"
 
 export type IOType = "in" | "out"
-
-const BlockWrapper = createMotionChakraDiv({
-  baseStyle: {
-    bg: "blueGray.200",
-    borderRadius: "lg",
-    overflow: "hidden",
-  },
-})
 
 export const BlockContent = observer(({ state }: { state: BlockState }) => {
   const { width, height } = state
@@ -30,11 +21,11 @@ export const BlockContent = observer(({ state }: { state: BlockState }) => {
   )
 })
 
-const BlockIOWrapper = createChakraDiv({
-  baseStyle: { bg: "blueGray.100", position: "relative", mb: 1, display: "flex", flexDir: "column" },
-  variants: {
-    in: { mr: 2, borderRightRadius: "lg", alignItems: "flex-start" },
-    out: { ml: 2, borderLeftRadius: "lg", alignItems: "flex-end" },
+const BlockWrapper = createMotionBox({
+  baseStyle: {
+    bg: "blueGray.200",
+    borderRadius: "lg",
+    overflow: "hidden",
   },
 })
 
@@ -48,12 +39,22 @@ export const BlockInterface = observer(({ io, ioType }: { io: ILogicInterfaceMod
   )
 })
 
+const BlockIOWrapper = createBox({
+  baseStyle: { bg: "blueGray.100", position: "relative", display: "flex", flexDir: "column" },
+  variants: {
+    in: { mr: 2, borderRightRadius: "lg", alignItems: "flex-start", mb: 2 },
+    out: { ml: 2, borderLeftRadius: "lg", alignItems: "flex-end" },
+  },
+})
+
 export const BlockNode = observer(({ node }: { node: ILogicNodeModel; ioType: IOType }) => {
   const { label } = node
 
   return (
-    <Box sx={{ py: 1 }}>
+    <BlockNodeWrapper>
       <Label size="xs">{label}</Label>
-    </Box>
+    </BlockNodeWrapper>
   )
 })
+
+const BlockNodeWrapper = createFlex({ baseStyle: { alignItems: "center", h: 7 } })

@@ -2,7 +2,7 @@ import { AnimatePresence } from "framer-motion"
 import { observer } from "mobx-react-lite"
 import { mapIter } from "@utils/iterable-fns"
 import { MotionBox } from "@ui/common"
-import { createMotionChakraDiv } from "@ui/utils/hoc"
+import { createMotionBox } from "@ui/utils/hoc"
 import { IBlocks, IBlock } from "@main/controllers"
 import { useBlocksState } from "./use-blocks-state"
 import { Block } from "./Block"
@@ -25,7 +25,7 @@ export const Blocks = observer(({ blocks }: { blocks: IBlocks }) => {
   } else return null
 })
 
-const BlocksBackground = createMotionChakraDiv({
+const BlocksBackground = createMotionBox({
   baseStyle: {
     position: "absolute",
     bg: "blueGray.400",
