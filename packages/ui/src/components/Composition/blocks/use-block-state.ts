@@ -1,9 +1,11 @@
-import { IBlock } from "@main/controllers"
+import { IBlock, ILogicNodeModel } from "@main/controllers"
 import { animate, MotionValue } from "framer-motion"
 import { action, computed, makeObservable, untracked } from "mobx"
-import { useConstant } from "@utils/react"
 import { BlocksState } from "./use-blocks-state"
 import { useParentCompositionState } from "../use-composition-state"
+import { useMemo } from "react"
+import { SmartMap } from "smartmap"
+import { BlockNodeState } from "./use-block-node-state"
 
 const gridSize = 35
 
@@ -20,6 +22,9 @@ export class BlockState {
   block: IBlock
   motionXY: { x: MotionValue<number>; y: MotionValue<number> }
   parent: BlocksState
+  inNodes: SmartMap<string, ILogicNodeModel, BlockNodeState>
+  outNodes: SmartMap<string, ILogicNodeModel, BlockNodeState>
+
   dispose: Disposer
 
   constructor(block: IBlock, parent: BlocksState) {
@@ -27,6 +32,10 @@ export class BlockState {
     this.block = block
     this.parent = parent
     this.motionXY = untracked(() => ({ x: new MotionValue(this.x), y: new MotionValue(this.y) }))
+
+    const { inputs, outputs } = block.logic.info!
+    this.inNodes = new SmartMap(inputs.store, (input) => new BlockNodeState(input), { eager: true })
+    this.outNodes = new SmartMap(outputs.store, (output) => new BlockNodeState(output), { eager: true })
   }
 
   @computed get width() {
@@ -83,8 +92,8 @@ export class BlockState {
 }
 
 export function useBlockState(block: IBlock) {
-  const parent = useParentCompositionState()
-  const state = useConstant(() => parent.blocks.get(block._id)!)
-  // const state = parent.blocks.get(block._id)!
+  const composition = useParentCompositionState()
+  const state = useMemo(() => composition.blocks.get(block._id)!, [composition])
+
   return state
 }

@@ -16,7 +16,7 @@ export class BlocksState {
   composition: CompositionState
   @observable.ref motionOffset: MotionPoint | null = null
 
-  get: (key: any) => BlockState | undefined
+  get: (key: string) => BlockState | undefined
 
   constructor(blocks: IBlocks, composition: CompositionState) {
     makeObservable(this)

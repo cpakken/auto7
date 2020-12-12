@@ -15,7 +15,7 @@ const BlockModel = HasID.props({
   .volatile(createConnections)
   .actions((self) => ({
     setXY(xy: readonly [number, number]) {
-      self.xy = xy
+      self.xy = xy as any
     },
     beforeDestroy() {
       //Remove all connected paths

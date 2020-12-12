@@ -1,4 +1,4 @@
-import { observer, useLocalObservable } from "mobx-react-lite"
+import { observer } from "mobx-react-lite"
 import { ILogicNode } from "@main/controllers"
 import { useScaleBoxShadowValues } from "@ui/utils/use-scale-boxShadow"
 import { useParentIOState } from "./use-io-state"
@@ -7,6 +7,7 @@ import { createMotionBox } from "src/utils/hoc"
 import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
 import { NodeConnector } from "@ui/library"
+import { useIONodeState } from "./use-io-node-state"
 
 export const IONode = observer(({ node }: { node: ILogicNode }) => {
   const { type } = node
@@ -47,24 +48,3 @@ const IONodeContainer = createMotionBox({
     position: "relative",
   },
 })
-
-function useIONodeState() {
-  const state = useLocalObservable(() => ({
-    isFocus: false,
-    isHover: false,
-    onFocus() {
-      this.isFocus = true
-    },
-    onBlur() {
-      this.isFocus = false
-    },
-    onHoverStart() {
-      this.isHover = true
-    },
-    onHoverEnd() {
-      this.isHover = false
-    },
-  }))
-
-  return state
-}
