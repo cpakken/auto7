@@ -1,34 +1,45 @@
-import { createContext, useContext } from "react"
-import { makeAutoObservable } from "mobx"
-import { ILogicNode } from "@main/controllers"
-import { useConstant } from "@utils/react"
+import { createContext, useContext, useMemo } from "react"
+import { action, makeObservable, observable } from "mobx"
+import { ILogicInterface, ILogicNode } from "@main/controllers"
+import { SmartMap } from "smartmap"
+import { IONodeState } from "./use-io-node-state"
+import { ComposerState, useParentComposerState } from "../Composer/use-composer-state"
 
 export type IOType = "in" | "out"
 
 export class IOState {
   ioType: IOType
+  io: ILogicInterface
+  composer: ComposerState | undefined
 
-  isEdit = false
-  nodeEdit: ILogicNode | null = null
+  nodes: SmartMap<string, ILogicNode, IONodeState>
 
-  editNode(node: ILogicNode) {
-    this.isEdit = true
-    this.nodeEdit = node
+  @observable isEdit = false
+  @observable nodeEdit: ILogicNode | null = null
+
+  constructor(ioType: IOType, io: ILogicInterface, composer?: ComposerState) {
+    makeObservable(this)
+    this.composer = composer
+    this.ioType = ioType
+    this.io = io
+
+    this.nodes = new SmartMap(io.store, (node) => new IONodeState(node, this), { eager: true })
   }
 
-  constructor(ioType: IOType) {
-    makeAutoObservable(this, { ioType: false }, { autoBind: true })
-    this.ioType = ioType
+  @action.bound editNode(node: ILogicNode) {
+    this.isEdit = true
+    this.nodeEdit = node
   }
 }
 
 export function useIOState(ioType: IOType) {
-  const state = useConstant(() => new IOState(ioType))
+  const composer = useParentComposerState()
+  const state = useMemo(() => (ioType === "in" ? composer.inputs : composer.outputs), [composer, ioType])
 
   return state
 }
 
-export const IOContext = createContext(new IOState("in"))
+export const IOContext = createContext({} as IOState)
 
 export function useParentIOState() {
   return useContext(IOContext)

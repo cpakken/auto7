@@ -12,7 +12,7 @@ import { useIONodeState } from "./use-io-node-state"
 export const IONode = observer(({ node }: { node: ILogicNode }) => {
   const { type } = node
   const { ioType, isEdit } = useParentIOState()
-  const { isFocus, onFocus, onBlur, isHover, onHoverStart, onHoverEnd } = useIONodeState()
+  const { isFocus, onFocus, onBlur, isHover, onHoverStart, onHoverEnd } = useIONodeState(node)
 
   const { boxShadow, scale } = useScaleBoxShadowValues(1.06)
 

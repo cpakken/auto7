@@ -1,16 +1,19 @@
 import { makeObservable, observable, action } from "mobx"
 import { useMemo } from "react"
-import { CompositionState, useParentCompositionState } from "../Composition/use-composition-state"
+import { ILogicNode } from "@main/controllers"
+import { IOState, useParentIOState } from "./use-io-state"
 
 export class IONodeState {
-  composition: CompositionState
+  io: IOState
+  node: ILogicNode
 
   @observable isFocus = false
   @observable isHover = false
 
-  constructor(composition: CompositionState) {
+  constructor(node: ILogicNode, io: IOState) {
     makeObservable(this)
-    this.composition = composition
+    this.io = io
+    this.node = node
   }
 
   @action.bound onFocus() {
@@ -27,10 +30,9 @@ export class IONodeState {
   }
 }
 
-export function useIONodeState() {
-  //TODO link to composition state
-  const composition = useParentCompositionState()
-  const state = useMemo(() => new IONodeState(composition), [composition])
+export function useIONodeState(node: ILogicNode) {
+  const io = useParentIOState()
+  const state = useMemo(() => io.nodes.get(node._id)!, [io, node])
 
   return state
 }

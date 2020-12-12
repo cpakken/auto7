@@ -5,7 +5,7 @@ import { LogicInterface, ILogicInterfaceSnapshot } from "@main/controllers"
 import { usePropsUpdateStore } from "@utils/react/use-props-update-store"
 import { Box } from "@ui/common"
 import { IO } from "@ui/components/IO"
-import { useIOState } from "../use-io-state"
+import { IOState } from "../use-io-state"
 
 const inSnapshot: ILogicInterfaceSnapshot = [
   { _id: "in1", label: "in1", typeKey: "_std_string" },
@@ -14,8 +14,11 @@ const inSnapshot: ILogicInterfaceSnapshot = [
 ]
 
 export const Inputs: Story<{ isEdit: boolean }> = (props) => {
-  const io = useConstant(() => LogicInterface.create(inSnapshot, { typeController: createTestTypeController() }))
-  const state = useIOState("in")
+  const { io, state } = useConstant(() => {
+    const io = LogicInterface.create(inSnapshot, { typeController: createTestTypeController() })
+    const state = new IOState("in", io)
+    return { io, state }
+  })
   usePropsUpdateStore(props, state)
 
   return <IO ioType="in" io={io} _state={state} />
@@ -32,8 +35,12 @@ const outSnapshot: ILogicInterfaceSnapshot = [
 ]
 
 export const Outputs: Story<{ isEdit: boolean }> = (props) => {
-  const io = useConstant(() => LogicInterface.create(outSnapshot, { typeController: createTestTypeController() }))
-  const state = useIOState("out")
+  const { io, state } = useConstant(() => {
+    const io = LogicInterface.create(outSnapshot, { typeController: createTestTypeController() })
+    const state = new IOState("out", io)
+    return { io, state }
+  })
+
   usePropsUpdateStore(props, state)
 
   return <IO ioType="out" io={io} _state={state} />

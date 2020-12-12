@@ -15,8 +15,10 @@ export const InitialPoint = { x: 0, y: 0 }
 export class CompositionState {
   ref: RefObject<HTMLDivElement>
   composition: ILogicComposition
+
   blocks: SmartMap<string, IBlock, BlockState>
-  // blocks: BlocksState
+  //paths
+
   @observable.ref motionOffset: MotionPoint | null = null
 
   @observable blockHover: BlockState | null = null
