@@ -3,6 +3,7 @@ import { ILogicNode } from "@main/controllers"
 import { useUnmountEffect } from "@utils/react"
 import { useLocalObservable } from "mobx-react-lite"
 
+// @refresh reset
 export function useNodeInputState(node: ILogicNode) {
   const ref = useRef<HTMLInputElement>(null)
   // const parent = useParentNodeState()

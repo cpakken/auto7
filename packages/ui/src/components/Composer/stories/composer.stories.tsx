@@ -11,7 +11,6 @@ const createADDSTRING = () => {
 
 export const Primary = () => {
   const composed = useConstant(createADDSTRING)
-
   return <Composer composed={composed} />
 }
 

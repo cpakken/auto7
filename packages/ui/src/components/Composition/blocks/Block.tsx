@@ -26,22 +26,22 @@ export const Block = observer(({ block }: { block: IBlock }) => {
   const variant = isDrag ? "drag" : isHover ? "hover" : "default"
 
   return (
-    <MotionBox
-      // drag
-      drag={enable} // use own custom popmotion
-      dragMomentum={false}
-      onHoverStart={onHoverStart}
-      onHoverEnd={onHoverEnd}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      animate={variant}
-      variants={blockVariants}
-      position="absolute"
-      style={{ scale, boxShadow, ...motionXY }}
-    >
-      <BlockStateContext.Provider value={state}>
+    <BlockStateContext.Provider value={state}>
+      <MotionBox
+        // drag
+        drag={enable} // use own custom popmotion
+        dragMomentum={false}
+        onHoverStart={onHoverStart}
+        onHoverEnd={onHoverEnd}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        animate={variant}
+        variants={blockVariants}
+        position="absolute"
+        style={{ scale, boxShadow, ...motionXY }}
+      >
         <BlockContent state={state} />
-      </BlockStateContext.Provider>
-    </MotionBox>
+      </MotionBox>
+    </BlockStateContext.Provider>
   )
 })

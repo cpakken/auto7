@@ -1,3 +1,5 @@
+change useStates from MEMO to useConstant since we always expect a full remount on state change
+
 IONode add delete reorder
 
 Block Node Connectors Shadows

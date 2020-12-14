@@ -1,23 +1,35 @@
-import { useConstant, useUnmountEffect } from "@utils/react"
-import { createContext, useContext } from "react"
-import { LogicComposed, LogicComposedShallowReady } from "@main/controllers"
+import { createContext, createRef, useContext, useLayoutEffect, useMemo } from "react"
+import { LogicComposedShallowReady } from "@main/controllers"
+import { useConstant, useMemoCleanUp, useUnmountEffect } from "@utils/react"
 import { IOState } from "../IO/use-io-state"
 import { CompositionState } from "../Composition/use-composition-state"
-import { action } from "mobx"
+import { action, makeObservable, observable } from "mobx"
 
+export type Dimensions = { width: number; height: number }
+
+// @refresh reset
 export class ComposerState {
-  composed: LogicComposed
+  ref = createRef<HTMLDivElement>()
+  @observable.ref dimensions: Dimensions | null = null
+
+  composed: LogicComposedShallowReady
   inputs: IOState
   outputs: IOState
   composition: CompositionState
 
   constructor(composed: LogicComposedShallowReady) {
+    makeObservable(this)
     this.composed = composed
 
     const { inputs, outputs } = composed.info
     this.inputs = new IOState("in", inputs, this)
     this.outputs = new IOState("out", outputs, this)
-    this.composition = new CompositionState(composed.composition, this)
+    this.composition = new CompositionState(this)
+  }
+
+  @action.bound initialize() {
+    const { offsetWidth, offsetHeight } = this.ref.current!
+    this.dimensions = { width: offsetWidth, height: offsetHeight }
   }
 
   @action.bound dispose() {
@@ -28,9 +40,23 @@ export class ComposerState {
 }
 
 export function useComposerState(composed: LogicComposedShallowReady) {
-  const state = useConstant(() => new ComposerState(composed))
+  // const state = useMemoCleanUp(
+  //   () => {
+  //     console.log("intialize")
+  //     return new ComposerState(composed)
+  //   },
+  //   (prev) => prev.dispose()
+  //   // [composed]
+  // )
+
+  const state = useConstant(() => {
+    console.log("intialize!!")
+    return new ComposerState(composed)
+  })
 
   useUnmountEffect(state.dispose)
+
+  useLayoutEffect(state.initialize, [state])
 
   return state
 }

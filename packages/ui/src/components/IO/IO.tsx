@@ -1,16 +1,15 @@
 import { observer } from "mobx-react-lite"
-import { ILogicInterface } from "@main/controllers"
 import { useIOState, IOContext, IOState, IOType } from "./use-io-state"
 import { Node } from "./IONode"
-import { createFlex } from "src/utils/hoc"
+import { createMotionBox } from "src/utils/hoc"
 
-export const IO = observer(({ io, ioType, _state }: { io: ILogicInterface; ioType: IOType; _state?: IOState }) => {
+export const IO = observer(({ ioType, _state }: { ioType: IOType; _state?: IOState }) => {
   const state = _state ?? useIOState(ioType)
 
   return (
     <IOContext.Provider value={state}>
-      <IOContainer variant={ioType}>
-        {io.list.map((node) => (
+      <IOContainer variant={ioType} initial={{ opacity: 0, x: ioType === "in" ? -25 : 25 }} animate={{ opacity: 1, x: 0 }}>
+        {state.io.list.map((node) => (
           <Node node={node} key={node._id} />
         ))}
       </IOContainer>
@@ -18,20 +17,17 @@ export const IO = observer(({ io, ioType, _state }: { io: ILogicInterface; ioTyp
   )
 })
 
-const IOContainer = createFlex({
+const IOContainer = createMotionBox({
   baseStyle: {
-    bg: "blueGray.100",
-    // bg: "blueGray.700",
+    display: "flex",
+    flexDir: "column",
+    justifyContent: "space-around",
+    position: "absolute",
+    top: 0,
     w: 140,
     h: "100%",
-    px: 3,
-    position: "absolute",
+    bg: "blueGray.100",
     userSelect: "none",
-    top: 0,
-  },
-  defaultProps: {
-    direction: "column",
-    justify: "space-around",
   },
   variants: {
     in: {

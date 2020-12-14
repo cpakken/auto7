@@ -5,8 +5,12 @@ export interface IWhenOptions {
   onError?: (error: any) => void
 }
 
-type Falsey = false | null | undefined | 0 | ""
-type Truthy<T> = Exclude<T, Falsey>
+type Nullable = false | null | undefined
+type Truthy<T> = Exclude<T, Nullable>
+
+function isNullable(test): test is Nullable {
+  return test === null || test === undefined || test === false
+}
 
 export function when<T>(predicate: () => T, opts?: IWhenOptions): Promise<Truthy<T>> & { cancel(): void }
 export function when<T>(predicate: () => T, effect: (arg: Truthy<T>) => void, opts?: IWhenOptions): IReactionDisposer
@@ -30,7 +34,7 @@ function _when<T>(predicate: () => T, effect: (arg: Truthy<T>) => void, opts: IW
 
   const disposer = autorun((r) => {
     const cond = predicate()
-    if (cond) {
+    if (!isNullable(cond)) {
       r.dispose()
       if (timeoutHandle) clearTimeout(timeoutHandle)
       runInAction(() => effect(cond as Truthy<T>))

@@ -5,6 +5,7 @@ import { action, computed, makeObservable, untracked } from "mobx"
 import { SmartMap } from "smartmap"
 import { CompositionState, useParentCompositionState } from "../use-composition-state"
 import { BlockNodeState } from "./use-block-node-state"
+import { useConstant } from "../../../../../utils/src/react"
 
 export const gridSize = 35
 
@@ -16,6 +17,7 @@ export function gridToValue(grid: number) {
   return grid * gridSize
 }
 
+// @refresh reset
 export class BlockState {
   block: IBlock
   motionXY: { x: MotionValue<number>; y: MotionValue<number> }
@@ -98,8 +100,10 @@ export class BlockState {
 }
 
 export function useBlockState(block: IBlock) {
+  // const composition = useParentCompositionState()
+  // const state = useMemo(() => composition.blocks.get(block._id)!, [composition, block])
   const composition = useParentCompositionState()
-  const state = useMemo(() => composition.blocks.get(block._id)!, [composition])
+  const state = useConstant(() => composition.blocks.get(block._id)!)
 
   useLayoutEffect(state.initialize, [])
 

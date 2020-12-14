@@ -1,19 +1,19 @@
-import { createContext, createRef, RefObject, useContext, useLayoutEffect, useMemo } from "react"
+import { createContext, useContext, useEffect, useMemo } from "react"
 import { animate, MotionValue } from "framer-motion"
 import { action, computed, makeObservable, observable, reaction } from "mobx"
 import { SmartMap } from "smartmap"
 import { reduceIter } from "@utils/iterable-fns"
 import { IBlock, ILogicComposition } from "@main/controllers"
 import { BlockState } from "./blocks/use-block-state"
-import { ComposerState, useParentComposerState } from "../Composer/use-composer-state"
+import { ComposerState, Dimensions, useParentComposerState } from "../Composer/use-composer-state"
+import { useConstant } from "@utils/react"
 
-export type Dimensions = { width: number; height: number }
 type Point = { x: number; y: number }
 type MotionPoint = { x: MotionValue<number>; y: MotionValue<number> }
 export const InitialPoint = { x: 0, y: 0 }
 
+// @refresh reset
 export class CompositionState {
-  ref: RefObject<HTMLDivElement>
   composition: ILogicComposition
 
   composer: ComposerState
@@ -25,43 +25,38 @@ export class CompositionState {
   @observable blockHover: BlockState | null = null
   @observable blockDrag: BlockState | null = null
 
-  @observable.ref border: null | Dimensions = null
-
-  constructor(composition: ILogicComposition, composer: ComposerState) {
+  constructor(composer: ComposerState) {
     makeObservable(this)
-    this.ref = createRef()
     this.composer = composer
-    this.composition = composition
-    this.blocks = new SmartMap(composition.blocks.store, (block) => new BlockState(block, this), { eager: true })
+    this.composition = composer.composed.composition
+    this.blocks = new SmartMap(this.composition.blocks.store, (block) => new BlockState(block, this), {
+      onCleanup: (block) => block.dispose(),
+      eager: true,
+    })
+    //paths
   }
 
+  //Run in ComposerState
   @action dispose() {
-    this.blocks.dispose()
+    console.log("composition disposed")
+    // this.blocks.dispose()
     // this.paths.dispose()
   }
 
   @action.bound intialize() {
-    //Set Composition Border Dimensions
-    const { offsetHeight, offsetWidth } = this.ref.current!
-    this.border = { width: offsetWidth, height: offsetHeight }
-
-    //TODO sync border with window size change
-
     //Initialize motionOffset and sync with mobx offset
     const { x, y } = this.offset!
     const motionOffset = { x: new MotionValue(x), y: new MotionValue(y) }
     this.motionOffset = motionOffset
 
     const config = { type: "spring", bounce: 0.1 } as const
-    const dispose = reaction(
+    return reaction(
       () => this.offset!,
       ({ x, y }) => {
         animate(motionOffset.x, x, config)
         animate(motionOffset.y, y, config)
       }
     )
-
-    return dispose
   }
 
   @computed get min(): Point {
@@ -84,9 +79,18 @@ export class CompositionState {
     return { width: this.max.x - this.min.x, height: this.max.y - this.min.y }
   }
 
+  @computed get border(): Dimensions | null {
+    const { dimensions } = this.composer
+    return dimensions
+      ? {
+          width: dimensions.width,
+          height: dimensions.height,
+        }
+      : null
+  }
+
   @computed get offset(): Point | null {
-    const { border } = this
-    const { min } = this
+    const { border, min } = this
     return (
       border && {
         x: -min.x + (border.width - this.dimensions.width) / 2,
@@ -96,11 +100,12 @@ export class CompositionState {
   }
 }
 
-export function useCompositionState(_composer?: ComposerState) {
-  const composer = _composer ?? useParentComposerState()
-  const state = useMemo(() => composer.composition, [composer])
-
-  useLayoutEffect(state.intialize, [])
+export function useCompositionState() {
+  const composer = useParentComposerState()
+  // const state = useMemo(() => composer.composition, [composer])
+  // useEffect(state.intialize, [state])
+  const state = useConstant(() => composer.composition)
+  useEffect(state.intialize, [])
 
   return state
 }

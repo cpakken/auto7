@@ -2,20 +2,25 @@ import { Meta } from "@storybook/react/types-6-0"
 import { Box } from "@ui/common"
 import { createTestControllers } from "@main/test-utils"
 import { Composition } from "../Composition"
-import { useComposerState } from "src/components/Composer/use-composer-state"
+import { useComposerState, ComposerContext } from "src/components/Composer/use-composer-state"
 import { LogicComposedShallowReady } from "@main/controllers"
-import { useCompositionState } from "../use-composition-state"
+import { useConstant } from "@utils/react"
 
 const createADDSTRING = () => {
   const { logic } = createTestControllers()
-  return logic.composed.get("ADDSTRING_COMPOUND")
+  return logic.composed.get("ADDSTRING_COMPOUND") as LogicComposedShallowReady
 }
 
 export const Primary = () => {
-  const composer = useComposerState(createADDSTRING() as LogicComposedShallowReady)
-  const state = useCompositionState(composer)
+  const state = useComposerState(useConstant(createADDSTRING))
 
-  return <Composition _state={state} />
+  return (
+    <Box ref={state.ref} w={1000} h={600}>
+      <ComposerContext.Provider value={state}>
+        <Composition />
+      </ComposerContext.Provider>
+    </Box>
+  )
 }
 
 // export const Blocks_ = () => {
@@ -33,5 +38,5 @@ export const Primary = () => {
 
 export default {
   title: "UI/Composition",
-  decorators: [(Story) => <Box sx={{ w: 800, h: 600 }}>{Story()}</Box>],
+  // decorators: [(Story) => <Box>{Story()}</Box>],
 } as Meta
