@@ -7,33 +7,44 @@ import { createMotionBox } from "src/utils/hoc"
 import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
 import { NodeConnector } from "@ui/library"
-import { useIONodeState } from "./use-io-node-state"
+import { useNodeState } from "./use-node-state"
 
-export const IONode = observer(({ node }: { node: ILogicNode }) => {
+export const Node = observer(({ node }: { node: ILogicNode }) => {
   const { type } = node
   const { ioType, isEdit } = useParentIOState()
-  const { isFocus, onFocus, onBlur, isHover, onHoverStart, onHoverEnd } = useIONodeState(node)
+  const { ref, isFocus, isHover, isDrag, onFocus, onBlur, onHoverStart, onHoverEnd, onDragStart, onDragEnd } = useNodeState(node)
 
   const { boxShadow, scale } = useScaleBoxShadowValues(1.06)
 
   return (
     <MotionCenter
+      ref={ref}
       position="relative"
+      layout="position"
+      drag={isEdit && "y"}
+      style={{ scale }}
+      // animate={{ scale: isHover || isFocus ? 1.06 : 1 }}
+      initial={false}
+      animate={{ zIndex: isDrag ? 10 : 1 }}
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: isEdit ? 1.12 : 1.06 }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      animate={{ scale: isHover || isFocus ? 1.06 : 1 }}
-      style={{ scale }}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      // onFocus={onFocus}
+      // onBlur={onBlur}
     >
-      <IONodeContainer onFocus={onFocus} onBlur={onBlur} style={{ boxShadow }}>
+      <NodeContainer style={{ boxShadow }}>
         <NodeLabel node={node} isEdit={isEdit} />
         <TypeLabel info={type!.info!} isEdit={isEdit} />
         <NodeConnector variant={ioType === "in" ? "right" : "left"} style={{ boxShadow }} />
-      </IONodeContainer>
+      </NodeContainer>
     </MotionCenter>
   )
 })
 
-const IONodeContainer = createMotionBox({
+const NodeContainer = createMotionBox({
   baseStyle: {
     bg: "blueGray.200",
     w: "full",

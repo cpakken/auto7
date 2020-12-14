@@ -35,6 +35,11 @@ export class CompositionState {
     this.blocks = new SmartMap(composition.blocks.store, (block) => new BlockState(block, this), { eager: true })
   }
 
+  @action dispose() {
+    this.blocks.dispose()
+    // this.paths.dispose()
+  }
+
   @action.bound intialize() {
     //Set Composition Border Dimensions
     const { offsetHeight, offsetWidth } = this.ref.current!

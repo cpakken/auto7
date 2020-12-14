@@ -14,7 +14,7 @@ import { BlockContent } from "./BlockContent"
 const blockVariants = {
   default: { scale: 1, opacity: 1, zIndex: 10 },
   hover: { scale: 1.06, opacity: 1, zIndex: 15 },
-  drag: { scale: 1.06, opacity: 0.75, zIndex: 20 },
+  drag: { scale: 1.06, opacity: 0.7, zIndex: 20 },
 }
 
 export const Block = observer(({ block }: { block: IBlock }) => {
@@ -27,6 +27,7 @@ export const Block = observer(({ block }: { block: IBlock }) => {
 
   return (
     <MotionBox
+      // drag
       drag={enable} // use own custom popmotion
       dragMomentum={false}
       onHoverStart={onHoverStart}

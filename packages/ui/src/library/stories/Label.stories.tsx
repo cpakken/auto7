@@ -1,4 +1,4 @@
-import colors from "src/theme/colors"
+import { tailwindColors } from "@ui/theme/colors"
 import { Box } from "@chakra-ui/react"
 import { Label } from "../Label"
 import { extractArgTypes } from "@utils/chakra-enhance"
@@ -15,7 +15,7 @@ export default {
   args: { label: "Testing!" },
   argTypes: {
     colorScheme: {
-      control: { type: "select", options: Object.keys(colors) },
+      control: { type: "select", options: Object.keys(tailwindColors) },
       defaultValue: "blueGray",
     },
     ...extractArgTypes(Label),

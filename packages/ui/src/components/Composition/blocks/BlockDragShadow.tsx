@@ -2,17 +2,6 @@ import { createMotionBox } from "@ui/utils/hoc"
 import { BlockState, gridToValue, valueToGrid } from "./use-block-state"
 import { useSpring, useTransform } from "framer-motion"
 
-const BlockDragShadowWrapper = createMotionBox({
-  baseStyle: {
-    position: "absolute",
-    border: "2px dashed",
-    // borderColor: "rose.500",
-    // borderColor: "blueGray.500",
-    borderColor: "violet.500",
-    borderRadius: "lg",
-  },
-})
-
 export const BlockDragShadow = ({ block }: { block: BlockState }) => {
   const { width, height } = block
   const position = useBlockDragShadowState(block)
@@ -27,6 +16,17 @@ export const BlockDragShadow = ({ block }: { block: BlockState }) => {
     />
   )
 }
+
+const BlockDragShadowWrapper = createMotionBox({
+  baseStyle: {
+    position: "absolute",
+    border: "3px dashed",
+    // borderColor: "rose.500",
+    // borderColor: "blueGray.500",
+    borderColor: "violet.500",
+    borderRadius: "lg",
+  },
+})
 
 function useBlockDragShadowState(block: BlockState) {
   const { motionXY } = block

@@ -1,4 +1,4 @@
-export default {
+export const tailwindColors = {
   black: "#000",
   white: "#fff",
   rose: {

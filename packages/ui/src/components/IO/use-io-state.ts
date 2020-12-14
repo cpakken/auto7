@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo } from "react"
 import { action, makeObservable, observable } from "mobx"
 import { ILogicInterface, ILogicNode } from "@main/controllers"
 import { SmartMap } from "smartmap"
-import { IONodeState } from "./use-io-node-state"
+import { NodeState } from "./use-node-state"
 import { ComposerState, useParentComposerState } from "../Composer/use-composer-state"
 
 export type IOType = "in" | "out"
@@ -12,7 +12,7 @@ export class IOState {
   io: ILogicInterface
   composer: ComposerState | undefined
 
-  nodes: SmartMap<string, ILogicNode, IONodeState>
+  nodes: SmartMap<string, ILogicNode, NodeState>
 
   @observable isEdit = false
   @observable nodeEdit: ILogicNode | null = null
@@ -23,7 +23,11 @@ export class IOState {
     this.ioType = ioType
     this.io = io
 
-    this.nodes = new SmartMap(io.store, (node) => new IONodeState(node, this), { eager: true })
+    this.nodes = new SmartMap(io.store, (node) => new NodeState(node, this), { eager: true })
+  }
+
+  @action dispose() {
+    this.nodes.dispose()
   }
 
   @action.bound editNode(node: ILogicNode) {

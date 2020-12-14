@@ -1,8 +1,8 @@
 import { extendTheme } from "@chakra-ui/react"
-import colors from "./colors"
+import { tailwindColors } from "./colors"
 
 export const customTheme = extendTheme({
-  colors,
+  colors: tailwindColors,
   zIndices: {
     connector: 0,
     node: 10,

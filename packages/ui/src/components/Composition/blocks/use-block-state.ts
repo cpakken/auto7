@@ -16,15 +16,12 @@ export function gridToValue(grid: number) {
   return grid * gridSize
 }
 
-type Disposer = () => void
 export class BlockState {
   block: IBlock
   motionXY: { x: MotionValue<number>; y: MotionValue<number> }
   composition: CompositionState
   inputs: SmartMap<string, ILogicNodeModel, BlockNodeState>
   outputs: SmartMap<string, ILogicNodeModel, BlockNodeState>
-
-  dispose: Disposer
 
   constructor(block: IBlock, parent: CompositionState) {
     makeObservable(this)
@@ -40,6 +37,11 @@ export class BlockState {
   @action.bound initialize() {
     this.inputs.forEach((input) => input.initializeInBlock())
     this.outputs.forEach((output) => output.initializeInBlock())
+  }
+
+  @action dispose() {
+    this.inputs.dispose()
+    this.outputs.dispose()
   }
 
   @computed get width() {

@@ -12,7 +12,7 @@ export const NodeConnector = createMotionBox({
   },
   sizes: {
     md: { w: "25px", h: "20px" },
-    sm: { w: "20px", h: "15px" },
+    sm: { w: "17px", h: "15px" },
   },
   defaultProps: { size: "md" },
 })
