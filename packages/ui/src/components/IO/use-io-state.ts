@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo } from "react"
 import { action, computed, makeObservable, observable } from "mobx"
 import { ILogicInterface, ILogicNode } from "@main/controllers"
 import { SmartMap } from "smartmap"
-import { NodeState, NODE_HEIGHT } from "./use-node-state"
+import { NodeState, NODE_CONTENT_HEIGHT, NODE_HEIGHT } from "./use-node-state"
 import { ComposerState, useParentComposerState } from "../Composer/use-composer-state"
 import { useConstant } from "@utils/react"
 

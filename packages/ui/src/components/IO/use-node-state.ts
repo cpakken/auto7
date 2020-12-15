@@ -1,5 +1,5 @@
 import { makeObservable, observable, action, computed } from "mobx"
-import { createRef, useEffect, useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { ILogicNode } from "@main/controllers"
 import { IOState, useParentIOState } from "./use-io-state"
 import { MotionValue } from "framer-motion"
@@ -10,7 +10,6 @@ import { when } from "@utils/mobx"
 export class NodeState {
   io: IOState
   node: ILogicNode
-  ref = createRef<HTMLDivElement>()
   y = new MotionValue(0)
 
   @observable isFocus = false
@@ -26,8 +25,8 @@ export class NodeState {
   }
 
   @action.bound initialize() {
-    when(
-      () => this.offsetHeight,
+    return when(
+      () => this.offsetY,
       (y) => this.y.set(y)
     )
   }
@@ -36,12 +35,17 @@ export class NodeState {
     return this.io.indexies.get(this.node)!
   }
 
-  @computed get offsetHeight() {
+  @computed get offsetY() {
     const { spacer } = this.io
     if (spacer) {
       return (spacer + NODE_HEIGHT) * (this.index + 1) - NODE_HEIGHT / 2
     }
     return null
+  }
+
+  getUpperNodeY() {
+    const upper: ILogicNode | undefined = this.io.io.list[this.index - 1]
+    return (upper && this.io.nodes.get(upper._id)?.offsetY) || null
   }
 
   @action.bound onFocus() {
@@ -58,10 +62,15 @@ export class NodeState {
   }
   @action.bound onDragStart() {
     this.isDrag = true
-    this.zIndex = 10
   }
   @action.bound onDragEnd() {
     this.isDrag = false
+  }
+  @action.bound onDrag({ y }) {
+    const { offsetY } = this
+    if (y < offsetY!) {
+      //move up
+    }
   }
 }
 
@@ -69,10 +78,11 @@ export function useNodeState(node: ILogicNode) {
   const io = useParentIOState()
   // const state = useMemo(() => io.nodes.get(node._id)!, [io, node])
   const state = useConstant(() => io.nodes.get(node._id)!)
-  useEffect(state.initialize)
+  useEffect(state.initialize, [])
 
   return state
 }
 
-export const NODE_HEIGHT = 75
-export const NODE_WIDTH = 120
+export const NODE_WIDTH = 110
+export const NODE_CONTENT_HEIGHT = 75
+export const NODE_HEIGHT = 110

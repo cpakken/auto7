@@ -6,33 +6,36 @@ import { createMotionBox } from "src/utils/hoc"
 import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
 import { NodeConnector } from "@ui/library"
-import { NODE_HEIGHT, NODE_WIDTH, useNodeState } from "./use-node-state"
+import { NODE_CONTENT_HEIGHT, NODE_HEIGHT, NODE_WIDTH, useNodeState } from "./use-node-state"
+import { useMotionDrag } from "src/utils/use-motion-drag"
 
 export const Node = observer(({ node }: { node: ILogicNode }) => {
   const { type } = node
-  const { ioType, isEdit } = useParentIOState()
-  const { ref, isFocus, isHover, isDrag, onFocus, onBlur, onHoverStart, onHoverEnd, onDragStart, onDragEnd, y } = useNodeState(
-    node
-  )
+  const { ioType, isEdit, height } = useParentIOState()
+
+  const state = useNodeState(node)
+  const { isHover, isFocus, y } = state
+  const { onHoverStart, onHoverEnd, onDragStart, onDragEnd, onDrag, onFocus, onBlur } = state
+
+  const constraints = { y: { min: NODE_HEIGHT / 2, max: height! - NODE_HEIGHT / 2 } }
+  const panProps = useMotionDrag({ y }, { onDragStart, onDragEnd, onDrag, constraints })
 
   const { boxShadow, scale } = useScaleBoxShadowValues(1.06)
 
   return (
     <NodeContainer
-      ref={ref}
       // drag={isEdit && "y"}
+      dragMomentum={false}
       style={{ scale, y }}
-      // animate={{ scale: isHover || isFocus ? 1.06 : 1 }}
-      initial={false}
-      animate={{ zIndex: isDrag ? 10 : 1 }}
-      whileHover={{ scale: 1.04 }}
+      animate={{ scale: isHover || isFocus ? 1.06 : 1 }}
+      // animate={{ zIndex: isDrag ? 10 : 1 }}
+      // whileHover={{ scale: 1.04 }}
       // whileTap={{ scale: isEdit ? 1.12 : 1.06 }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      // onFocus={onFocus}
-      // onBlur={onBlur}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      {...(isEdit && panProps)}
     >
       <NodeContent style={{ boxShadow }}>
         <NodeLabel node={node} isEdit={isEdit} />
@@ -45,7 +48,6 @@ export const Node = observer(({ node }: { node: ILogicNode }) => {
 
 const NodeContainer = createMotionBox({
   baseStyle: {
-    // position: "relative",
     position: "absolute",
     top: 0,
     w: "full",
@@ -58,10 +60,11 @@ const NodeContainer = createMotionBox({
 const NodeContent = createMotionBox({
   baseStyle: {
     position: "absolute",
+    // position: "relative",
     bg: "blueGray.200",
     // w: "full",
     w: NODE_WIDTH,
-    h: NODE_HEIGHT,
+    h: NODE_CONTENT_HEIGHT,
     px: 2,
     borderRadius: "lg",
     display: "flex",
