@@ -1,8 +1,8 @@
-import { createContext, useContext, useMemo } from "react"
+import { createContext, useContext } from "react"
 import { action, computed, makeObservable, observable } from "mobx"
 import { ILogicInterface, ILogicNode } from "@main/controllers"
 import { SmartMap } from "smartmap"
-import { NodeState, NODE_CONTENT_HEIGHT, NODE_HEIGHT } from "./use-node-state"
+import { NodeState, NODE_HEIGHT } from "./use-node-state"
 import { ComposerState, useParentComposerState } from "../Composer/use-composer-state"
 import { useConstant } from "@utils/react"
 
@@ -29,7 +29,7 @@ export class IOState {
   }
 
   @computed get height() {
-    return this.composer.dimensions?.height //- TOOLBAR HEIGHT??
+    return this.composer.dimensions.height //- TOOLBAR HEIGHT??
   }
 
   @computed get maxHeight() {
@@ -37,15 +37,11 @@ export class IOState {
   }
 
   @computed get spacer() {
-    const { height } = this
-    if (height) {
-      const { size } = this.nodes
-      return (height - size * NODE_HEIGHT) / (size + 1)
-    }
-    return null
+    const { size } = this.nodes
+    return (this.height - size * NODE_HEIGHT) / (size + 1)
   }
 
-  @computed get indexies() {
+  @computed get indexies(): Map<ILogicNode, number> {
     return new Map(this.io.list.map((node, i) => [node, i]))
   }
 
@@ -61,7 +57,6 @@ export class IOState {
 
 export function useIOState(ioType: IOType) {
   const composer = useParentComposerState()
-  // const state = useMemo(() => (ioType === "in" ? composer.inputs : composer.outputs), [composer, ioType])
   const state = useConstant(() => (ioType === "in" ? composer.inputs : composer.outputs))
 
   return state

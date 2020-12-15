@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo } from "react"
+import { createContext, useContext, useEffect } from "react"
 import { animate, MotionValue } from "framer-motion"
 import { action, computed, makeObservable, observable, reaction } from "mobx"
 import { SmartMap } from "smartmap"
@@ -20,7 +20,7 @@ export class CompositionState {
   blocks: SmartMap<string, IBlock, BlockState>
   //paths
 
-  @observable.ref motionOffset: MotionPoint | null = null
+  motionOffset: MotionPoint
 
   @observable blockHover: BlockState | null = null
   @observable blockDrag: BlockState | null = null
@@ -34,6 +34,8 @@ export class CompositionState {
       eager: true,
     })
     //paths
+
+    this.motionOffset = { x: new MotionValue(this.offset.x), y: new MotionValue(this.offset.y) }
   }
 
   //Run in ComposerState
@@ -44,11 +46,8 @@ export class CompositionState {
   }
 
   @action.bound intialize() {
-    //Initialize motionOffset and sync with mobx offset
-    const { x, y } = this.offset!
-    const motionOffset = { x: new MotionValue(x), y: new MotionValue(y) }
-    this.motionOffset = motionOffset
-
+    //Sync motionOffset with observable offset
+    const { motionOffset } = this
     const config = { type: "spring", bounce: 0.1 } as const
     return reaction(
       () => this.offset!,
@@ -79,31 +78,22 @@ export class CompositionState {
     return { width: this.max.x - this.min.x, height: this.max.y - this.min.y }
   }
 
-  @computed get border(): Dimensions | null {
-    const { dimensions } = this.composer
-    return dimensions
-      ? {
-          width: dimensions.width,
-          height: dimensions.height,
-        }
-      : null
+  @computed get border(): Dimensions {
+    //Can change based on composition focus
+    return this.composer.dimensions
   }
 
-  @computed get offset(): Point | null {
-    const { border, min } = this
-    return (
-      border && {
-        x: -min.x + (border.width - this.dimensions.width) / 2,
-        y: -min.y + (border.height - this.dimensions.height) / 2,
-      }
-    )
+  @computed get offset(): Point {
+    const { dimensions, border, min } = this
+    return {
+      x: -min.x + (border.width - dimensions.width) / 2,
+      y: -min.y + (border.height - dimensions.height) / 2,
+    }
   }
 }
 
 export function useCompositionState() {
   const composer = useParentComposerState()
-  // const state = useMemo(() => composer.composition, [composer])
-  // useEffect(state.intialize, [state])
   const state = useConstant(() => composer.composition)
   useEffect(state.intialize, [])
 

@@ -1,35 +1,25 @@
-import { IBlock, ILogicNodeModel } from "@main/controllers"
+import { createContext, useContext, useLayoutEffect } from "react"
 import { animate, MotionValue } from "framer-motion"
-import { createContext, useContext, useLayoutEffect, useMemo } from "react"
-import { action, computed, makeObservable, untracked } from "mobx"
+import { action, computed, makeObservable } from "mobx"
 import { SmartMap } from "smartmap"
+import { useConstant } from "@utils/react"
+import { IBlock, ILogicNodeModel } from "@main/controllers"
 import { CompositionState, useParentCompositionState } from "../use-composition-state"
 import { BlockNodeState } from "./use-block-node-state"
-import { useConstant } from "../../../../../utils/src/react"
-
-export const gridSize = 35
-
-export function valueToGrid(value: number) {
-  return Math.round(value / gridSize)
-}
-
-export function gridToValue(grid: number) {
-  return grid * gridSize
-}
 
 // @refresh reset
 export class BlockState {
   block: IBlock
-  motionXY: { x: MotionValue<number>; y: MotionValue<number> }
   composition: CompositionState
   inputs: SmartMap<string, ILogicNodeModel, BlockNodeState>
   outputs: SmartMap<string, ILogicNodeModel, BlockNodeState>
+
+  motionXY = { x: new MotionValue(0), y: new MotionValue(0) }
 
   constructor(block: IBlock, parent: CompositionState) {
     makeObservable(this)
     this.block = block
     this.composition = parent
-    this.motionXY = untracked(() => ({ x: new MotionValue(this.x), y: new MotionValue(this.y) }))
 
     const { inputs, outputs } = block.logic.info!
     this.inputs = new SmartMap(inputs.store, (input) => new BlockNodeState(input), { eager: true })
@@ -37,6 +27,10 @@ export class BlockState {
   }
 
   @action.bound initialize() {
+    const { x, y } = this.motionXY
+    x.set(this.x)
+    y.set(this.y)
+
     this.inputs.forEach((input) => input.initializeInBlock())
     this.outputs.forEach((output) => output.initializeInBlock())
   }
@@ -97,6 +91,16 @@ export class BlockState {
     const xy = [valueToGrid(x.get()), valueToGrid(y.get())] as const
     this.block.setXY(xy)
   }
+}
+
+export const gridSize = 35
+
+export function valueToGrid(value: number) {
+  return Math.round(value / gridSize)
+}
+
+export function gridToValue(grid: number) {
+  return grid * gridSize
 }
 
 export function useBlockState(block: IBlock) {

@@ -5,6 +5,7 @@ import { Composition } from "../Composition"
 import { useComposerState, ComposerContext } from "src/components/Composer/use-composer-state"
 import { LogicComposedShallowReady } from "@main/controllers"
 import { useConstant } from "@utils/react"
+import { useRef } from "react"
 
 const createADDSTRING = () => {
   const { logic } = createTestControllers()
@@ -12,29 +13,19 @@ const createADDSTRING = () => {
 }
 
 export const Primary = () => {
-  const state = useComposerState(useConstant(createADDSTRING))
+  const ref = useRef(null)
+  const state = useComposerState(ref, useConstant(createADDSTRING))
 
   return (
-    <Box ref={state.ref} w={1000} h={600}>
-      <ComposerContext.Provider value={state}>
-        <Composition />
-      </ComposerContext.Provider>
+    <Box ref={ref} w={1000} h={600}>
+      {state && (
+        <ComposerContext.Provider value={state}>
+          <Composition />
+        </ComposerContext.Provider>
+      )}
     </Box>
   )
 }
-
-// export const Blocks_ = () => {
-//   const { composition } = useConstant(createADDSTRING)
-//   const { blocks } = composition!
-
-//   const compositionState = useCompositionState(composition!)
-
-//   return (
-//     <CompositionContext.Provider value={compositionState}>
-//       <Blocks blocks={blocks} />
-//     </CompositionContext.Provider>
-//   )
-// }
 
 export default {
   title: "UI/Composition",

@@ -1,6 +1,6 @@
 import { ILogicNodeModel } from "@main/controllers"
 import { action, makeObservable, observable } from "mobx"
-import { createRef, useMemo } from "react"
+import { createRef } from "react"
 import { useConstant } from "@utils/react"
 import { IOType } from "../blocks/BlockContent"
 import { useParentBlockState } from "./use-block-state"
@@ -24,10 +24,6 @@ export class BlockNodeState {
 }
 
 export function useBlockNodeState(ioType: IOType, node: ILogicNodeModel) {
-  // const block = useParentBlockState()
-  // const state = useMemo(() => {
-  //   return ioType === "in" ? block.inputs.get(node._id)! : block.outputs.get(node._id)!
-  // }, [ioType, node, block])
   const block = useParentBlockState()
   const state = useConstant(() => {
     return ioType === "in" ? block.inputs.get(node._id)! : block.outputs.get(node._id)!

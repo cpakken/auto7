@@ -8,7 +8,6 @@ import { IO } from "@ui/components/IO"
 import { IOState } from "../use-io-state"
 import { ComposerState } from "src/components/Composer/use-composer-state"
 import { useLocalObservable } from "mobx-react-lite"
-import { useMemo } from "react"
 
 const inSnapshot: ILogicInterfaceSnapshot = [
   { _id: "in1", label: "in1", typeKey: "_std_string" },
@@ -22,11 +21,11 @@ const Inputs: Story<{ isEdit: boolean }> = (props) => {
     dimensions: { height: 600 },
   })) as ComposerState
 
-  const state = useMemo(() => new IOState("in", io, composer), [io, composer])
+  const state = useConstant(() => new IOState("in", io, composer))
 
   usePropsUpdateStore(props, state)
 
-  return <IO ioType="in" io={io} _state={state} />
+  return <IO ioType="in" _state={state} />
 }
 
 export const Primary = Inputs.bind({})
