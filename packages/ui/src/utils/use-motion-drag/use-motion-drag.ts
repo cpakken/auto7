@@ -12,18 +12,16 @@ type DragConstraint = {
   min: number
   max: number
   elastic?: number
+
   onMinStart?: ConstraintCallback
+  onMin?: (deltaMin: number) => void
   onMinEnd?: ConstraintCallback
-  onMin?: ConstraintCallback
+
   onMaxStart?: ConstraintCallback
+  onMax?: (deltaMax: number) => void
   onMaxEnd?: ConstraintCallback
-  onMax?: ConstraintCallback
 }
 type DragConstraints = { x?: DragConstraint; y?: DragConstraint }
-
-//Not Ndeded
-type ScrollConstraint = { min?: number; max?: number; speed?: number }
-type DragEdgeScroll = { x?: ScrollConstraint; y?: ScrollConstraint }
 
 type DragHook = (position: DragPosition) => void
 type DragOffset = { x: MotionValue<number>; y: MotionValue<number> }
@@ -31,7 +29,6 @@ type DragOffset = { x: MotionValue<number>; y: MotionValue<number> }
 type DragOptions = {
   constraints?: DragConstraints
   offset?: DragOffset
-  scroll?: DragEdgeScroll
 
   onDragStart?: DragHook
   onDragEnd?: DragHook
@@ -66,7 +63,15 @@ export class MotionDrag {
 
   onPanEnd = () => {
     this.processors = null
-    this.options.onDragEnd?.(this.position)
+
+    const { constraints, onDragEnd } = this.options
+    constraints &&
+      Object.values(constraints).forEach((c) => {
+        c?.onMaxEnd?.()
+        c?.onMinEnd?.()
+      })
+
+    onDragEnd?.(this.position)
   }
 
   onPan = (_, { offset }) => {

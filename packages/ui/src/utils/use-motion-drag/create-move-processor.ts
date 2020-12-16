@@ -1,6 +1,5 @@
 import { mix } from "popmotion"
 import { MotionDrag } from "./use-motion-drag"
-import { getFrameData } from "framesync"
 
 export type MoveProcessor = ReturnType<typeof createMoveProcessor>
 export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag) {
@@ -12,9 +11,6 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
 
     //constraint state
     const cs = { min: false, max: false }
-
-    //Can be useless when implement hooks
-    const scroll = dragController.options.scroll?.[axis]
 
     return (mouseOffset: number) => {
       const mouse = mouseOffset + origin.val
@@ -39,18 +35,7 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
             if (!cs.max) {
               cs.max = true
               constraint.onMaxStart?.()
-            }
-
-            if (scroll) {
-              const { delta } = getFrameData()
-              const { speed = 140 } = scroll
-              // const speed_ = interpolate([max, max + buffer], [speedMin, speedMax], {clamp: true})(val)
-
-              const scrollDelta = (speed * delta) / 1000
-
-              offset.set(offsetVal - scrollDelta)
-              position.set(val_c + scrollDelta)
-              return
+              constraint.onMax?.(val_c - max_)
             }
 
             return position.set(val_c)
@@ -63,18 +48,7 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
             if (!cs.min) {
               cs.min = true
               constraint.onMinStart?.()
-            }
-
-            if (scroll) {
-              const { delta } = getFrameData()
-              const { speed = 140 } = scroll
-              // const speed_ = interpolate([max, max + buffer], [speedMin, speedMax], {clamp: true})(val)
-
-              const scrollDelta = (speed * delta) / 1000
-
-              offset.set(offsetVal + scrollDelta)
-              position.set(val_c - scrollDelta)
-              return
+              constraint.onMin?.(val_c - min_)
             }
 
             return position.set(val_c)
