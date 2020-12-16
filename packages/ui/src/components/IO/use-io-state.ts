@@ -38,7 +38,7 @@ export class IOState {
 
   @computed get spacer() {
     const { size } = this.nodes
-    return (this.height - size * NODE_HEIGHT) / (size + 1)
+    return (this.maxHeight - size * NODE_HEIGHT) / (size + 1)
   }
 
   @computed get indexies(): Map<ILogicNode, number> {

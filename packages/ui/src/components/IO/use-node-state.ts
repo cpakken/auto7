@@ -43,6 +43,12 @@ export class NodeState {
     return (upper && this.io.nodes.get(upper._id)?.offsetY) || null
   }
 
+  //spread these
+  // props = {
+  //   onHoverStart
+  // all props
+  // }
+
   @action.bound onFocus() {
     this.isFocus = true
   }
@@ -65,6 +71,7 @@ export class NodeState {
     const { offsetY } = this
     if (y < offsetY!) {
       //move up
+      console.log("adsf")
     }
   }
 }

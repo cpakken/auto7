@@ -1,18 +1,24 @@
 import { MotionValue } from "framer-motion"
 import { useConstant } from "@utils/react"
-import { mix } from "popmotion"
+import { mix, interpolate } from "popmotion"
+import { getFrameData } from "framesync"
 import { useMemo } from "react"
 
 type DragPosition = { x?: MotionValue<number>; y?: MotionValue<number> }
+
 type DragConstraint = { min: number; max: number; elastic?: number }
 type DragConstraints = { x?: DragConstraint; y?: DragConstraint }
 
+type ScrollConstraint = { min?: number; max?: number; speed?: number } //acceleration??
+type DragEdgeScroll = { x?: ScrollConstraint; y?: ScrollConstraint }
+
 type DragHook = (position: DragPosition) => void
+type DragOffset = { x: MotionValue<number>; y: MotionValue<number> }
 
 type DragOptions = {
   constraints?: DragConstraints
-  scroll?
-  scrollOnEdge?
+  offset?: DragOffset
+  scroll?: DragEdgeScroll
 
   onDragStart?: DragHook
   onDragEnd?: DragHook
@@ -20,12 +26,15 @@ type DragOptions = {
   onDrag?: (xy: { x?: number; y?: number }) => void
 }
 
+type Origin = { val: number; offset?: number }
+
 // @refresh reset
 class MotionDrag {
   private position: DragPosition
   private options: DragOptions
 
-  private origin: { x?: number; y?: number } | null = null
+  // private origin: { x?: number; y?: number } | null = null
+  private origin: { x?: Origin; y?: Origin } | null = null
 
   constructor(position: DragPosition, options: DragOptions = {}) {
     this.position = position
@@ -37,51 +46,96 @@ class MotionDrag {
   }
 
   onPanStart = () => {
-    // window.addEventListener("mousemove", this.onMouseMove)
     const { x, y } = this.position
-    this.origin = { x: x?.get(), y: y?.get() }
-    this.options.onDragStart?.(this.position)
+    const { onDragStart, offset } = this.options
+
+    this.origin = {
+      ...(x && { x: { val: x.get(), offset: offset?.x.get() } }),
+      ...(y && { y: { val: y.get(), offset: offset?.y.get() } }),
+    }
+
+    onDragStart?.(this.position)
   }
 
   onPanEnd = () => {
-    // window.removeEventListener("mousemove", this.onMouseMove)
     this.origin = null
     this.options.onDragEnd?.(this.position)
   }
 
   onPan = (_, { offset }) => {
-    const { x, y } = this.position
-    const { origin } = this
-    const { constraints } = this.options
+    const { x, y } = this.origin!
+    x && this.processMove("x", offset.x + x.val)
+    y && this.processMove("y", offset.y + y.val)
+  }
 
-    if (x) {
-      const c = constraints?.x
-      let xVal = offset.x + origin!.x
+  private processMove(axis: "x" | "y", mouse: number) {
+    const offset = this.options.offset?.[axis]
+    const constraint = this.options.constraints?.[axis]
+    const position = this.position[axis]
 
-      if (c) {
-        const { elastic = 0.4 } = c
-        xVal = xVal > c.max ? mix(c.max, xVal, elastic) : xVal < c.min ? mix(c.min, xVal, elastic) : xVal
+    if (position) {
+      if (constraint) {
+        const { elastic = 0.5 } = constraint
+        const { min, max } = constraint
+
+        if (offset) {
+          const offsetVal = offset.get()
+          const offsetDelta = this.origin![axis]!.offset! - offsetVal
+
+          const pos = mouse + offsetDelta
+
+          const max_ = max - offsetVal
+          const min_ = min - offsetVal
+
+          //constraint right
+          if (pos > max_) {
+            const val_c = mix(max_, pos, elastic)
+
+            //hook onConstraintMax(posFromBase, elasticPosFromBase), onConstraintMin()
+            // scroll logic can be put outside of this
+            const scroll = this.options.scroll?.[axis]
+            if (scroll) {
+              const { delta } = getFrameData()
+              const { speed = 140 } = scroll
+              // const speed_ = interpolate([max, max + buffer], [speedMin, speedMax], {clamp: true})(val)
+
+              const scrollDelta = (speed * delta) / 1000
+
+              offset.set(offsetVal - scrollDelta)
+              position.set(val_c + scrollDelta)
+              return
+            }
+
+            return position.set(val_c)
+          }
+
+          //constraint left
+          else if (pos < min_) {
+            const val_c = mix(min_, pos, elastic)
+
+            const scroll = this.options.scroll?.[axis]
+            if (scroll) {
+              const { delta } = getFrameData()
+              const { speed = 140 } = scroll
+              // const speed_ = interpolate([max, max + buffer], [speedMin, speedMax], {clamp: true})(val)
+
+              const scrollDelta = (speed * delta) / 1000
+
+              offset.set(offsetVal + scrollDelta)
+              position.set(val_c - scrollDelta)
+              return
+            }
+            return position.set(val_c)
+          }
+
+          //normal
+          return position.set(pos)
+        } else {
+          //NO OFFSET
+          return position.set(mouse > max ? mix(max, mouse, elastic) : mouse < min ? mix(min, mouse, elastic) : mouse)
+        }
       }
-
-      x.set(xVal)
     }
-
-    if (y) {
-      const c = constraints?.y
-      let yVal = offset.y + origin!.y
-
-      if (c) {
-        const { elastic = 0.4 } = c
-        yVal = yVal > c.max ? mix(c.max, yVal, elastic) : yVal < c.min ? mix(c.min, yVal, elastic) : yVal
-      }
-
-      y.set(yVal)
-    }
-
-    this.options.onDrag?.({
-      ...(x && { x: x.get() }),
-      ...(y && { y: y.get() }),
-    })
   }
 }
 

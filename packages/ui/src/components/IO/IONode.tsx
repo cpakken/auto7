@@ -18,7 +18,7 @@ export const Node = observer(({ node }: { node: ILogicNode }) => {
   const { onHoverStart, onHoverEnd, onDragStart, onDragEnd, onDrag, onFocus, onBlur } = state
 
   const constraints = { y: { min: NODE_HEIGHT / 2, max: height! - NODE_HEIGHT / 2 } }
-  const panProps = useMotionDrag({ y }, { onDragStart, onDragEnd, onDrag, constraints })
+  const panHandlers = useMotionDrag({ y }, { onDragStart, onDragEnd, onDrag, constraints })
 
   const { boxShadow, scale } = useScaleBoxShadowValues(1.06)
 
@@ -35,7 +35,7 @@ export const Node = observer(({ node }: { node: ILogicNode }) => {
       onHoverEnd={onHoverEnd}
       onFocus={onFocus}
       onBlur={onBlur}
-      {...(isEdit && panProps)}
+      {...(isEdit && panHandlers)}
     >
       <NodeContent style={{ boxShadow }}>
         <NodeLabel node={node} isEdit={isEdit} />
