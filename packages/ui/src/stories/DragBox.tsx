@@ -1,7 +1,7 @@
 import { MotionBox } from "@ui/common"
 import { useMotionValue } from "framer-motion"
 import { createMotionBox } from "src/utils/hoc"
-import { useMotionDrag } from "src/utils/use-motion-drag"
+import { useMotionDrag } from "src/utils/use-motion-drag/use-motion-drag"
 
 const gridSize = 30
 
@@ -11,7 +11,10 @@ export const DragBox = () => {
   const offset = { x: useMotionValue(-10 * gridSize), y: useMotionValue(-10 * gridSize) }
   const scroll = { x: {}, y: {} }
 
-  const constraints = { x: { min: 0, max: 1000 - 3 * gridSize }, y: { min: 0, max: 700 - 3 * gridSize } }
+  const constraints = {
+    x: { min: 0, max: 1000 - 3 * gridSize, onMaxEnd: () => console.log("xmaxend"), onMaxStart: () => console.log("xmax") },
+    y: { min: 0, max: 700 - 3 * gridSize },
+  }
 
   const panHandlers = useMotionDrag(drag, { constraints, offset, scroll })
   // const panHandlers = useMotionDrag(drag, { constraints, offset })

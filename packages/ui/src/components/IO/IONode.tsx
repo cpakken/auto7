@@ -7,7 +7,7 @@ import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
 import { NodeConnector } from "@ui/library"
 import { NODE_CONTENT_HEIGHT, NODE_HEIGHT, NODE_WIDTH, useNodeState } from "./use-node-state"
-import { useMotionDrag } from "src/utils/use-motion-drag"
+import { useMotionDrag } from "src/utils/use-motion-drag/use-motion-drag"
 
 export const Node = observer(({ node }: { node: ILogicNode }) => {
   const { type } = node
