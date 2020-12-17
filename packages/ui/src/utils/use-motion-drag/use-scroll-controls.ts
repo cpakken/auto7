@@ -1,23 +1,25 @@
 import { MotionValue } from "framer-motion"
 import { useConstant } from "@utils/react"
 import { animateEnhanced } from "@utils/motion"
+import { interpolate } from "popmotion"
 
 //TODO create animation function to use on MotionValue.start(animation)
 //So it automatically stops the previous animation before starting the new one
 //use for velocity and scroll motionvalue
 
-export function useScrollControls(scroll: MotionValue<number>, options: { max?: number; min?: number; speed?: number } = {}) {
-  return useConstant(() => {
-    const { speed = 200 } = options
+export function useScrollControls(
+  scroll: MotionValue<number>,
+  speed: number | { max: number; min: number; buffer: number } = 200
+) {
+  const getSpeed = typeof speed === "number" ? () => speed : interpolate([0, speed.buffer], [speed.min, speed.max])
 
-    const increase = () => {
-      // const speed_ = interpolate([max, max + buffer], [speedMin, speedMax], {clamp: true})(val)
-      animateEnhanced(scroll, { type: "push", velocity: speed })
+  return useConstant(() => {
+    const increase = (delta: number = 0) => {
+      animateEnhanced(scroll, { type: "push", targetVelocity: getSpeed(Math.abs(delta)) })
     }
 
-    const decrease = () => {
-      // const speed_ = interpolate([max, max + buffer], [speedMin, speedMax], {clamp: true})(val)
-      animateEnhanced(scroll, { type: "push", velocity: -speed })
+    const decrease = (delta: number = 0) => {
+      animateEnhanced(scroll, { type: "push", targetVelocity: -getSpeed(Math.abs(delta)) })
     }
 
     const stop = () => {

@@ -1,7 +1,7 @@
 import { MotionValue } from "framer-motion"
 import { StartAnimation } from "framer-motion/types/value"
 import sync, { cancelSync } from "framesync"
-import { inertia, InertiaOptions, animate } from "popmotion"
+import { inertia, InertiaOptions, clamp } from "popmotion"
 
 type InertiaConfig = Omit<InertiaOptions, "from" | "velocity" | "onUpdate" | "onComplete">
 export function createInertiaAnimation(motion: MotionValue<number>, options: InertiaConfig): StartAnimation {
@@ -16,27 +16,30 @@ export function createInertiaAnimation(motion: MotionValue<number>, options: Ine
   }
 }
 
-type PushConfig = { velocity: number }
+type PushConfig = { targetVelocity: number; acceleration?: number }
 export function createPushAnimation(motion: MotionValue<number>, options: PushConfig): StartAnimation {
   return () => {
-    const { velocity } = options
-    let vel = motion.getVelocity()
+    const { targetVelocity, acceleration = 1500 } = options
 
-    const velStop = animate({
-      from: vel,
-      to: velocity,
-      onUpdate: (v) => (vel = v),
-      bounce: 0.15,
-    }).stop
+    let velocity = motion.getVelocity()
 
-    const process = sync.update(({ delta }) => {
-      const val = motion.get() + (vel * delta) / 1000
+    const velProcess = sync.update(({ delta }) => {
+      if (velocity !== targetVelocity) {
+        const acc = velocity < targetVelocity ? acceleration : -acceleration
+        const next = velocity + (acc * delta) / 1000
+        velocity = acc > 0 ? Math.min(next, targetVelocity) : Math.max(next, targetVelocity)
+      }
+    }, true)
+
+    const valProcess = sync.update(({ delta }) => {
+      const val = motion.get() + (velocity * delta) / 1000
       motion.set(val)
     }, true)
 
     return () => {
-      velStop()
-      cancelSync.update(process)
+      // velStop()
+      cancelSync.update(velProcess)
+      cancelSync.update(valProcess)
     }
   }
 }

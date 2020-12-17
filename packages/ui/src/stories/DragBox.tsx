@@ -10,12 +10,13 @@ export const DragBox = () => {
   const xy = { x: useMotionValue(15 * gridSize), y: useMotionValue(15 * gridSize) }
   const offset = { x: useMotionValue(-10 * gridSize), y: useMotionValue(-10 * gridSize) }
 
-  const { increase, decrease, stop } = useScrollControls(offset.x)
+  const { increase, decrease, stop } = useScrollControls(offset.x, { min: 200, max: 450, buffer: 100 })
 
-  //TODO hook increaes to onMin instead of onMinStart to get deltaMax
   const cx = {
-    onMinStart: increase,
-    onMaxStart: decrease,
+    // onMinStart: increase,
+    onMin: increase,
+    // onMaxStart: decrease,
+    onMax: decrease,
     onMinEnd: stop,
     onMaxEnd: stop,
   }

@@ -16,7 +16,7 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
       const mouse = mouseOffset + origin.val
 
       if (constraint) {
-        const { elastic = 0.5 } = constraint
+        const { elastic = 0.4 } = constraint
         const { min, max } = constraint
 
         if (offset) {
@@ -35,9 +35,9 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
             if (!cs.max) {
               cs.max = true
               constraint.onMaxStart?.()
-              constraint.onMax?.(val_c - max_)
             }
 
+            constraint.onMax?.(val_c - max_)
             return position.set(val_c)
           }
 
@@ -48,9 +48,9 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
             if (!cs.min) {
               cs.min = true
               constraint.onMinStart?.()
-              constraint.onMin?.(val_c - min_)
             }
 
+            constraint.onMin?.(val_c - min_)
             return position.set(val_c)
           }
 
