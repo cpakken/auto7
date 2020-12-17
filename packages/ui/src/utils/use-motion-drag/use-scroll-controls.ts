@@ -3,8 +3,6 @@ import sync, { Process, cancelSync } from "framesync"
 import { inertia, animate } from "popmotion"
 import { useConstant } from "@utils/react"
 
-const vConfig = { type: "spring" } as const
-
 function animateVel(motion: MotionValue<number>, config: { from: number; to: number; [key: string]: any }) {
   return animate({
     ...config,
