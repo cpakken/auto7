@@ -9,21 +9,43 @@ import { interpolate } from "popmotion"
 
 export function useScrollControls(
   scroll: MotionValue<number>,
-  speed: number | { max: number; min: number; buffer: number } = 200
+  options: {
+    speed?: number | { min: number; max: number; buffer: number }
+    acceleration?: number
+    min?: number
+    max?: number
+    buffer?: number
+  }
 ) {
+  const { speed = 200, acceleration = 1500, min, max, buffer = 20 } = options
   const getSpeed = typeof speed === "number" ? () => speed : interpolate([0, speed.buffer], [speed.min, speed.max])
 
   return useConstant(() => {
     const increase = (delta: number = 0) => {
-      animateEnhanced(scroll, { type: "push", targetVelocity: getSpeed(Math.abs(delta)) })
+      if (max === undefined || scroll.get() < max - buffer)
+        animateEnhanced(scroll, {
+          type: "push",
+          min,
+          max,
+          acceleration,
+          targetVelocity: getSpeed(Math.abs(delta)),
+        }).then(stop)
     }
 
     const decrease = (delta: number = 0) => {
-      animateEnhanced(scroll, { type: "push", targetVelocity: -getSpeed(Math.abs(delta)) })
+      if (min === undefined || scroll.get() > min + buffer) {
+        animateEnhanced(scroll, {
+          type: "push",
+          min,
+          max,
+          acceleration,
+          targetVelocity: -getSpeed(Math.abs(delta)),
+        }).then(stop)
+      }
     }
 
     const stop = () => {
-      animateEnhanced(scroll, { type: "inertia" })
+      animateEnhanced(scroll, { type: "inertia", power: 0.7, min, max, bounceDamping: 30, bounceStiffness: 450 })
     }
 
     return { increase, decrease, stop }

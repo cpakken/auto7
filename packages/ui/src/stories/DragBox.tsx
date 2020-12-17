@@ -2,28 +2,40 @@ import { MotionBox } from "@ui/common"
 import { useMotionValue } from "framer-motion"
 import { createMotionBox } from "src/utils/hoc"
 import { useMotionDrag, useScrollControls } from "@ui/utils/use-motion-drag"
+import { useConstant } from "@utils/react"
 
 const gridSize = 30
+const offsetLength = gridSize * 50
 
 // @refresh reset
 export const DragBox = () => {
-  const xy = { x: useMotionValue(15 * gridSize), y: useMotionValue(15 * gridSize) }
+  const xy = { x: useMotionValue(25 * gridSize), y: useMotionValue(25 * gridSize) }
   const offset = { x: useMotionValue(-10 * gridSize), y: useMotionValue(-10 * gridSize) }
 
-  const { increase, decrease, stop } = useScrollControls(offset.x, { min: 200, max: 450, buffer: 100 })
+  const sx = useScrollControls(offset.x, {
+    speed: { min: 200, max: 500, buffer: 100 },
+    max: gridSize,
+    min: -offsetLength + gridSize,
+  })
+  const sy = useScrollControls(offset.y, {
+    speed: { min: 200, max: 500, buffer: 100 },
+    max: gridSize,
+    min: -offsetLength + gridSize,
+  })
 
-  const cx = {
-    // onMinStart: increase,
-    onMin: increase,
-    // onMaxStart: decrease,
-    onMax: decrease,
-    onMinEnd: stop,
-    onMaxEnd: stop,
-  }
+  const cx = useConstant(() => {
+    const { increase, decrease, stop } = sx
+    return { onMin: increase, onMax: decrease, onMinEnd: stop, onMaxEnd: stop }
+  })
+
+  const cy = useConstant(() => {
+    const { increase, decrease, stop } = sy
+    return { onMin: increase, onMax: decrease, onMinEnd: stop, onMaxEnd: stop }
+  })
 
   const constraints = {
     x: { min: 0, max: 1000 - 3 * gridSize, ...cx },
-    y: { min: 0, max: 700 - 3 * gridSize },
+    y: { min: 0, max: 700 - 3 * gridSize, ...cy },
   }
 
   const dragControls = useMotionDrag(xy, { offset, constraints })
@@ -43,8 +55,8 @@ export const DragBox = () => {
 const OffsetBox = createMotionBox({
   baseStyle: {
     position: "absolute",
-    w: gridSize * 50,
-    h: gridSize * 50,
+    w: offsetLength,
+    h: offsetLength,
     backgroundSize: `${gridSize}px ${gridSize}px`,
     backgroundImage: [
       "linear-gradient(to right, black 1px, transparent 1px)",
