@@ -18,28 +18,25 @@ export function createInertiaAnimation(motion: MotionValue<number>, options: Ine
 
 type PushConfig = { velocity: number }
 export function createPushAnimation(motion: MotionValue<number>, options: PushConfig): StartAnimation {
-  return (complete) => {
+  return () => {
     const { velocity } = options
-
-    let vel = 0
+    let vel = motion.getVelocity()
 
     const velStop = animate({
-      from: motion.getVelocity(),
+      from: vel,
       to: velocity,
       onUpdate: (v) => (vel = v),
-      bounce: 0.2,
+      bounce: 0.15,
     }).stop
 
     const process = sync.update(({ delta }) => {
-      // const scrollDelta = (speed * delta) / 1000
-      const scrollDelta = (vel * delta) / 1000
-      motion.set(motion.get() + scrollDelta)
+      const val = motion.get() + (vel * delta) / 1000
+      motion.set(val)
     }, true)
 
     return () => {
-      cancelSync.update(process)
       velStop()
-      complete()
+      cancelSync.update(process)
     }
   }
 }

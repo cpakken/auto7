@@ -64,14 +64,14 @@ export class MotionDrag {
   onPanEnd = () => {
     this.processors = null
 
-    const { constraints, onDragEnd } = this.options
-    constraints &&
-      Object.values(constraints).forEach((c) => {
-        c?.onMaxEnd?.()
-        c?.onMinEnd?.()
-      })
+    // const { constraints } = this.options
+    // constraints &&
+    //   Object.values(constraints).forEach((c) => {
+    //     c?.onMaxEnd?.()
+    //     c?.onMinEnd?.()
+    //   })
 
-    onDragEnd?.(this.position)
+    this.options.onDragEnd?.(this.position)
   }
 
   onPan = (_, { offset }) => {

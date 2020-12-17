@@ -7,28 +7,33 @@ const gridSize = 30
 
 // @refresh reset
 export const DragBox = () => {
-  const drag = { x: useMotionValue(15 * gridSize), y: useMotionValue(15 * gridSize) }
+  const xy = { x: useMotionValue(15 * gridSize), y: useMotionValue(15 * gridSize) }
   const offset = { x: useMotionValue(-10 * gridSize), y: useMotionValue(-10 * gridSize) }
 
   const { increase, decrease, stop } = useScrollControls(offset.x)
 
   //TODO hook increaes to onMin instead of onMinStart to get deltaMax
-  const cx = { onMinStart: increase, onMaxStart: decrease, onMinEnd: stop, onMaxEnd: stop }
+  const cx = {
+    onMinStart: increase,
+    onMaxStart: decrease,
+    onMinEnd: stop,
+    onMaxEnd: stop,
+  }
 
   const constraints = {
     x: { min: 0, max: 1000 - 3 * gridSize, ...cx },
     y: { min: 0, max: 700 - 3 * gridSize },
   }
 
-  const pan = useMotionDrag(drag, { constraints, offset })
+  const dragControls = useMotionDrag(xy, { offset, constraints })
 
   return (
     <OffsetBox style={offset}>
       <MotionBox
-        {...pan}
+        {...dragControls}
         whileTap={{ scale: 1.1 }}
         sx={{ w: 3 * gridSize, h: 3 * gridSize, bg: "red.600", borderRadius: "xl", position: "absolute" }}
-        style={drag}
+        style={xy}
       />
     </OffsetBox>
   )
