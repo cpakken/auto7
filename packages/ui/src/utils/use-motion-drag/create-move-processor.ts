@@ -1,5 +1,5 @@
 import { mix } from "popmotion"
-import { MotionDrag } from "./use-motion-drag"
+import { DragConstraint, MotionDrag } from "./use-motion-drag"
 
 export type MoveProcessor = ReturnType<typeof createMoveProcessor>
 export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag) {
@@ -20,59 +20,71 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
         const { min, max } = constraint
 
         if (offset) {
+          //CONSTRAINT & OFFSET
           const offsetVal = offset.get()
           const offsetDelta = origin.offset! - offsetVal
 
           const pos = mouse + offsetDelta
 
-          const max_ = max - offsetVal
           const min_ = min - offsetVal
+          const max_ = max - offsetVal
 
-          //Constraint Max
-          if (pos > max_) {
-            const val_c = mix(max_, pos, elastic)
-
-            if (!cs.max) {
-              cs.max = true
-              constraint.onStart?.("max")
-            }
-
-            constraint.onMove?.(pos - max_, val_c - max_)
-            return position.set(val_c)
-          }
-
-          //Constraint Min
-          else if (pos < min_) {
-            const val_c = mix(min_, pos, elastic)
-
-            if (!cs.min) {
-              cs.min = true
-              constraint.onStart?.("min")
-            }
-
-            constraint.onMove?.(val_c - min_, pos - min_)
-            return position.set(val_c)
-          }
-
-          //normal
-          if (cs.max) {
-            cs.max = false
-            constraint.onEnd?.("max")
-          }
-
-          if (cs.min) {
-            cs.min = false
-            constraint.onEnd?.("min")
-          }
-
-          return position.set(pos)
+          return position.set(processConstraint(pos, min_, max_, elastic, cs, constraint))
         } else {
-          //NO OFFSET
-          return position.set(
-            mouseOffset > max ? mix(max, mouseOffset, elastic) : mouseOffset < min ? mix(min, mouseOffset, elastic) : mouseOffset
-          )
+          //CONSTRAINT & NO OFFSET
+          return position.set(processConstraint(mouse, min, max, elastic, cs, constraint))
         }
       }
+      //NO CONSTRAINT & NO OFFSET
+      return position.set(mouse)
     }
   }
+}
+
+function processConstraint(
+  pos: number,
+  min: number,
+  max: number,
+  elastic: number,
+  cs: { min: boolean; max: boolean },
+  constraint: DragConstraint
+) {
+  //Constraint Max
+  if (pos > max) {
+    const pos_c = mix(max, pos, elastic)
+
+    if (!cs.max) {
+      cs.max = true
+      constraint.onStart?.("max")
+    }
+
+    constraint.onMove?.(pos - max, pos_c - max)
+    return pos_c
+  }
+
+  //Constraint Min
+  else if (pos < min) {
+    const pos_c = mix(min, pos, elastic)
+
+    if (!cs.min) {
+      cs.min = true
+      constraint.onStart?.("min")
+    }
+
+    constraint.onMove?.(pos - min, pos_c - min)
+    return pos_c
+  }
+
+  //Normal
+  if (cs.max) {
+    cs.max = false
+    constraint.onEnd?.("max")
+  }
+
+  if (cs.min) {
+    cs.min = false
+    constraint.onEnd?.("min")
+  }
+
+  return pos
 }

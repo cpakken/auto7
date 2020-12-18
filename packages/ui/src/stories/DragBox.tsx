@@ -19,8 +19,8 @@ export const DragBox = () => {
   const sx = useScrollControls(offset.x, { max: gridSize, min: -offsetLength + gridSize })
   const sy = useScrollControls(offset.y, { max: gridSize, min: -offsetLength + gridSize })
 
-  const cx = useScrollControlsToDragConstraintHooks(sx, { min: 200, max: 600, buffer: 120 })
-  const cy = useScrollControlsToDragConstraintHooks(sy, { min: 200, max: 600, buffer: 120 })
+  const cx = useScrollControlsToDragConstraintHooks(sx, { min: 200, max: 600, range: 120 })
+  const cy = useScrollControlsToDragConstraintHooks(sy, { min: 200, max: 600, range: 120 })
 
   const constraints: DragConstraints = {
     x: { min: 0, max: 1000 - 3 * gridSize, ...cx },
@@ -32,13 +32,7 @@ export const DragBox = () => {
   return (
     <Box
       onWheel={({ deltaX, deltaY }) => console.log(deltaX, deltaY)}
-      sx={{
-        w: 1000,
-        h: 700,
-        bg: "coolGray.200",
-        position: "relative",
-        overflow: "hidden",
-      }}
+      sx={{ w: 1000, h: 700, bg: "coolGray.200", position: "relative", overflow: "hidden" }}
     >
       <OffsetBox style={offset}>
         <MotionBox

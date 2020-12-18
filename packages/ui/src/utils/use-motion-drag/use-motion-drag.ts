@@ -12,7 +12,7 @@ export type DragConstraintHooks = {
   onEnd?: (type: "min" | "max" | "release") => void
 
   /**
-   * @description triggers when value is outside the range of constraint parameters
+   * triggers when value is outside the range of constraint parameters
    * @param delta distance between mouse and constraint
    * @param elasticDelta elastic distance between motionValue and constraint
    * @remarks negative for min, positive for max
@@ -53,7 +53,7 @@ export class MotionDrag {
       y: createMoveProcessor("y", this),
     }
 
-    // onDragStart?.(this.position)
+    this.options.onDragStart?.(this.position)
   }
 
   onPanEnd = () => {
