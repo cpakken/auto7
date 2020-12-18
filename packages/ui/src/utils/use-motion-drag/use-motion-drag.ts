@@ -5,23 +5,20 @@ import { createMoveProcessor, MoveProcessor } from "./create-move-processor"
 
 type DragPosition = { x?: MotionValue<number>; y?: MotionValue<number> }
 
-//Intead have hooks in DragConstraint options
-//onMinStart onMinEnd onMin onMaxStart onMaxEnd onMax
-type ConstraintCallback = () => void
-type DragConstraint = {
-  min: number
-  max: number
-  elastic?: number
+export type DragConstraints = { x?: DragConstraint; y?: DragConstraint }
+export type DragConstraint = { min: number; max: number; elastic?: number } & DragConstraintHooks
+export type DragConstraintHooks = {
+  onStart?: (type: "min" | "max") => void
+  onEnd?: (type: "min" | "max" | "release") => void
 
-  onMinStart?: ConstraintCallback
-  onMin?: (deltaMin: number) => void
-  onMinEnd?: ConstraintCallback
-
-  onMaxStart?: ConstraintCallback
-  onMax?: (deltaMax: number) => void
-  onMaxEnd?: ConstraintCallback
+  /**
+   * @description triggers when value is outside the range of constraint parameters
+   * @param delta distance between mouse and constraint
+   * @param elasticDelta elastic distance between motionValue and constraint
+   * @remarks negative for min, positive for max
+   */
+  onMove?: (delta: number, elasticDelta: number) => void
 }
-type DragConstraints = { x?: DragConstraint; y?: DragConstraint }
 
 type DragHook = (position: DragPosition) => void
 type DragOffset = { x: MotionValue<number>; y: MotionValue<number> }
@@ -29,10 +26,8 @@ type DragOffset = { x: MotionValue<number>; y: MotionValue<number> }
 type DragOptions = {
   constraints?: DragConstraints
   offset?: DragOffset
-
   onDragStart?: DragHook
   onDragEnd?: DragHook
-  // onDrag?: DragHook
   onDrag?: (xy: { x?: number; y?: number }) => void
 }
 
@@ -65,11 +60,7 @@ export class MotionDrag {
     this.processors = null
 
     const { constraints } = this.options
-    constraints &&
-      Object.values(constraints).forEach((c) => {
-        c?.onMaxEnd?.()
-        c?.onMinEnd?.()
-      })
+    constraints && Object.values(constraints).forEach((c) => c?.onEnd?.("release"))
 
     this.options.onDragEnd?.(this.position)
   }

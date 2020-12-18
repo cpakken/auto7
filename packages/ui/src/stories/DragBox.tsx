@@ -1,8 +1,12 @@
-import { MotionBox } from "@ui/common"
+import { MotionBox, Box } from "@ui/common"
 import { useMotionValue } from "framer-motion"
 import { createMotionBox } from "src/utils/hoc"
-import { useMotionDrag, useScrollControls } from "@ui/utils/use-motion-drag"
-import { useConstant } from "@utils/react"
+import {
+  useMotionDrag,
+  useScrollControls,
+  DragConstraints,
+  useScrollControlsToDragConstraintHooks,
+} from "@ui/utils/use-motion-drag"
 
 const gridSize = 30
 const offsetLength = gridSize * 50
@@ -12,28 +16,13 @@ export const DragBox = () => {
   const xy = { x: useMotionValue(25 * gridSize), y: useMotionValue(25 * gridSize) }
   const offset = { x: useMotionValue(-10 * gridSize), y: useMotionValue(-10 * gridSize) }
 
-  const sx = useScrollControls(offset.x, {
-    speed: { min: 200, max: 500, buffer: 100 },
-    max: gridSize,
-    min: -offsetLength + gridSize,
-  })
-  const sy = useScrollControls(offset.y, {
-    speed: { min: 200, max: 500, buffer: 100 },
-    max: gridSize,
-    min: -offsetLength + gridSize,
-  })
+  const sx = useScrollControls(offset.x, { max: gridSize, min: -offsetLength + gridSize })
+  const sy = useScrollControls(offset.y, { max: gridSize, min: -offsetLength + gridSize })
 
-  const cx = useConstant(() => {
-    const { increase, decrease, stop } = sx
-    return { onMin: increase, onMax: decrease, onMinEnd: stop, onMaxEnd: stop }
-  })
+  const cx = useScrollControlsToDragConstraintHooks(sx, { min: 200, max: 600, buffer: 120 })
+  const cy = useScrollControlsToDragConstraintHooks(sy, { min: 200, max: 600, buffer: 120 })
 
-  const cy = useConstant(() => {
-    const { increase, decrease, stop } = sy
-    return { onMin: increase, onMax: decrease, onMinEnd: stop, onMaxEnd: stop }
-  })
-
-  const constraints = {
+  const constraints: DragConstraints = {
     x: { min: 0, max: 1000 - 3 * gridSize, ...cx },
     y: { min: 0, max: 700 - 3 * gridSize, ...cy },
   }
@@ -41,14 +30,25 @@ export const DragBox = () => {
   const dragControls = useMotionDrag(xy, { offset, constraints })
 
   return (
-    <OffsetBox style={offset}>
-      <MotionBox
-        {...dragControls}
-        whileTap={{ scale: 1.1 }}
-        sx={{ w: 3 * gridSize, h: 3 * gridSize, bg: "red.600", borderRadius: "xl", position: "absolute" }}
-        style={xy}
-      />
-    </OffsetBox>
+    <Box
+      onWheel={({ deltaX, deltaY }) => console.log(deltaX, deltaY)}
+      sx={{
+        w: 1000,
+        h: 700,
+        bg: "coolGray.200",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <OffsetBox style={offset}>
+        <MotionBox
+          {...dragControls}
+          whileTap={{ scale: 1.1 }}
+          sx={{ w: 3 * gridSize, h: 3 * gridSize, bg: "red.600", borderRadius: "xl", position: "absolute" }}
+          style={xy}
+        />
+      </OffsetBox>
+    </Box>
   )
 }
 

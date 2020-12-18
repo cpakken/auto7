@@ -34,10 +34,10 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
 
             if (!cs.max) {
               cs.max = true
-              constraint.onMaxStart?.()
+              constraint.onStart?.("max")
             }
 
-            constraint.onMax?.(val_c - max_)
+            constraint.onMove?.(pos - max_, val_c - max_)
             return position.set(val_c)
           }
 
@@ -47,22 +47,22 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
 
             if (!cs.min) {
               cs.min = true
-              constraint.onMinStart?.()
+              constraint.onStart?.("min")
             }
 
-            constraint.onMin?.(val_c - min_)
+            constraint.onMove?.(val_c - min_, pos - min_)
             return position.set(val_c)
           }
 
           //normal
           if (cs.max) {
             cs.max = false
-            constraint.onMaxEnd?.()
+            constraint.onEnd?.("max")
           }
 
           if (cs.min) {
             cs.min = false
-            constraint.onMinEnd?.()
+            constraint.onEnd?.("min")
           }
 
           return position.set(pos)

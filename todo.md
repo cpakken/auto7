@@ -1,5 +1,3 @@
-use motion drag -> change onPan to custom windows.addEventListener
-
 IONode add delete reorder
 
 Block Node Connectors Shadows
