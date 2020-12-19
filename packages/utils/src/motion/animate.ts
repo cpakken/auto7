@@ -47,8 +47,7 @@ export function createPushAnimation(motion: MotionValue<number>, options: PushCo
 
     const posProcess = sync.update(({ delta }) => {
       const val = motion.get() + (velocity * delta) / 1000
-
-      if ((min !== undefined && val < min) || (max !== undefined && val > max)) {
+      if (targetVelocity < 0 ? min !== undefined && val < min : max !== undefined && val > max) {
         stop()
         onComplete?.()
         complete()

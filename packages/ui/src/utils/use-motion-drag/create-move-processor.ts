@@ -1,43 +1,62 @@
+import { MotionValue } from "framer-motion"
 import { mix } from "popmotion"
+import sync, { Process, cancelSync } from "framesync"
 import { DragConstraint, MotionDrag } from "./use-motion-drag"
 
-export type MoveProcessor = ReturnType<typeof createMoveProcessor>
-export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag) {
-  const position = dragController.position[axis]
-  if (position) {
-    const offset = dragController.options.offset?.[axis]
-    const origin = { val: position.get(), offset: offset?.get() }
-    const constraint = dragController.options.constraints?.[axis]
+export class MoveProcessor {
+  position: MotionValue<number>
+  offset?: MotionValue<number>
+  constraint?: DragConstraint
+  origin: { val: number; offset?: number }
 
-    //constraint state
-    const cs = { min: false, max: false }
+  /** constraint state */
+  cs = { min: false, max: false }
+  mouseOffset = 0
 
-    return (mouseOffset: number) => {
-      const mouse = mouseOffset + origin.val
+  fprocess: Process
+  constructor(axis: "x" | "y", dragController: MotionDrag) {
+    this.position = dragController.position[axis]!
+    this.offset = dragController.options.offset?.[axis]
+    this.constraint = dragController.options.constraints?.[axis]
+    this.origin = { val: this.position.get(), offset: this.offset?.get() }
 
-      if (constraint) {
-        const { elastic = 0.4 } = constraint
-        const { min, max } = constraint
+    this.fprocess = sync.preRender(this.update, true)
+  }
 
-        if (offset) {
-          //CONSTRAINT & OFFSET
-          const offsetVal = offset.get()
-          const offsetDelta = origin.offset! - offsetVal
+  setMouseOffset(offset: number) {
+    this.mouseOffset = offset
+  }
 
-          const pos = mouse + offsetDelta //TODO seems to be ahead/lag by 1 frame -> scrolling Maybe not frame synced???
+  stop() {
+    cancelSync.preRender(this.fprocess)
+  }
 
-          const min_ = min - offsetVal
-          const max_ = max - offsetVal
+  update = () => {
+    const { constraint, offset, cs, position, origin } = this
+    const mouse = this.mouseOffset + origin.val
 
-          return position.set(processConstraint(pos, min_, max_, elastic, cs, constraint))
-        } else {
-          //CONSTRAINT & NO OFFSET
-          return position.set(processConstraint(mouse, min, max, elastic, cs, constraint))
-        }
+    if (constraint) {
+      const { elastic = 0.4 } = constraint
+      const { min, max } = constraint
+
+      if (offset) {
+        //CONSTRAINT & OFFSET
+        const offsetVal = offset.get()
+        const offsetDelta = origin.offset! - offsetVal
+
+        const pos = mouse + offsetDelta //TODO seems to be ahead/lag by 1 frame -> scrolling Maybe not frame synced???
+
+        const min_ = min - offsetVal
+        const max_ = max - offsetVal
+
+        return position.set(processConstraint(pos, min_, max_, elastic, cs, constraint))
+      } else {
+        //CONSTRAINT & NO OFFSET
+        return position.set(processConstraint(mouse, min, max, elastic, cs, constraint))
       }
-      //NO CONSTRAINT & NO OFFSET
-      return position.set(mouse)
     }
+    //NO CONSTRAINT & NO OFFSET
+    return position.set(mouse)
   }
 }
 
@@ -87,4 +106,9 @@ function processConstraint(
   }
 
   return pos
+}
+
+export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag): MoveProcessor | undefined {
+  const position = dragController.position[axis]
+  return position && new MoveProcessor(axis, dragController)
 }

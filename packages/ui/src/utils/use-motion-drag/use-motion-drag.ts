@@ -1,6 +1,6 @@
+import { useMemo } from "react"
 import { MotionValue } from "framer-motion"
 import { useConstant } from "@utils/react"
-import { useMemo } from "react"
 import { createMoveProcessor, MoveProcessor } from "./create-move-processor"
 
 type DragPosition = { x?: MotionValue<number>; y?: MotionValue<number> }
@@ -21,7 +21,7 @@ export type DragConstraintHooks = {
 }
 
 type DragHook = (position: DragPosition) => void
-type DragOffset = { x: MotionValue<number>; y: MotionValue<number> }
+type DragOffset = { x?: MotionValue<number>; y?: MotionValue<number> }
 
 type DragOptions = {
   constraints?: DragConstraints
@@ -36,7 +36,7 @@ export class MotionDrag {
   position: DragPosition
   options: DragOptions
 
-  private processors: { x: MoveProcessor; y: MoveProcessor } | null = null
+  private processors: { x?: MoveProcessor; y?: MoveProcessor } | null = null
 
   constructor(position: DragPosition, options: DragOptions = {}) {
     this.position = position
@@ -49,25 +49,29 @@ export class MotionDrag {
 
   onPanStart = () => {
     //Framesync update?? -> turn into drag motionValue animation that stops completes on panEnd
-    this.processors = {
-      x: createMoveProcessor("x", this),
-      y: createMoveProcessor("y", this),
-    }
-
+    this.processors = { x: createMoveProcessor("x", this), y: createMoveProcessor("y", this) }
     this.options.onDragStart?.(this.position)
   }
 
   onPan = (_, { offset }) => {
     const { x, y } = this.processors!
-    x?.(offset.x)
-    y?.(offset.y)
+    if (x) x.setMouseOffset(offset.x)
+    if (y) y.setMouseOffset(offset.y)
   }
 
   onPanEnd = () => {
-    this.processors = null
+    const { processors } = this
+    if (processors) {
+      processors?.x?.stop()
+      processors?.y?.stop()
+      this.processors = null
+    }
 
     const { constraints } = this.options
-    constraints && Object.values(constraints).forEach((c) => c?.onEnd?.("release"))
+    if (constraints) {
+      constraints.x?.onEnd?.("release")
+      constraints.y?.onEnd?.("release")
+    }
 
     this.options.onDragEnd?.(this.position)
   }

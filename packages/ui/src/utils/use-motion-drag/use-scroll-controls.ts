@@ -36,15 +36,15 @@ export class ScrollControls {
       animate(scroll, next, {
         onComplete: this.resetScrollTarget,
         type: "spring",
-        damping: 20,
-        stiffness: 200,
+        damping: 25,
+        stiffness: 250,
       })
       this.scrollTarget = next
     }
   }
 
-  // push = (targetVelocity: number, acceleration = 1500, targetOffsetIfConstrianed: number ) => {
-  push = (targetVelocity: number, acceleration = 2000) => {
+  // push = (targetVelocity: number, acceleration = 2500, targetOffsetIfConstrianed: number ) => {
+  push = (targetVelocity: number, acceleration = 2500) => {
     const { scroll } = this
     const { min, max, buffer = 20 } = this.options
 
@@ -74,24 +74,31 @@ export class ScrollControls {
     if (enable)
       animateEnhanced(scroll, {
         type: "push",
+        // min: min && min + buffer,
+        // max: max && max - buffer,
         min,
         max,
         acceleration,
         targetVelocity,
-        onComplete: this.stop,
+        // onComplete: this.stop,
+        onComplete: () => {
+          console.log("complete", scroll.get(), scroll.getVelocity())
+          this.stop()
+        },
       })
   }
 
   stop = () => {
     const { min, max } = this.options
+    console.log("stop", this.scroll.get(), this.scroll.getVelocity())
 
     animateEnhanced(this.scroll, {
       type: "inertia",
       power: 0.7,
       min,
       max,
-      bounceDamping: 30,
-      bounceStiffness: 300,
+      bounceDamping: 20,
+      bounceStiffness: 200,
     })
   }
 }

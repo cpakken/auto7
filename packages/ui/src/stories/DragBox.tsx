@@ -13,14 +13,20 @@ const offsetLength = gridSize * 50
 
 // @refresh reset
 export const DragBox = () => {
-  const xy = { x: useMotionValue(25 * gridSize), y: useMotionValue(25 * gridSize) }
-  const offset = { x: useMotionValue(-10 * gridSize), y: useMotionValue(-10 * gridSize) }
+  const xy = {
+    x: useMotionValue(25 * gridSize),
+    y: useMotionValue(25 * gridSize),
+  }
+  const offset = {
+    x: useMotionValue(-10 * gridSize),
+    y: useMotionValue(-10 * gridSize),
+  }
 
   const sx = useScrollControls(offset.x, { max: gridSize, min: -offsetLength + gridSize })
   const sy = useScrollControls(offset.y, { max: gridSize, min: -offsetLength + gridSize })
 
-  const cx = useScrollControlsToDragConstraintHooks(sx, { min: 200, max: 600, range: 120 })
-  const cy = useScrollControlsToDragConstraintHooks(sy, { min: 200, max: 600, range: 120 })
+  const cx = useScrollControlsToDragConstraintHooks(sx, { min: 200, max: 800, range: 120 })
+  const cy = useScrollControlsToDragConstraintHooks(sy, { min: 200, max: 800, range: 120 })
 
   const constraints: DragConstraints = {
     x: { min: 0, max: 1000 - 3 * gridSize, ...cx },
