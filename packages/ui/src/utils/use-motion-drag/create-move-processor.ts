@@ -24,7 +24,7 @@ export function createMoveProcessor(axis: "x" | "y", dragController: MotionDrag)
           const offsetVal = offset.get()
           const offsetDelta = origin.offset! - offsetVal
 
-          const pos = mouse + offsetDelta
+          const pos = mouse + offsetDelta //TODO seems to be ahead/lag by 1 frame -> scrolling Maybe not frame synced???
 
           const min_ = min - offsetVal
           const max_ = max - offsetVal

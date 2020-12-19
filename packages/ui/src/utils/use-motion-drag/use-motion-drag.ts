@@ -48,12 +48,19 @@ export class MotionDrag {
   }
 
   onPanStart = () => {
+    //Framesync update?? -> turn into drag motionValue animation that stops completes on panEnd
     this.processors = {
       x: createMoveProcessor("x", this),
       y: createMoveProcessor("y", this),
     }
 
     this.options.onDragStart?.(this.position)
+  }
+
+  onPan = (_, { offset }) => {
+    const { x, y } = this.processors!
+    x?.(offset.x)
+    y?.(offset.y)
   }
 
   onPanEnd = () => {
@@ -63,12 +70,6 @@ export class MotionDrag {
     constraints && Object.values(constraints).forEach((c) => c?.onEnd?.("release"))
 
     this.options.onDragEnd?.(this.position)
-  }
-
-  onPan = (_, { offset }) => {
-    const { x, y } = this.processors!
-    x?.(offset.x)
-    y?.(offset.y)
   }
 }
 

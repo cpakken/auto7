@@ -14,26 +14,37 @@ export class ScrollControls {
   scroll: MotionValue<number>
   options: ScrollControlsOptions
 
+  private scrollTarget: number | null = null
+  private resetScrollTarget = () => (this.scrollTarget = null)
+
   constructor(scroll: MotionValue<number>, options: ScrollControlsOptions) {
     this.scroll = scroll
     this.options = options
   }
 
-  move = (delta: number = 30) => {
+  move = (delta: number) => {
     //TODO use if -> check if value is within constraints before moveing
     const { scroll } = this
     const { min, max } = this.options
 
-    let targetPosition: number | null = null
-    const resetPosition = () => (targetPosition = null)
+    //Initialize
+    if (this.scrollTarget === null) this.scrollTarget = scroll.get()
+    const { scrollTarget } = this
+    const next = clamp(min ?? -Infinity, max ?? Infinity, scrollTarget + delta)
 
-    if (targetPosition === null) targetPosition = scroll.get()
-    targetPosition = clamp(min || -Infinity, max || Infinity, targetPosition + delta)
-    animate(scroll, targetPosition, { onComplete: resetPosition, onStop: resetPosition })
+    if (scrollTarget !== next) {
+      animate(scroll, next, {
+        onComplete: this.resetScrollTarget,
+        type: "spring",
+        damping: 20,
+        stiffness: 200,
+      })
+      this.scrollTarget = next
+    }
   }
 
   // push = (targetVelocity: number, acceleration = 1500, targetOffsetIfConstrianed: number ) => {
-  push = (targetVelocity: number, acceleration = 1500) => {
+  push = (targetVelocity: number, acceleration = 2000) => {
     const { scroll } = this
     const { min, max, buffer = 20 } = this.options
 
@@ -60,13 +71,20 @@ export class ScrollControls {
 
     const enable =
       targetVelocity > 0 ? max === undefined || scroll.get() < max - buffer : min === undefined || scroll.get() > min + buffer
-    if (enable) animateEnhanced(scroll, { type: "push", min, max, acceleration, targetVelocity }).then(this.stop)
+    if (enable)
+      animateEnhanced(scroll, {
+        type: "push",
+        min,
+        max,
+        acceleration,
+        targetVelocity,
+        onComplete: this.stop,
+      })
   }
 
   stop = () => {
     const { min, max } = this.options
 
-    console.log("stop")
     animateEnhanced(this.scroll, {
       type: "inertia",
       power: 0.7,

@@ -31,7 +31,10 @@ export const DragBox = () => {
 
   return (
     <Box
-      onWheel={({ deltaX, deltaY }) => console.log(deltaX, deltaY)}
+      onWheel={({ deltaX, deltaY }) => {
+        if (deltaX) sx.move(deltaX > 0 ? -50 : 50)
+        if (deltaY) sy.move(deltaY > 0 ? -50 : 50)
+      }}
       sx={{ w: 1000, h: 700, bg: "coolGray.200", position: "relative", overflow: "hidden" }}
     >
       <OffsetBox style={offset}>
