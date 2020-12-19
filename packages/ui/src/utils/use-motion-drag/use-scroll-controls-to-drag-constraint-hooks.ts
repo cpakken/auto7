@@ -16,7 +16,7 @@ export function useScrollControlsToDragConstraintHooks(
   options: ScrollControlsToDragConstraintHooksOptions
 ): DragConstraintHooks {
   return useMemo(() => {
-    const { push, stop } = controls
+    const { push, float } = controls
     const { min, max, range } = options
 
     return {
@@ -24,7 +24,7 @@ export function useScrollControlsToDragConstraintHooks(
         const targetSpeed = interpolate([0, range], [min, max])(Math.abs(delta))
         push(delta > 0 ? -targetSpeed : targetSpeed)
       },
-      onEnd: stop,
+      onEnd: float,
     }
   }, [options])
 }

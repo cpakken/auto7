@@ -86,14 +86,16 @@ export class ScrollControls {
         // onComplete: this.stop,
         onComplete: () => {
           console.log("complete", scroll.get(), scroll.getVelocity())
-          this.stop()
+          this.float()
         },
       })
   }
 
-  stop = () => {
+  float = () => {
     const { min, max } = this.options
-    console.log("stop", this.scroll.get(), this.scroll.getVelocity())
+    console.log("float", this.scroll.get(), this.scroll.getVelocity())
+
+    //if this is put on repeat, this.scroll keeps updating, causing jitters???
 
     animateEnhanced(this.scroll, {
       type: "inertia",
@@ -104,11 +106,24 @@ export class ScrollControls {
       bounceStiffness: 200,
     })
   }
+
+  stop = () => {
+    console.log("stop")
+    const { scroll } = this
+    const { min, max } = this.options
+
+    const val = clamp(min ?? -Infinity, max ?? Infinity, scroll.get())
+    animate(scroll, val, {
+      type: "spring",
+      damping: 15,
+      stiffness: 150,
+    })
+  }
 }
 
 export function useScrollControls(scroll: MotionValue<number>, options: ScrollControlsOptions) {
-  useMemo(() => controls?.setOptions(options), [options])
   const controls = useConstant(() => new ScrollControls(scroll, options))
+  useMemo(() => controls.setOptions(options), [options])
 
   return controls
 }

@@ -34,7 +34,19 @@ export const DragBox = () => {
     y: { min: 0, max: 700 - 3 * gridSize, ...cy },
   }
 
-  const dragControls = useMotionDrag(xy, { offset, constraints })
+  const onTapStart = (e) => {
+    e.stopPropagation()
+    sx.stop()
+    sy.stop()
+  }
+
+  const onDragEnd = () => {
+    console.log("dragend?")
+    sx.stop()
+    sy.stop()
+  }
+
+  const dragControls = useMotionDrag(xy, { offset, constraints, onDragEnd })
 
   return (
     <Box
@@ -45,7 +57,7 @@ export const DragBox = () => {
         <MotionBox
           {...dragControls}
           whileTap={{ scale: 1.1 }}
-          onTapStart={(e) => e.stopPropagation()}
+          onTapStart={onTapStart}
           sx={{ w: 3 * gridSize, h: 3 * gridSize, bg: "red.600", borderRadius: "xl", position: "absolute" }}
           style={xy}
         />

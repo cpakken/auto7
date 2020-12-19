@@ -65,21 +65,21 @@ export class MotionDrag {
       processors?.x?.stop()
       processors?.y?.stop()
       this.processors = null
-    }
 
-    const { constraints } = this.options
-    if (constraints) {
-      constraints.x?.onEnd?.("release")
-      constraints.y?.onEnd?.("release")
-    }
+      // const { constraints } = this.options
+      // if (constraints) {
+      //   constraints.x?.onEnd?.("release")
+      //   constraints.y?.onEnd?.("release")
+      // }
 
-    this.options.onDragEnd?.(this.position)
+      this.options.onDragEnd?.(this.position)
+    }
   }
 }
 
 export function useMotionDrag(position: DragPosition, options: DragOptions = {}) {
-  useMemo(() => drag?.setOptions(options), [options])
   const drag = useConstant(() => new MotionDrag(position, options))
+  useMemo(() => drag.setOptions(options), [options])
 
   return useConstant(() => {
     const { onPan, onPanStart, onPanEnd } = drag
