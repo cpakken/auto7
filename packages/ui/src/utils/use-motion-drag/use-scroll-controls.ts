@@ -2,6 +2,7 @@ import { MotionValue, animate } from "framer-motion"
 import { useConstant } from "@utils/react"
 import { animateEnhanced } from "@utils/motion"
 import { clamp } from "popmotion"
+import { useMemo } from "react"
 
 export type ScrollControlsOptions = {
   min?: number
@@ -22,12 +23,14 @@ export class ScrollControls {
     this.options = options
   }
 
+  setOptions = (options: ScrollControlsOptions) => {
+    this.options = options
+  }
+
   move = (delta: number) => {
-    //TODO use if -> check if value is within constraints before moveing
     const { scroll } = this
     const { min, max } = this.options
 
-    //Initialize
     if (this.scrollTarget === null) this.scrollTarget = scroll.get()
     const { scrollTarget } = this
     const next = clamp(min ?? -Infinity, max ?? Infinity, scrollTarget + delta)
@@ -94,7 +97,7 @@ export class ScrollControls {
 
     animateEnhanced(this.scroll, {
       type: "inertia",
-      power: 0.7,
+      power: 0.65,
       min,
       max,
       bounceDamping: 20,
@@ -104,5 +107,8 @@ export class ScrollControls {
 }
 
 export function useScrollControls(scroll: MotionValue<number>, options: ScrollControlsOptions) {
-  return useConstant(() => new ScrollControls(scroll, options))
+  useMemo(() => controls?.setOptions(options), [options])
+  const controls = useConstant(() => new ScrollControls(scroll, options))
+
+  return controls
 }

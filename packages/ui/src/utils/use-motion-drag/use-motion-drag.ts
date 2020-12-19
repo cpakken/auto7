@@ -78,8 +78,11 @@ export class MotionDrag {
 }
 
 export function useMotionDrag(position: DragPosition, options: DragOptions = {}) {
-  const { onPan, onPanStart, onPanEnd, setOptions } = useConstant(() => new MotionDrag(position, options))
-  useMemo(() => setOptions(options), [options])
+  useMemo(() => drag?.setOptions(options), [options])
+  const drag = useConstant(() => new MotionDrag(position, options))
 
-  return { onPan, onPanStart, onPanEnd }
+  return useConstant(() => {
+    const { onPan, onPanStart, onPanEnd } = drag
+    return { onPan, onPanStart, onPanEnd }
+  })
 }

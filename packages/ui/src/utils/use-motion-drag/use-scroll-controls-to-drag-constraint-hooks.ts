@@ -1,5 +1,5 @@
-import { useConstant } from "@utils/react"
 import { interpolate } from "popmotion"
+import { useCallback, useMemo } from "react"
 import { DragConstraintHooks, ScrollControls } from "."
 
 type ScrollControlsToDragConstraintHooksOptions = {
@@ -15,7 +15,7 @@ export function useScrollControlsToDragConstraintHooks(
   controls: ScrollControls,
   options: ScrollControlsToDragConstraintHooksOptions
 ): DragConstraintHooks {
-  return useConstant(() => {
+  return useMemo(() => {
     const { push, stop } = controls
     const { min, max, range } = options
 
@@ -26,5 +26,15 @@ export function useScrollControlsToDragConstraintHooks(
       },
       onEnd: stop,
     }
-  })
+  }, [options])
+}
+
+export function useScrollMoveOnWheelHandler(s: { x?: ScrollControls; y?: ScrollControls }, offset: number = 50) {
+  return useCallback(
+    ({ deltaX, deltaY }) => {
+      if (deltaX) s.x?.move(deltaX > 0 ? -offset : offset)
+      if (deltaY) s.y?.move(deltaY > 0 ? -offset : offset)
+    },
+    [offset]
+  )
 }

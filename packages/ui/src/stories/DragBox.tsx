@@ -6,6 +6,7 @@ import {
   useScrollControls,
   DragConstraints,
   useScrollControlsToDragConstraintHooks,
+  useScrollMoveOnWheelHandler,
 } from "@ui/utils/use-motion-drag"
 
 const gridSize = 30
@@ -25,8 +26,8 @@ export const DragBox = () => {
   const sx = useScrollControls(offset.x, { max: gridSize, min: -offsetLength + gridSize })
   const sy = useScrollControls(offset.y, { max: gridSize, min: -offsetLength + gridSize })
 
-  const cx = useScrollControlsToDragConstraintHooks(sx, { min: 200, max: 800, range: 120 })
-  const cy = useScrollControlsToDragConstraintHooks(sy, { min: 200, max: 800, range: 120 })
+  const cx = useScrollControlsToDragConstraintHooks(sx, { min: 200, max: 800, range: 140 })
+  const cy = useScrollControlsToDragConstraintHooks(sy, { min: 200, max: 800, range: 140 })
 
   const constraints: DragConstraints = {
     x: { min: 0, max: 1000 - 3 * gridSize, ...cx },
@@ -37,16 +38,14 @@ export const DragBox = () => {
 
   return (
     <Box
-      onWheel={({ deltaX, deltaY }) => {
-        if (deltaX) sx.move(deltaX > 0 ? -50 : 50)
-        if (deltaY) sy.move(deltaY > 0 ? -50 : 50)
-      }}
+      onWheel={useScrollMoveOnWheelHandler({ x: sx, y: sy })}
       sx={{ w: 1000, h: 700, bg: "coolGray.200", position: "relative", overflow: "hidden" }}
     >
-      <OffsetBox style={offset}>
+      <OffsetBox drag dragTransition={{ power: 0.65 }} style={offset}>
         <MotionBox
           {...dragControls}
           whileTap={{ scale: 1.1 }}
+          onTapStart={(e) => e.stopPropagation()}
           sx={{ w: 3 * gridSize, h: 3 * gridSize, bg: "red.600", borderRadius: "xl", position: "absolute" }}
           style={xy}
         />
