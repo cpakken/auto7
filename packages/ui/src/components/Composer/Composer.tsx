@@ -16,11 +16,12 @@ export const Composer = ({ composed }: { composed: LogicComposed }) => {
   )
 }
 export const ComposerShallowLoaded = ({ state }: { state: ComposerState }) => {
+  const { inputs, outputs, composition } = state
   return (
     <ComposerContext.Provider value={state}>
-      <Composition />
-      <IO ioType="in" />
-      <IO ioType="out" />
+      <Composition state={composition} />
+      <IO state={inputs} />
+      <IO state={outputs} />
     </ComposerContext.Provider>
   )
 }

@@ -1,23 +1,23 @@
 import { observer } from "mobx-react-lite"
 import { Label } from "@ui/library"
 import { BlockState } from "./use-block-state"
-import { ILogicInterfaceModel } from "@main/controllers"
 import { createMotionBox, createBox } from "@ui/utils/hoc"
 import { BlockNode } from "./BlockNode"
+import { BlockInterfaceState } from "./use-block-interface-state"
 
 export type IOType = "in" | "out"
 
 export const BlockContent = observer(({ state }: { state: BlockState }) => {
-  const { width, height } = state
-  const { inputs, outputs, label } = state.block.logic.info!
+  const { width, height, inputs, outputs } = state
+  const { label } = state.block.logic.info!
 
   return (
     <BlockWrapper sx={{ width, height }}>
-      <Label sx={{ h: 6 }} variant="center" size="xs">
+      <Label h={6} variant="center" size="xs">
         {label}
       </Label>
-      <BlockInterface io={inputs} ioType="in" />
-      <BlockInterface io={outputs} ioType="out" />
+      <BlockInterface io={inputs} />
+      <BlockInterface io={outputs} />
     </BlockWrapper>
   )
 })
@@ -29,11 +29,13 @@ const BlockWrapper = createMotionBox({
   },
 })
 
-export const BlockInterface = observer(({ io, ioType }: { io: ILogicInterfaceModel; ioType: IOType }) => {
+export const BlockInterface = observer(({ io }: { io: BlockInterfaceState }) => {
+  const { ioType } = io
+
   return (
     <BlockIOWrapper variant={ioType}>
       {io.list.map((node) => (
-        <BlockNode key={node._id} node={node} ioType={ioType} />
+        <BlockNode key={node._id} state={node} />
       ))}
     </BlockIOWrapper>
   )
@@ -46,7 +48,7 @@ const BlockIOWrapper = createBox({
     flexDir: "column",
   },
   variants: {
-    in: { mr: 2, borderRightRadius: "lg", alignItems: "flex-start", mb: 2 },
-    out: { ml: 2, borderLeftRadius: "lg", alignItems: "flex-end" },
+    in: { mr: 2, borderTopRightRadius: "lg", alignItems: "flex-start" },
+    out: { ml: 2, borderBottomLeftRadius: "lg", alignItems: "flex-end" },
   },
 })

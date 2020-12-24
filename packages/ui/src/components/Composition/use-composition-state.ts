@@ -1,15 +1,17 @@
-import { createContext, useContext, useEffect } from "react"
+import { useEffect } from "react"
 import { animate, MotionValue } from "framer-motion"
 import { action, computed, makeObservable, observable, reaction } from "mobx"
-import { SmartMap } from "smartmap"
+import { SmartMap, ReadOnlyMap } from "smartmap"
 import { reduceIter } from "@utils/iterable-fns"
-import { IBlock, ILogicComposition } from "@main/controllers"
+import { ILogicComposition } from "@main/controllers"
 import { BlockState } from "./blocks/use-block-state"
-import { ComposerState, Dimensions, useParentComposerState } from "../Composer/use-composer-state"
-import { useConstant } from "@utils/react"
+import { ComposerState, Dimensions } from "../Composer/use-composer-state"
 
 type Point = { x: number; y: number }
 type MotionPoint = { x: MotionValue<number>; y: MotionValue<number> }
+
+export type Blocks = ReadOnlyMap<string, BlockState>
+
 export const InitialPoint = { x: 0, y: 0 }
 
 // @refresh reset
@@ -17,7 +19,7 @@ export class CompositionState {
   composition: ILogicComposition
 
   composer: ComposerState
-  blocks: SmartMap<string, IBlock, BlockState>
+  blocks: Blocks
   //paths
 
   motionOffset: MotionPoint
@@ -29,10 +31,7 @@ export class CompositionState {
     makeObservable(this)
     this.composer = composer
     this.composition = composer.composed.composition
-    this.blocks = new SmartMap(this.composition.blocks.store, (block) => new BlockState(block, this), {
-      onCleanup: (block) => block.dispose(),
-      eager: true,
-    })
+    this.blocks = new SmartMap(this.composition.blocks.store, (block) => new BlockState(block, this), { eager: true })
     //paths
 
     this.motionOffset = { x: new MotionValue(this.offset.x), y: new MotionValue(this.offset.y) }
@@ -45,7 +44,7 @@ export class CompositionState {
     // this.paths.dispose()
   }
 
-  @action.bound intialize() {
+  @action.bound private intialize() {
     //Sync motionOffset with observable offset
     const { motionOffset } = this
     const config = { type: "spring", bounce: 0.1 } as const
@@ -56,6 +55,10 @@ export class CompositionState {
         animate(motionOffset.y, y, config)
       }
     )
+  }
+
+  useInit = () => {
+    useEffect(this.intialize, [])
   }
 
   @computed get min(): Point {
@@ -92,19 +95,19 @@ export class CompositionState {
   }
 }
 
-export function useCompositionState() {
-  const composer = useParentComposerState()
-  const state = useConstant(() => composer.composition)
-  useEffect(state.intialize, [])
+// export function useCompositionState() {
+//   const composer = useParentComposerState()
+//   const state = useConstant(() => composer.composition)
+//   useEffect(state.intialize, [])
 
-  return state
-}
+//   return state
+// }
 
-export const CompositionContext = createContext({} as CompositionState)
+// export const CompositionContext = createContext({} as CompositionState)
 
-export function useParentCompositionState() {
-  return useContext(CompositionContext)
-}
+// export function useParentCompositionState() {
+//   return useContext(CompositionContext)
+// }
 
 //TODO use createRef instead of useRef
 // use MotionValue instea dof useMotionValue

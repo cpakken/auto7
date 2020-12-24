@@ -1,19 +1,16 @@
 import { observer } from "mobx-react-lite"
-import { ILogicNode } from "@main/controllers"
 import { useScaleBoxShadowValues } from "@ui/utils/use-scale-boxShadow"
-import { useParentIOState } from "./use-io-state"
 import { createMotionBox } from "src/utils/hoc"
 import { NodeLabel } from "./NodeLabel"
 import { TypeLabel } from "./TypeLabel"
 import { NodeConnector } from "@ui/library"
-import { NODE_CONTENT_HEIGHT, NODE_HEIGHT, NODE_WIDTH, useNodeState } from "./use-node-state"
+import { NodeState, NODE_CONTENT_HEIGHT, NODE_HEIGHT, NODE_WIDTH } from "./use-node-state"
 import { useMotionDrag } from "src/utils/use-motion-drag/use-motion-drag"
 
-export const Node = observer(({ node }: { node: ILogicNode }) => {
-  const { type } = node
-  const { ioType, isEdit, height } = useParentIOState()
+export const Node = observer(({ state }: { state: NodeState }) => {
+  state.useInit()
 
-  const state = useNodeState(node)
+  const { ioType, isEdit, height } = state.io
   const { isHover, isFocus, y } = state
   const { onHoverStart, onHoverEnd, onDragStart, onDragEnd, onDrag, onFocus, onBlur } = state
 
@@ -38,8 +35,8 @@ export const Node = observer(({ node }: { node: ILogicNode }) => {
       {...(isEdit && panHandlers)}
     >
       <NodeContent style={{ boxShadow }}>
-        <NodeLabel node={node} isEdit={isEdit} />
-        <TypeLabel info={type!.info!} isEdit={isEdit} />
+        <NodeLabel state={state} />
+        <TypeLabel state={state} />
         <NodeConnector variant={ioType === "in" ? "right" : "left"} style={{ boxShadow }} />
       </NodeContent>
     </NodeContainer>

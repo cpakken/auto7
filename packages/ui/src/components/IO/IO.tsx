@@ -1,19 +1,17 @@
 import { observer } from "mobx-react-lite"
-import { useIOState, IOContext, IOState, IOType } from "./use-io-state"
+import { IOState } from "./use-io-state"
 import { Node } from "./IONode"
 import { createMotionBox } from "src/utils/hoc"
 
-export const IO = observer(({ ioType, _state }: { ioType: IOType; _state?: IOState }) => {
-  const state = _state ?? useIOState(ioType)
+export const IO = observer(({ state }: { state: IOState }) => {
+  const { ioType } = state
 
   return (
-    <IOContext.Provider value={state}>
-      <IOContainer variant={ioType} initial={{ opacity: 0, x: ioType === "in" ? -25 : 25 }} animate={{ opacity: 1, x: 0 }}>
-        {state.io.list.map((node) => (
-          <Node node={node} key={node._id} />
-        ))}
-      </IOContainer>
-    </IOContext.Provider>
+    <IOContainer variant={ioType} initial={{ opacity: 0, x: ioType === "in" ? -25 : 25 }} animate={{ opacity: 1, x: 0 }}>
+      {state.list.map((node) => (
+        <Node key={node._id} state={node} />
+      ))}
+    </IOContainer>
   )
 })
 

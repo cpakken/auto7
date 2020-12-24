@@ -1,17 +1,16 @@
 import { observer } from "mobx-react-lite"
 import { Label, NodeConnector } from "@ui/library"
-import { ILogicNodeModel } from "@main/controllers"
 import { createBox } from "@ui/utils/hoc"
-import { IOType } from "./BlockContent"
-import { useBlockNodeState } from "./use-block-node-state"
+import { gridSize } from "./use-block-state"
+import { BlockNodeState } from "./use-block-node-state"
 
-export const BlockNode = observer(({ node, ioType }: { node: ILogicNodeModel; ioType: IOType }) => {
-  const { ref } = useBlockNodeState(ioType, node)
-  const { label } = node
+export const BlockNode = observer(({ state }: { state: BlockNodeState }) => {
+  const { ioType } = state
+  const { label } = state.node
 
   return (
     <BlockNodeContainer>
-      <PositionZeroHeight ref={ref} variant={ioType}>
+      <PositionZeroHeight variant={ioType}>
         <BlockContent>
           <Label size="xs">{label}</Label>
         </BlockContent>
@@ -26,8 +25,8 @@ const BlockNodeContainer = createBox({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    h: 7,
     w: "full",
+    h: gridSize,
   },
 })
 

@@ -1,33 +1,44 @@
 import { ILogicNodeModel } from "@main/controllers"
-import { action, makeObservable, observable } from "mobx"
-import { createRef } from "react"
-import { useConstant } from "@utils/react"
-import { IOType } from "../blocks/BlockContent"
-import { useParentBlockState } from "./use-block-state"
+import { computed, makeObservable } from "mobx"
+import { BlockInterfaceState } from "./use-block-interface-state"
+import { gridSize } from "./use-block-state"
 
 // @refresh reset
-export class BlockNodeState {
-  ref = createRef<HTMLDivElement>()
+export abstract class BlockNodeState {
+  get _id() {
+    return this.node._id
+  }
+
+  get ioType() {
+    return this.io.ioType
+  }
+
   node: ILogicNodeModel
+  io: BlockInterfaceState
 
-  @observable height = 0
-
-  constructor(node: ILogicNodeModel) {
+  constructor(node: ILogicNodeModel, io: BlockInterfaceState) {
     makeObservable(this)
     this.node = node
+    this.io = io
   }
 
-  //Initialize in block
-  @action.bound initializeInBlock() {
-    this.height = this.ref.current!.offsetTop
+  @computed get index() {
+    return this.io.indexies.get(this)!
+  }
+
+  @computed get height() {
+    return this.index * gridSize
   }
 }
 
-export function useBlockNodeState(ioType: IOType, node: ILogicNodeModel) {
-  const block = useParentBlockState()
-  const state = useConstant(() => {
-    return ioType === "in" ? block.inputs.get(node._id)! : block.outputs.get(node._id)!
-  })
+export class BlockInNodeState extends BlockNodeState {}
+export class BlockOutNodeState extends BlockNodeState {}
 
-  return state
-}
+// export function useBlockNodeState(ioType: IOType, node: ILogicNodeModel) {
+//   const block = useParentBlockState()
+//   const state = useConstant(() => {
+//     return ioType === "in" ? block.inputs.get(node._id)! : block.outputs.get(node._id)!
+//   })
+
+//   return state
+// }

@@ -1,18 +1,17 @@
-import { createContext, useContext, useLayoutEffect } from "react"
 import { animate, MotionValue } from "framer-motion"
 import { action, computed, makeObservable } from "mobx"
-import { SmartMap } from "smartmap"
-import { useConstant } from "@utils/react"
-import { IBlock, ILogicNodeModel } from "@main/controllers"
-import { CompositionState, useParentCompositionState } from "../use-composition-state"
-import { BlockNodeState } from "./use-block-node-state"
+import { IBlock } from "@main/controllers"
+import { CompositionState } from "../use-composition-state"
+import { BlockInInterfaceState, BlockOutInterfaceState } from "./use-block-interface-state"
+import { useLayoutEffect } from "react"
 
 // @refresh reset
 export class BlockState {
   block: IBlock
   composition: CompositionState
-  inputs: SmartMap<string, ILogicNodeModel, BlockNodeState>
-  outputs: SmartMap<string, ILogicNodeModel, BlockNodeState>
+
+  inputs: BlockInInterfaceState
+  outputs: BlockOutInterfaceState
 
   motionXY = { x: new MotionValue(0), y: new MotionValue(0) }
 
@@ -22,29 +21,38 @@ export class BlockState {
     this.composition = parent
 
     const { inputs, outputs } = block.logic.info!
-    this.inputs = new SmartMap(inputs.store, (input) => new BlockNodeState(input), { eager: true })
-    this.outputs = new SmartMap(outputs.store, (output) => new BlockNodeState(output), { eager: true })
+    // this.inputs = new SmartMap(inputs.store, (input) => new BlockInNodeState(input, this), { eager: true })
+    // this.outputs = new SmartMap(outputs.store, (output) => new BlockOutNodeState(output, this), { eager: true })
+
+    this.inputs = new BlockInInterfaceState(inputs, this)
+    this.outputs = new BlockOutInterfaceState(outputs, this)
   }
 
-  @action.bound initialize() {
+  get _id() {
+    return this.block._id
+  }
+
+  @action.bound private initialize() {
     const { x, y } = this.motionXY
     x.set(this.x)
     y.set(this.y)
-
-    this.inputs.forEach((input) => input.initializeInBlock())
-    this.outputs.forEach((output) => output.initializeInBlock())
   }
 
-  @action dispose() {
-    this.inputs.dispose()
-    this.outputs.dispose()
+  useInit = () => {
+    useLayoutEffect(this.initialize, [])
   }
+
+  // @action dispose() {
+  //   this.inputs.dispose()
+  //   this.outputs.dispose()
+  // }
 
   @computed get width() {
-    return gridSize * 4
+    return gridSize * 5
   }
   @computed get height() {
-    return gridSize * 4
+    // return (this.inputs.size + this.outputs.size + 1) * gridSize
+    return (this.inputs.store.size + this.outputs.store.size + 1) * gridSize
   }
   @computed get x() {
     return gridToValue(this.block.xy[0])
@@ -93,7 +101,7 @@ export class BlockState {
   }
 }
 
-export const gridSize = 35
+export const gridSize = 30
 
 export function valueToGrid(value: number) {
   return Math.round(value / gridSize)
@@ -101,21 +109,4 @@ export function valueToGrid(value: number) {
 
 export function gridToValue(grid: number) {
   return grid * gridSize
-}
-
-export function useBlockState(block: IBlock) {
-  // const composition = useParentCompositionState()
-  // const state = useMemo(() => composition.blocks.get(block._id)!, [composition, block])
-  const composition = useParentCompositionState()
-  const state = useConstant(() => composition.blocks.get(block._id)!)
-
-  useLayoutEffect(state.initialize, [])
-
-  return state
-}
-
-export const BlockStateContext = createContext({} as BlockState)
-
-export function useParentBlockState() {
-  return useContext(BlockStateContext)
 }

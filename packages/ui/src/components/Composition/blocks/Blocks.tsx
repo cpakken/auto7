@@ -2,23 +2,20 @@ import { AnimatePresence } from "framer-motion"
 import { observer } from "mobx-react-lite"
 import { mapIter } from "@utils/iterable-fns"
 import { createMotionBox, createBox } from "@ui/utils/hoc"
-import { IBlock } from "@main/controllers"
-import { useParentCompositionState } from "../use-composition-state"
 import { Block } from "./Block"
 import { BlockDragShadow } from "./BlockDragShadow"
 import { gridSize } from "./use-block-state"
+import { CompositionState } from "../use-composition-state"
 
-export const Blocks = observer(() => {
-  const state = useParentCompositionState()
-  const { blockDrag } = state
-  const { blocks } = state.composition
+export const Blocks = observer(({ composition }: { composition: CompositionState }) => {
+  const { blockDrag, blocks } = composition
 
   return (
     <div>
       {/* <BlocksBackground layout sx={dimensions} style={min} /> */}
       <Grid opacity={blockDrag ? 0.1 : 0} />
-      {mapIter(blocks.values(), (block: IBlock) => (
-        <Block key={block._id} block={block} />
+      {mapIter(blocks.values(), (block) => (
+        <Block key={block._id} state={block} />
       ))}
       <AnimatePresence>{blockDrag && <BlockDragShadow block={blockDrag} />}</AnimatePresence>
     </div>

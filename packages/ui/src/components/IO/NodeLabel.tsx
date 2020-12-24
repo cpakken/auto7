@@ -5,6 +5,7 @@ import { Center } from "@ui/common"
 import { chakra } from "@chakra-ui/react"
 import { useColor } from "@utils/chakra-utils"
 import { useNodeInputState } from "./use-node-input-state"
+import { NodeState } from "./use-node-state"
 
 export const NodeInput = observer(({ node }: { node: ILogicNode }) => {
   const { ref, value, onChange, isValid, onKeyDown, onBlur, onFocus } = useNodeInputState(node)
@@ -36,8 +37,10 @@ export const NodeInput = observer(({ node }: { node: ILogicNode }) => {
   )
 })
 
-export const NodeLabel = observer(({ node, isEdit }: { node: ILogicNode; isEdit: boolean }) => {
-  const { label } = node
+// export const NodeLabel = observer(({ node, isEdit }: { node: ILogicNode; isEdit: boolean }) => {
+export const NodeLabel = observer(({ state }: { state: NodeState }) => {
+  const { label } = state.node
+  const { isEdit } = state.io
   const color = useColor("blueGray")
 
   return (

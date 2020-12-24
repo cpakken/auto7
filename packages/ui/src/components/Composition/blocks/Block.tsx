@@ -1,7 +1,6 @@
-import { IBlock } from "@main/controllers"
 import { observer } from "mobx-react-lite"
 import { MotionBox } from "@ui/common"
-import { BlockStateContext, useBlockState } from "./use-block-state"
+import { BlockState } from "./use-block-state"
 import { useScaleBoxShadowValues } from "@ui/utils/use-scale-boxShadow"
 import { BlockContent } from "./BlockContent"
 
@@ -17,31 +16,31 @@ const blockVariants = {
   drag: { scale: 1.06, opacity: 0.7, zIndex: 20 },
 }
 
-export const Block = observer(({ block }: { block: IBlock }) => {
-  const state = useBlockState(block)
+// export const Block = observer(({ block }: { block: IBlock }) => {
+export const Block = observer(({ state }: { state: BlockState }) => {
   const { motionXY, onHoverStart, onHoverEnd, onDragEnd, onDragStart, isHover, isDrag } = state
   const { boxShadow, scale } = useScaleBoxShadowValues(1.06)
+
+  state.useInit()
 
   const enable = isHover || isDrag
   const variant = isDrag ? "drag" : isHover ? "hover" : "default"
 
   return (
-    <BlockStateContext.Provider value={state}>
-      <MotionBox
-        // drag
-        drag={enable} // use own custom popmotion
-        dragMomentum={false}
-        onHoverStart={onHoverStart}
-        onHoverEnd={onHoverEnd}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-        animate={variant}
-        variants={blockVariants}
-        position="absolute"
-        style={{ scale, boxShadow, ...motionXY }}
-      >
-        <BlockContent state={state} />
-      </MotionBox>
-    </BlockStateContext.Provider>
+    <MotionBox
+      // drag
+      drag={enable} // use own custom popmotion
+      dragMomentum={false}
+      onHoverStart={onHoverStart}
+      onHoverEnd={onHoverEnd}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      animate={variant}
+      variants={blockVariants}
+      position="absolute"
+      style={{ scale, boxShadow, ...motionXY }}
+    >
+      <BlockContent state={state} />
+    </MotionBox>
   )
 })

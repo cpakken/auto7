@@ -1,7 +1,7 @@
 import { makeObservable, observable, action, computed } from "mobx"
-import { useEffect, useLayoutEffect } from "react"
+import { useLayoutEffect } from "react"
 import { ILogicNode } from "@main/controllers"
-import { IOState, useParentIOState } from "./use-io-state"
+import { IOState } from "./use-io-state"
 import { MotionValue } from "framer-motion"
 import { useConstant } from "@utils/react"
 
@@ -25,13 +25,21 @@ export class NodeState {
     // this.y = new MotionValue(this.offsetY)
   }
 
-  @action.bound initialize() {
+  get _id() {
+    return this.node._id
+  }
+
+  @action.bound private initialize() {
     //Sync offsetY with motionY
     this.y.set(this.offsetY)
   }
 
+  useInit = () => {
+    useLayoutEffect(this.initialize, [])
+  }
+
   @computed get index() {
-    return this.io.indexies.get(this.node)!
+    return this.io.indexies.get(this)!
   }
 
   @computed get offsetY() {
@@ -74,14 +82,6 @@ export class NodeState {
       console.log("adsf")
     }
   }
-}
-
-export function useNodeState(node: ILogicNode) {
-  const io = useParentIOState()
-  const state = useConstant(() => io.nodes.get(node._id)!)
-  useLayoutEffect(state.initialize, [])
-
-  return state
 }
 
 export const NODE_WIDTH = 110

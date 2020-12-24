@@ -1,3 +1,5 @@
+IOState => put directly in react props instead of useIOState
+
 IONode add delete reorder
 
 Block Node Connectors Shadows

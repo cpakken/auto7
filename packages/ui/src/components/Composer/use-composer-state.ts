@@ -1,4 +1,4 @@
-import { createContext, createRef, MutableRefObject, RefObject, useContext, useLayoutEffect, useRef, useState } from "react"
+import { createContext, RefObject, useContext, useLayoutEffect, useState } from "react"
 import { isShallowReady, LogicComposed, LogicComposedShallowReady } from "@main/controllers"
 import { IOState } from "../IO/use-io-state"
 import { CompositionState } from "../Composition/use-composition-state"
@@ -9,7 +9,6 @@ export type Dimensions = { width: number; height: number }
 
 // @refresh reset
 export class ComposerState {
-  ref = createRef<HTMLDivElement>()
   @observable.ref dimensions: Dimensions
 
   composed: LogicComposedShallowReady
@@ -44,7 +43,6 @@ export class ComposerState {
   }
 }
 
-// export function useComposerState(composed: LogicComposedShallowReady) {
 export function useComposerState(ref: RefObject<HTMLDivElement>, composed: LogicComposed) {
   const [state, setState] = useState<ComposerState | null>(null)
 

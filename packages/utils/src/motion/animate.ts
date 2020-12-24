@@ -53,8 +53,8 @@ export function createPushAnimation(motion: MotionValue<number>, options: PushCo
         complete()
       }
 
-      onUpdate?.(val)
       motion.set(val)
+      onUpdate?.(val)
     }, true)
 
     const stop = () => {

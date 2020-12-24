@@ -1,7 +1,7 @@
 import { ChangeEvent, useRef, KeyboardEvent } from "react"
-import { ILogicNode } from "@main/controllers"
 import { useUnmountEffect } from "@utils/react"
 import { useLocalObservable } from "mobx-react-lite"
+import { ILogicNode } from "@main/controllers"
 
 // @refresh reset
 export function useNodeInputState(node: ILogicNode) {

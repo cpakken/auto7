@@ -1,9 +1,11 @@
 import { Text } from "@chakra-ui/react"
 import { observer } from "mobx-react-lite"
-import { ITypeNativeInfo } from "@main/controllers"
+import { NodeState } from "./use-node-state"
 
-export const TypeLabel = observer(({ info, isEdit }: { info: ITypeNativeInfo; isEdit: boolean }) => {
-  const { label, avatar } = info
+// export const TypeLabel = observer(({ info, isEdit }: { info: ITypeNativeInfo; isEdit: boolean }) => {
+export const TypeLabel = observer(({ state }: { state: NodeState }) => {
+  const { label, avatar } = state.node.type!.info!
+  const { isEdit } = state.io
   const { color } = avatar
 
   return (

@@ -34,15 +34,15 @@ export class TaskProducer<V = any> implements Task<V> {
   }
 }
 
-export type ITaskSyncConfig<V> = {
+export type ITaskSyncConfig = {
   tasks: TaskCombined
-  fn: LogicFn<V>
+  fn: LogicFn
 }
 
 export class TaskSync<V> implements Task<V> {
-  config: ITaskSyncConfig<V>
+  config: ITaskSyncConfig
 
-  constructor(config: ITaskSyncConfig<V>) {
+  constructor(config: ITaskSyncConfig) {
     this.config = config
   }
 

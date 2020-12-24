@@ -2,23 +2,21 @@ import { observer } from "mobx-react-lite"
 import { createBox } from "@ui/utils/hoc"
 import { MotionBox } from "@ui/common"
 import { Blocks } from "./blocks"
-import { useCompositionState, CompositionContext } from "./use-composition-state"
+import { CompositionState } from "./use-composition-state"
 
-export const Composition = observer(() => {
-  const state = useCompositionState()
-  const { border, motionOffset } = state
+export const Composition = observer(({ state }: { state: CompositionState }) => {
+  const { border, motionOffset, useInit } = state
+  useInit()
 
   return (
-    <CompositionContext.Provider value={state}>
-      <CompositionContainer>
-        {border && (
-          <OffsetControl position="absolute" style={motionOffset!} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <Blocks />
-            {/* Paths */}
-          </OffsetControl>
-        )}
-      </CompositionContainer>
-    </CompositionContext.Provider>
+    <CompositionContainer>
+      {border && (
+        <OffsetControl position="absolute" style={motionOffset!} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <Blocks composition={state} />
+          {/* Paths */}
+        </OffsetControl>
+      )}
+    </CompositionContainer>
   )
 })
 
